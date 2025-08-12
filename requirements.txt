@@ -1,0 +1,11 @@
+langchain
+langchain-openai
+openai
+geopandas
+shapely
+fiona
+pyproj
+numpy
+pandas
+matplotlib
+requests

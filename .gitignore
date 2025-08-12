@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+.env
+.venv
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# API Keys
+*.key
+secrets.json
+
+# Generated data files
+meshes/*.json
+meshes/*.csv
+results/*.json
+png/*.png
+
+# Large data files
+data/land/*.shp
+data/land/*.shx
+data/land/*.dbf
+data/land/*.prj
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+*_intermediate_*
