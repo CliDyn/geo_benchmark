@@ -1,0 +1,145 @@
+lon,lat,is_land,country,state,city,address_formatted,address_full,is_on_regular,resolution
+-180.0,-60.0,False,,,,,,True,20.0
+-160.0,-60.0,False,,,,,,True,20.0
+-140.0,-60.0,False,,,,,,True,20.0
+-120.0,-60.0,False,,,,,,True,20.0
+-100.0,-60.0,False,,,,,,True,20.0
+-80.0,-60.0,False,,,,,,True,20.0
+-60.0,-60.0,False,,,,,,True,20.0
+-40.0,-60.0,False,,,,,,True,20.0
+-20.0,-60.0,False,,,,,,True,20.0
+0.0,-60.0,False,,,,,,True,20.0
+20.0,-60.0,False,,,,,,True,20.0
+40.0,-60.0,False,,,,,,True,20.0
+60.0,-60.0,False,,,,,,True,20.0
+80.0,-60.0,False,,,,,,True,20.0
+100.0,-60.0,False,,,,,,True,20.0
+120.0,-60.0,False,,,,,,True,20.0
+140.0,-60.0,False,,,,,,True,20.0
+160.0,-60.0,False,,,,,,True,20.0
+-180.0,-40.0,False,,,,,,True,20.0
+-160.0,-40.0,False,,,,,,True,20.0
+-140.0,-40.0,False,,,,,,True,20.0
+-120.0,-40.0,False,,,,,,True,20.0
+-100.0,-40.0,False,,,,,,True,20.0
+-80.0,-40.0,False,,,,,,True,20.0
+-60.0,-40.0,False,,,,,,True,20.0
+-40.0,-40.0,False,,,,,,True,20.0
+-20.0,-40.0,False,,,,,,True,20.0
+0.0,-40.0,False,,,,,,True,20.0
+20.0,-40.0,False,,,,,,True,20.0
+40.0,-40.0,False,,,,,,True,20.0
+60.0,-40.0,False,,,,,,True,20.0
+80.0,-40.0,False,,,,,,True,20.0
+100.0,-40.0,False,,,,,,True,20.0
+120.0,-40.0,False,,,,,,True,20.0
+140.0,-40.0,False,,,,,,True,20.0
+160.0,-40.0,False,,,,,,True,20.0
+-180.0,-20.0,False,,,,,,True,20.0
+-160.0,-20.0,False,,,,,,True,20.0
+-140.0,-20.0,False,,,,,,True,20.0
+-120.0,-20.0,False,,,,,,True,20.0
+-100.0,-20.0,False,,,,,,True,20.0
+-80.0,-20.0,False,,,,,,True,20.0
+-60.0,-20.0,True,Paraguay,Alto Paraguay,,"**Address:** Paraguay, Alto Paraguay","Address: hamlet: Lagerenza 4 de Mayo, town: Bahía Negra, state: Alto Paraguay, ISO3166-2-lvl4: PY-16, region: Región Occidental, country: Paraguay, country_code: py",True,20.0
+-40.0,-20.0,False,,,,,,True,20.0
+-20.0,-20.0,False,,,,,,True,20.0
+0.0,-20.0,False,,,,,,True,20.0
+20.0,-20.0,True,Namibia,Otjozondjupa,,"**Address:** Namibia, Otjozondjupa","Address: state: Otjozondjupa, ISO3166-2-lvl4: NA-OD, country: Namibia, country_code: na",True,20.0
+40.0,-20.0,False,,,,,,True,20.0
+60.0,-20.0,False,,,,,,True,20.0
+80.0,-20.0,False,,,,,,True,20.0
+100.0,-20.0,False,,,,,,True,20.0
+120.0,-20.0,True,Australia,Western Australia,,"**Address:** Australia, Western Australia, Great Northern Highway","Address: road: Great Northern Highway, city_district: Pardoo, municipality: Shire of East Pilbara, state: Western Australia, ISO3166-2-lvl4: AU-WA, postcode: 6725, country: Australia, country_code: au",True,20.0
+140.0,-20.0,True,Australia,Queensland,,"**Address:** Australia, Queensland","Address: hamlet: Three Rivers, municipality: Cloncurry Shire, state: Queensland, ISO3166-2-lvl4: AU-QLD, postcode: 4824, country: Australia, country_code: au",True,20.0
+160.0,-20.0,False,,,,,,True,20.0
+-180.0,0.0,False,,,,,,True,20.0
+-160.0,0.0,False,,,,,,True,20.0
+-140.0,0.0,False,,,,,,True,20.0
+-120.0,0.0,False,,,,,,True,20.0
+-100.0,0.0,False,,,,,,True,20.0
+-80.0,0.0,True,Ecuador,Manabí,,"**Address:** Ecuador, Manabí","Address: hamlet: La Felicidad, town: Pedernales, county: Pedernales, state: Manabí, ISO3166-2-lvl4: EC-M, country: Ecuador, country_code: ec",True,20.0
+-60.0,0.0,True,Brazil,Amazonas,,"**Address:** Brazil, Amazonas","Address: city_district: Urucará, town: Urucará, municipality: Região Geográfica Imediata de Itacoatiara, state_district: Região Geográfica Intermediária de Parintins, state: Amazonas, ISO3166-2-lvl4: BR-AM, region: North Region, country: Brazil, country_code: br",True,20.0
+-40.0,0.0,False,,,,,,True,20.0
+-20.0,0.0,False,,,,,,True,20.0
+0.0,0.0,True,,,,,,True,20.0
+20.0,0.0,True,Democratic Republic of the Congo,Équateur,,"**Address:** Democratic Republic of the Congo, Équateur","Address: state: Équateur, ISO3166-2-lvl4: CD-EQ, country: Democratic Republic of the Congo, country_code: cd",True,20.0
+40.0,0.0,True,Kenya,Garissa,,"**Address:** Kenya, Garissa","Address: county: Dadaab, state: Garissa, ISO3166-2-lvl4: KE-07, country: Kenya, country_code: ke",True,20.0
+60.0,0.0,False,,,,,,True,20.0
+80.0,0.0,False,,,,,,True,20.0
+100.0,0.0,True,Indonesia,West Sumatra,,"**Address:** Indonesia, West Sumatra","Address: suburb: Kinali District, county: West Pasaman, state: West Sumatra, ISO3166-2-lvl4: ID-SB, region: Sumatra, ISO3166-2-lvl3: ID-SM, country: Indonesia, country_code: id",True,20.0
+120.0,0.0,True,Indonesia,Central Sulawesi,,"**Address:** Indonesia, Central Sulawesi","Address: village: Sinei, county: Parigi Moutong Regency, state: Central Sulawesi, ISO3166-2-lvl4: ID-ST, region: Sulawesi, ISO3166-2-lvl3: ID-SL, country: Indonesia, country_code: id",True,20.0
+140.0,0.0,False,,,,,,True,20.0
+160.0,0.0,False,,,,,,True,20.0
+-180.0,20.0,False,,,,,,True,20.0
+-160.0,20.0,False,,,,,,True,20.0
+-140.0,20.0,False,,,,,,True,20.0
+-120.0,20.0,False,,,,,,True,20.0
+-100.0,20.0,True,Mexico,State of Mexico,,"**Address:** Mexico, State of Mexico","Address: hamlet: San Agustín la Loma, village: El Capulín (Barrio el Capulín la Loma), county: Acambay de Ruíz Castañeda, state: State of Mexico, ISO3166-2-lvl4: MX-MEX, country: Mexico, country_code: mx",True,20.0
+-80.0,20.0,False,,,,,,True,20.0
+-60.0,20.0,False,,,,,,True,20.0
+-40.0,20.0,False,,,,,,True,20.0
+-20.0,20.0,False,,,,,,True,20.0
+0.0,20.0,True,Mali,Kidal,,"**Address:** Mali, Kidal","Address: county: Tessalit Cercle, state: Kidal, ISO3166-2-lvl4: ML-8, country: Mali, country_code: ml",True,20.0
+20.0,20.0,True,Chad,Ennedi-Ouest,,"**Address:** Chad, Ennedi-Ouest","Address: state: Ennedi-Ouest, ISO3166-2-lvl4: TD-EO, country: Chad, country_code: td",True,20.0
+40.0,20.0,False,,,,,,True,20.0
+60.0,20.0,False,,,,,,True,20.0
+80.0,20.0,True,India,Maharashtra,,"**Address:** India, Maharashtra","Address: village: Govardhan tola, county: Chamorshi Taluka, state_district: Gadchiroli, state: Maharashtra, ISO3166-2-lvl4: IN-MH, country: India, country_code: in",True,20.0
+100.0,20.0,True,Thailand,,,**Address:** Thailand,"Address: village: Ban Dong Chai, county: Wiang Chiang Rung, province: Chiang Rai Province, ISO3166-2-lvl4: TH-57, country: Thailand, country_code: th",True,20.0
+120.0,20.0,False,,,,,,True,20.0
+140.0,20.0,False,,,,,,True,20.0
+160.0,20.0,False,,,,,,True,20.0
+-180.0,40.0,False,,,,,,True,20.0
+-160.0,40.0,False,,,,,,True,20.0
+-140.0,40.0,False,,,,,,True,20.0
+-120.0,40.0,True,United States,California,,"**Address:** United States, California","Address: county: Lassen County, state: California, ISO3166-2-lvl4: US-CA, country: United States, country_code: us",True,20.0
+-100.0,40.0,True,United States,Nebraska,,"**Address:** United States, Nebraska, Road 702","Address: road: Road 702, county: Furnas County, state: Nebraska, ISO3166-2-lvl4: US-NE, country: United States, country_code: us",True,20.0
+-80.0,40.0,True,United States,Pennsylvania,East Bethlehem Township,"**Address:** United States, Pennsylvania, East Bethlehem Township, Potters Alley 1","Address: house_number: 1, road: Potters Alley, hamlet: Fredericktown Hill, village: Fredericktown, city: East Bethlehem Township, county: Washington County, state: Pennsylvania, ISO3166-2-lvl4: US-PA, postcode: 15333, country: United States, country_code: us",True,20.0
+-60.0,40.0,False,,,,,,True,20.0
+-40.0,40.0,False,,,,,,True,20.0
+-20.0,40.0,False,,,,,,True,20.0
+0.0,40.0,True,Spain,Valencian Community,Castelló de la Plana,"**Address:** Spain, Valencian Community, Castelló de la Plana, Entrador 1","Address: road: Entrador 1, city: Castelló de la Plana, region: la Plana Alta, province: Castelló / Castellón, ISO3166-2-lvl6: ES-CS, state: Valencian Community, ISO3166-2-lvl4: ES-VC, postcode: 12100, country: Spain, country_code: es",True,20.0
+20.0,40.0,True,Albania,,,**Address:** Albania,"Address: village: Fushë Vërri, municipality: Bashkia Delvinë, county: Vlorë County, ISO3166-2-lvl6: AL-12, postcode: 9720, country: Albania, country_code: al",True,20.0
+40.0,40.0,True,Turkey,,,**Address:** Turkey,"Address: village: Küçük Otlukbeli, town: Otlukbeli, province: Erzincan, ISO3166-2-lvl4: TR-24, region: Eastern Anatolia Region, country: Turkey, country_code: tr",True,20.0
+60.0,40.0,True,Turkmenistan,,,**Address:** Turkmenistan,"Address: county: Gorogly District, province: Dashoguz Region, ISO3166-2-lvl4: TM-D, postcode: 746380, country: Turkmenistan, country_code: tm",True,20.0
+80.0,40.0,True,China,Xinjiang,,"**Address:** China, Xinjiang","Address: county: Awat County, region: Aksu Prefecture, state: Xinjiang, ISO3166-2-lvl4: CN-XJ, country: China, country_code: cn",True,20.0
+100.0,40.0,True,China,Inner Mongolia,,"**Address:** China, Inner Mongolia","Address: town: Altan Qog, district: Alxa Right Banner, region: Alxa League, state: Inner Mongolia, ISO3166-2-lvl4: CN-NM, country: China, country_code: cn",True,20.0
+120.0,40.0,False,,,,,,True,20.0
+140.0,40.0,True,Japan,,,**Address:** Japan,"Address: quarter: 字中野, village: Ogata, county: Minamiakita County, province: Akita Prefecture, ISO3166-2-lvl4: JP-05, postcode: 010-0442, country: Japan, country_code: jp",True,20.0
+160.0,40.0,False,,,,,,True,20.0
+-180.0,60.0,False,,,,,,True,20.0
+-160.0,60.0,True,United States,Alaska,,"**Address:** United States, Alaska","Address: county: Unorganized Borough, state: Alaska, ISO3166-2-lvl4: US-AK, country: United States, country_code: us",True,20.0
+-140.0,60.0,True,United States,Alaska,,"**Address:** United States, Alaska","Address: county: Yakutat, state: Alaska, ISO3166-2-lvl4: US-AK, country: United States, country_code: us",True,20.0
+-120.0,60.0,True,Canada,Alberta,,"**Address:** Canada, Alberta","Address: county: Mackenzie County, state: Alberta, ISO3166-2-lvl4: CA-AB, country: Canada, country_code: ca",True,20.0
+-100.0,60.0,True,Canada,Nunavut,,"**Address:** Canada, Nunavut","Address: county: Kivalliq Region, state: Nunavut, ISO3166-2-lvl4: CA-NU, country: Canada, country_code: ca",True,20.0
+-80.0,60.0,False,,,,,,True,20.0
+-60.0,60.0,False,,,,,,True,20.0
+-40.0,60.0,False,,,,,,True,20.0
+-20.0,60.0,False,,,,,,True,20.0
+0.0,60.0,False,,,,,,True,20.0
+20.0,60.0,False,,,,,,True,20.0
+40.0,60.0,True,Russia,Vologda Oblast,,"**Address:** Russia, Vologda Oblast","Address: locality: Татарское, hamlet: Горбатиха, county: Харовский муниципальный округ, state: Vologda Oblast, ISO3166-2-lvl4: RU-VLG, region: Northwestern Federal District, country: Russia, country_code: ru",True,20.0
+60.0,60.0,True,Russia,Sverdlovsk Oblast,,"**Address:** Russia, Sverdlovsk Oblast","Address: county: Волчанский муниципальный округ, state: Sverdlovsk Oblast, ISO3166-2-lvl4: RU-SVE, region: Ural Federal District, country: Russia, country_code: ru",True,20.0
+80.0,60.0,True,Russia,Tomsk Oblast,,"**Address:** Russia, Tomsk Oblast","Address: county: Alexandrovsky District, state: Tomsk Oblast, ISO3166-2-lvl4: RU-TOM, region: Siberian Federal District, country: Russia, country_code: ru",True,20.0
+100.0,60.0,True,Russia,Krasnoyarsk Krai,,"**Address:** Russia, Krasnoyarsk Krai","Address: amenity: КОТИ, county: Boguchansky Rayon, state: Krasnoyarsk Krai, ISO3166-2-lvl4: RU-KYA, region: Siberian Federal District, country: Russia, country_code: ru",True,20.0
+120.0,60.0,True,Russia,Sakha Republic,,"**Address:** Russia, Sakha Republic","Address: municipality: Жарханский национальный наслег, county: Olyokminsky Ulus, state: Sakha Republic, ISO3166-2-lvl4: RU-SA, region: Far Eastern Federal District, postcode: 678110, country: Russia, country_code: ru",True,20.0
+140.0,60.0,True,Russia,Khabarovsk Krai,,"**Address:** Russia, Khabarovsk Krai","Address: county: Okhotsky Rayon, state: Khabarovsk Krai, ISO3166-2-lvl4: RU-KHA, region: Far Eastern Federal District, country: Russia, country_code: ru",True,20.0
+160.0,60.0,False,,,,,,True,20.0
+-180.0,80.0,False,,,,,,True,20.0
+-160.0,80.0,False,,,,,,True,20.0
+-140.0,80.0,False,,,,,,True,20.0
+-120.0,80.0,False,,,,,,True,20.0
+-100.0,80.0,True,Canada,Nunavut,,"**Address:** Canada, Nunavut","Address: county: Qikiqtaaluk Region, state: Nunavut, ISO3166-2-lvl4: CA-NU, country: Canada, country_code: ca",True,20.0
+-80.0,80.0,True,Canada,Nunavut,,"**Address:** Canada, Nunavut","Address: county: Qikiqtaaluk Region, state: Nunavut, ISO3166-2-lvl4: CA-NU, country: Canada, country_code: ca",True,20.0
+-60.0,80.0,True,Greenland,,,**Address:** Greenland,"Address: municipality: Avannaata, ISO3166-2-lvl4: GL-AV, country: Greenland, country_code: gl",True,20.0
+-40.0,80.0,True,Greenland,,,**Address:** Greenland,"Address: country: Greenland, country_code: gl",True,20.0
+-20.0,80.0,False,,,,,,True,20.0
+0.0,80.0,False,,,,,,True,20.0
+20.0,80.0,True,Norway,,,**Address:** Norway,"Address: region: Svalbard, ISO3166-2-lvl4: NO-21, postcode: 9170, country: Norway, country_code: no",True,20.0
+40.0,80.0,False,,,,,,True,20.0
+60.0,80.0,False,,,,,,True,20.0
+80.0,80.0,False,,,,,,True,20.0
+100.0,80.0,False,,,,,,True,20.0
+120.0,80.0,False,,,,,,True,20.0
+140.0,80.0,False,,,,,,True,20.0
+160.0,80.0,False,,,,,,True,20.0
