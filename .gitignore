@@ -17,16 +17,17 @@ venv/
 secrets.json
 
 # Generated data files
-meshes/*.json
-meshes/*.csv
-results/*.json
-png/*.png
+#meshes/*.json
+#meshes/*.csv
+#results/*.json
+#png/*.png
 
 # Large data files
 data/land/*.shp
 data/land/*.shx
 data/land/*.dbf
 data/land/*.prj
+data/*nc
 
 # OS files
 .DS_Store
