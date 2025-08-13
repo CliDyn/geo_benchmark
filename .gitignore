@@ -39,5 +39,5 @@ Thumbs.db
 *_intermediate_*
 
 # Results
-results/*.json
+results/*
 results/*.csv

@@ -83,12 +83,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "22.1",
+          "raw_response": "23.1",
           "parsed_data": {
-            "july_temp_mean": 22.1
+            "july_temp_mean": 23.1
           },
           "numpy_arrays": {
-            "july_temp_mean": 22.1
+            "july_temp_mean": 23.1
           },
           "attempt": 1
         }
@@ -197,12 +197,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "16.3",
+          "raw_response": "18.6",
           "parsed_data": {
-            "july_temp_mean": 16.3
+            "july_temp_mean": 18.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 16.3
+            "july_temp_mean": 18.6
           },
           "attempt": 1
         }
@@ -275,12 +275,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "16.9",
+          "raw_response": "18.4",
           "parsed_data": {
-            "july_temp_mean": 16.9
+            "july_temp_mean": 18.4
           },
           "numpy_arrays": {
-            "july_temp_mean": 16.9
+            "july_temp_mean": 18.4
           },
           "attempt": 1
         }
@@ -422,12 +422,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "26.0",
+          "raw_response": "25.4",
           "parsed_data": {
-            "july_temp_mean": 26.0
+            "july_temp_mean": 25.4
           },
           "numpy_arrays": {
-            "july_temp_mean": 26.0
+            "july_temp_mean": 25.4
           },
           "attempt": 1
         }
@@ -498,12 +498,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "28.3",
+          "raw_response": "27.0",
           "parsed_data": {
-            "july_temp_mean": 28.3
+            "july_temp_mean": 27.0
           },
           "numpy_arrays": {
-            "july_temp_mean": 28.3
+            "july_temp_mean": 27.0
           },
           "attempt": 1
         }
@@ -525,12 +525,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "23.5",
+          "raw_response": "25.0",
           "parsed_data": {
-            "july_temp_mean": 23.5
+            "july_temp_mean": 25.0
           },
           "numpy_arrays": {
-            "july_temp_mean": 23.5
+            "july_temp_mean": 25.0
           },
           "attempt": 1
         }
@@ -632,12 +632,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "26.1",
+          "raw_response": "24.2",
           "parsed_data": {
-            "july_temp_mean": 26.1
+            "july_temp_mean": 24.2
           },
           "numpy_arrays": {
-            "july_temp_mean": 26.1
+            "july_temp_mean": 24.2
           },
           "attempt": 1
         }
@@ -704,12 +704,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "24.2",
+          "raw_response": "23.1",
           "parsed_data": {
-            "july_temp_mean": 24.2
+            "july_temp_mean": 23.1
           },
           "numpy_arrays": {
-            "july_temp_mean": 24.2
+            "july_temp_mean": 23.1
           },
           "attempt": 1
         }
@@ -782,12 +782,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "26.3",
+          "raw_response": "26.8",
           "parsed_data": {
-            "july_temp_mean": 26.3
+            "july_temp_mean": 26.8
           },
           "numpy_arrays": {
-            "july_temp_mean": 26.3
+            "july_temp_mean": 26.8
           },
           "attempt": 1
         }
@@ -925,12 +925,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "23.0",
+          "raw_response": "26.1",
           "parsed_data": {
-            "july_temp_mean": 23.0
+            "july_temp_mean": 26.1
           },
           "numpy_arrays": {
-            "july_temp_mean": 23.0
+            "july_temp_mean": 26.1
           },
           "attempt": 1
         }
@@ -1001,12 +1001,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "27.1",
+          "raw_response": "26.4",
           "parsed_data": {
-            "july_temp_mean": 27.1
+            "july_temp_mean": 26.4
           },
           "numpy_arrays": {
-            "july_temp_mean": 27.1
+            "july_temp_mean": 26.4
           },
           "attempt": 1
         }
@@ -1100,12 +1100,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "26.1",
+          "raw_response": "28.1",
           "parsed_data": {
-            "july_temp_mean": 26.1
+            "july_temp_mean": 28.1
           },
           "numpy_arrays": {
-            "july_temp_mean": 26.1
+            "july_temp_mean": 28.1
           },
           "attempt": 1
         }
@@ -1169,12 +1169,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "28.5",
+          "raw_response": "28.3",
           "parsed_data": {
-            "july_temp_mean": 28.5
+            "july_temp_mean": 28.3
           },
           "numpy_arrays": {
-            "july_temp_mean": 28.5
+            "july_temp_mean": 28.3
           },
           "attempt": 1
         }
@@ -1239,12 +1239,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "28.3",
+          "raw_response": "27.2",
           "parsed_data": {
-            "july_temp_mean": 28.3
+            "july_temp_mean": 27.2
           },
           "numpy_arrays": {
-            "july_temp_mean": 28.3
+            "july_temp_mean": 27.2
           },
           "attempt": 1
         }
@@ -1323,12 +1323,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "18.7",
+          "raw_response": "18.3",
           "parsed_data": {
-            "july_temp_mean": 18.7
+            "july_temp_mean": 18.3
           },
           "numpy_arrays": {
-            "july_temp_mean": 18.7
+            "july_temp_mean": 18.3
           },
           "attempt": 1
         }
@@ -1396,12 +1396,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "21.5",
+          "raw_response": "22.2",
           "parsed_data": {
-            "july_temp_mean": 21.5
+            "july_temp_mean": 22.2
           },
           "numpy_arrays": {
-            "july_temp_mean": 21.5
+            "july_temp_mean": 22.2
           },
           "attempt": 1
         }
@@ -1469,12 +1469,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "22.1",
+          "raw_response": "22.3",
           "parsed_data": {
-            "july_temp_mean": 22.1
+            "july_temp_mean": 22.3
           },
           "numpy_arrays": {
-            "july_temp_mean": 22.1
+            "july_temp_mean": 22.3
           },
           "attempt": 1
         }
@@ -1546,12 +1546,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "26.0",
+          "raw_response": "26.2",
           "parsed_data": {
-            "july_temp_mean": 26.0
+            "july_temp_mean": 26.2
           },
           "numpy_arrays": {
-            "july_temp_mean": 26.0
+            "july_temp_mean": 26.2
           },
           "attempt": 1
         }
@@ -1615,12 +1615,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "23.2",
+          "raw_response": "23.0",
           "parsed_data": {
-            "july_temp_mean": 23.2
+            "july_temp_mean": 23.0
           },
           "numpy_arrays": {
-            "july_temp_mean": 23.2
+            "july_temp_mean": 23.0
           },
           "attempt": 1
         }
@@ -1691,12 +1691,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "24.8",
+          "raw_response": "22.1",
           "parsed_data": {
-            "july_temp_mean": 24.8
+            "july_temp_mean": 22.1
           },
           "numpy_arrays": {
-            "july_temp_mean": 24.8
+            "july_temp_mean": 22.1
           },
           "attempt": 1
         }
@@ -1799,12 +1799,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "28.3",
+          "raw_response": "28.0",
           "parsed_data": {
-            "july_temp_mean": 28.3
+            "july_temp_mean": 28.0
           },
           "numpy_arrays": {
-            "july_temp_mean": 28.3
+            "july_temp_mean": 28.0
           },
           "attempt": 1
         }
@@ -1891,12 +1891,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "23.5",
+          "raw_response": "23.6",
           "parsed_data": {
-            "july_temp_mean": 23.5
+            "july_temp_mean": 23.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 23.5
+            "july_temp_mean": 23.6
           },
           "attempt": 1
         }
@@ -1983,12 +1983,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "23.1",
+          "raw_response": "22.3",
           "parsed_data": {
-            "july_temp_mean": 23.1
+            "july_temp_mean": 22.3
           },
           "numpy_arrays": {
-            "july_temp_mean": 23.1
+            "july_temp_mean": 22.3
           },
           "attempt": 1
         }
@@ -2053,12 +2053,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "20.3",
+          "raw_response": "24.6",
           "parsed_data": {
-            "july_temp_mean": 20.3
+            "july_temp_mean": 24.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 20.3
+            "july_temp_mean": 24.6
           },
           "attempt": 1
         }
@@ -2130,12 +2130,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "10.9",
+          "raw_response": "11.8",
           "parsed_data": {
-            "july_temp_mean": 10.9
+            "july_temp_mean": 11.8
           },
           "numpy_arrays": {
-            "july_temp_mean": 10.9
+            "july_temp_mean": 11.8
           },
           "attempt": 1
         }
@@ -2214,12 +2214,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "11.3",
+          "raw_response": "11.6",
           "parsed_data": {
-            "july_temp_mean": 11.3
+            "july_temp_mean": 11.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 11.3
+            "july_temp_mean": 11.6
           },
           "attempt": 1
         }
@@ -2288,12 +2288,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "16.2",
+          "raw_response": "15.2",
           "parsed_data": {
-            "july_temp_mean": 16.2
+            "july_temp_mean": 15.2
           },
           "numpy_arrays": {
-            "july_temp_mean": 16.2
+            "july_temp_mean": 15.2
           },
           "attempt": 1
         }
@@ -2369,12 +2369,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "10.5",
+          "raw_response": "-0.5",
           "parsed_data": {
-            "july_temp_mean": 10.5
+            "july_temp_mean": -0.5
           },
           "numpy_arrays": {
-            "july_temp_mean": 10.5
+            "july_temp_mean": -0.5
           },
           "attempt": 1
         }
@@ -2446,12 +2446,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "15.1",
+          "raw_response": "15.6",
           "parsed_data": {
-            "july_temp_mean": 15.1
+            "july_temp_mean": 15.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 15.1
+            "july_temp_mean": 15.6
           },
           "attempt": 1
         }
@@ -2524,12 +2524,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "17.0",
+          "raw_response": "15.2",
           "parsed_data": {
-            "july_temp_mean": 17.0
+            "july_temp_mean": 15.2
           },
           "numpy_arrays": {
-            "july_temp_mean": 17.0
+            "july_temp_mean": 15.2
           },
           "attempt": 1
         }
@@ -2605,12 +2605,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "17.3",
+          "raw_response": "19.2",
           "parsed_data": {
-            "july_temp_mean": 17.3
+            "july_temp_mean": 19.2
           },
           "numpy_arrays": {
-            "july_temp_mean": 17.3
+            "july_temp_mean": 19.2
           },
           "attempt": 1
         }
@@ -2676,12 +2676,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "15.2",
+          "raw_response": "18.6",
           "parsed_data": {
-            "july_temp_mean": 15.2
+            "july_temp_mean": 18.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 15.2
+            "july_temp_mean": 18.6
           },
           "attempt": 1
         }
@@ -2752,12 +2752,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "15.2",
+          "raw_response": "15.6",
           "parsed_data": {
-            "july_temp_mean": 15.2
+            "july_temp_mean": 15.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 15.2
+            "july_temp_mean": 15.6
           },
           "attempt": 1
         }
@@ -2830,12 +2830,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "21.7",
+          "raw_response": "17.6",
           "parsed_data": {
-            "july_temp_mean": 21.7
+            "july_temp_mean": 17.6
           },
           "numpy_arrays": {
-            "july_temp_mean": 21.7
+            "july_temp_mean": 17.6
           },
           "attempt": 1
         }
@@ -2914,12 +2914,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "-2.3",
+          "raw_response": "0.6",
           "parsed_data": {
-            "july_temp_mean": -2.3
+            "july_temp_mean": 0.6
           },
           "numpy_arrays": {
-            "july_temp_mean": -2.3
+            "july_temp_mean": 0.6
           },
           "attempt": 1
         }
@@ -2998,12 +2998,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "-6.0",
+          "raw_response": "0.0",
           "parsed_data": {
-            "july_temp_mean": -6.0
+            "july_temp_mean": 0.0
           },
           "numpy_arrays": {
-            "july_temp_mean": -6.0
+            "july_temp_mean": 0.0
           },
           "attempt": 1
         }
@@ -3074,12 +3074,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "-1.5",
+          "raw_response": "-0.8",
           "parsed_data": {
-            "july_temp_mean": -1.5
+            "july_temp_mean": -0.8
           },
           "numpy_arrays": {
-            "july_temp_mean": -1.5
+            "july_temp_mean": -0.8
           },
           "attempt": 1
         }
@@ -3368,12 +3368,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "-1.2",
+          "raw_response": "0.0",
           "parsed_data": {
-            "july_temp_mean": -1.2
+            "july_temp_mean": 0.0
           },
           "numpy_arrays": {
-            "july_temp_mean": -1.2
+            "july_temp_mean": 0.0
           },
           "attempt": 1
         }
@@ -3566,12 +3566,12 @@
       },
       "llm_responses": [
         {
-          "raw_response": "11.4",
+          "raw_response": "12.3",
           "parsed_data": {
-            "july_temp_mean": 11.4
+            "july_temp_mean": 12.3
           },
           "numpy_arrays": {
-            "july_temp_mean": 11.4
+            "july_temp_mean": 12.3
           },
           "attempt": 1
         }
@@ -3579,10 +3579,11 @@
     }
   ],
   "metadata": {
-    "processing_date": "2025-08-13 16:05:36",
+    "processing_date": "2025-08-13 16:36:44",
     "model_used": "gpt-5-nano",
     "num_repeats_per_point": 1,
     "simple_mode": true,
-    "query_type": "july_temp_only"
+    "query_type": "july_temp_only",
+    "month": "July"
   }
 }
