@@ -40,6 +40,8 @@ For each month (January through December), provide:
 - min: minimum typical value 
 - max: maximum typical value
 
+IMPORTANT: return only JSON object nothing else!!!!!!!!!!!!!!!!!!!!!!!
+
 Return ONLY a JSON object with this exact structure (no additional text):
 {{
   "temperature_2m_celsius": {{
@@ -227,16 +229,12 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
         
         # Save intermediate results every 10 points
         if (i + 1) % 10 == 0:
-            save_results(results, mesh_data, f"results/climate_results_intermediate_{i+1}.json", model_name)
+            save_results(results, mesh_data, f"climate_results_intermediate_{i+1}.json", model_name)
     
     return results, mesh_data
 
 def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str):
     """Save climate benchmark results"""
-    # Create results directory if it doesn't exist
-    output_path = Path(output_file)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    
     print(f"Saving results to {output_file}...")
     
     output_data = {
@@ -261,7 +259,7 @@ def main():
     import sys
     
     # Parse command line arguments
-    mesh_file = 'meshes/mesh_data_10deg.json'
+    mesh_file = 'mesh_data_10deg.json'
     num_repeats = 1
     model_name = 'gpt-5-nano'
     
@@ -289,7 +287,7 @@ def main():
         
         # Save final results
         resolution = mesh_data['resolution']
-        output_file = f"results/climate_results_{resolution}deg_r{num_repeats}.json"
+        output_file = f"climate_results_{resolution}deg_r{num_repeats}.json"
         save_results(results, mesh_data, output_file, model_name)
         
         # Print summary
