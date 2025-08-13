@@ -8,15 +8,51 @@ from geo_mesh_processor import load_mesh_data
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 
-def initialize_llm(model_name="gpt-5-nano", temperature=0.1):
+def configure_langsmith(disable_tracing: bool = False):
+    """Configure LangSmith tracing"""
+    if disable_tracing:
+        try:
+            import langsmith as ls
+            ls.configure(enabled=False)
+            print("LangSmith tracing disabled")
+        except ImportError:
+            pass  # LangSmith not installed, ignore
+    else:
+        print("LangSmith tracing enabled (default)")
+
+def initialize_llm(model_name="gpt-5-nano", temperature=0, simple_mode=False):
     """Initialize OpenAI LLM with LangChain"""
     
-    llm = ChatOpenAI(
-        model=model_name,
-        temperature=temperature,
-        verbosity="low",
-        reasoning_effort="minimal",
-    )
+    # Configure parameters based on model and mode
+    if "gpt-5" in model_name:
+        if simple_mode:
+            llm = ChatOpenAI(
+                model=model_name,
+                temperature=temperature,
+                verbosity="low",
+                reasoning_effort="minimal",
+                max_tokens=300,
+            )
+        else:
+            llm = ChatOpenAI(
+                model=model_name,
+                temperature=temperature,
+                verbosity="low",
+                reasoning_effort="minimal",
+            )
+    else:
+        # For other models (gpt-4o, gpt-4o-mini, etc.)
+        if simple_mode:
+            llm = ChatOpenAI(
+                model=model_name,
+                temperature=temperature,
+                max_tokens=300,
+            )
+        else:
+            llm = ChatOpenAI(
+                model=model_name,
+                temperature=temperature,
+            )
     
     return llm
 
@@ -175,7 +211,7 @@ def convert_to_numpy_arrays(climate_data: Dict, simple_mode: bool = False) -> Di
         return result
 
 def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False, month: str = "July") -> Optional[Dict]:
-    """Query LLM for climate data with retry logic"""
+    """Query LLM for climate data with retry logic (single request)"""
     
     # Prepare location info
     longitude = point_data.get('lon', 'N/A')
@@ -220,8 +256,64 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
     print(f"  Failed to get valid response after {max_retries} attempts")
     return None
 
-def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: str = "gpt-5-nano", simple_mode: bool = False, month: str = "July"):
+def query_climate_data_batch(llm, prompt_template, point_data: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July") -> List[Optional[Dict]]:
+    """Query LLM for climate data using batch processing"""
+    
+    # Prepare location info
+    longitude = point_data.get('lon', 'N/A')
+    latitude = point_data.get('lat', 'N/A')
+    country = point_data.get('country', 'N/A') if point_data.get('country') else 'N/A'
+    state = point_data.get('state', 'N/A') if point_data.get('state') else 'N/A'
+    city = point_data.get('city', 'N/A') if point_data.get('city') else 'N/A'
+    
+    # Create the same prompt for all repeats
+    messages = prompt_template.format_messages(
+        longitude=longitude,
+        latitude=latitude,
+        country=country,
+        state=state,
+        city=city
+    )
+    
+    # Create batch inputs (same prompt repeated)
+    inputs = [messages] * num_repeats
+    
+    # Run batch query
+    print(f"  Running {num_repeats} queries in parallel batch...")
+    results = llm.batch(inputs, config={"max_concurrency": num_repeats})
+    
+    # Process results
+    processed_results = []
+    successful_responses = 0
+    
+    for i, response in enumerate(results):
+        if response and hasattr(response, 'content'):
+            response_text = response.content
+            
+            # Validate and parse response
+            parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+            
+            if parsed_data is not None:
+                processed_results.append({
+                    'raw_response': response_text,
+                    'parsed_data': parsed_data,
+                    'numpy_arrays': convert_to_numpy_arrays(parsed_data, simple_mode),
+                    'batch_index': i + 1
+                })
+                successful_responses += 1
+            else:
+                processed_results.append(None)
+        else:
+            processed_results.append(None)
+    
+    print(f"  ✓ Batch completed: {successful_responses}/{num_repeats} successful responses")
+    return processed_results
+
+def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name: str = "gpt-5-nano", simple_mode: bool = False, month: str = "July", use_batch: bool = True, disable_tracing: bool = False):
     """Main function to process climate benchmark"""
+    
+    # Configure LangSmith tracing
+    configure_langsmith(disable_tracing)
     
     print(f"Loading mesh data from {mesh_file}...")
     mesh_data = load_mesh_data(mesh_file)
@@ -229,8 +321,11 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
     resolution = mesh_data['resolution']
     
     mode_str = f"Simple ({month} temp only)" if simple_mode else "Full (all months)"
+    batch_str = "Batch processing" if use_batch else "Individual processing"
     print(f"Loaded {len(mesh_points)} points with {resolution}° resolution")
     print(f"Mode: {mode_str}")
+    print(f"Processing: {batch_str}")
+    print(f"Repeats per point: {num_repeats}")
     
     # Filter land points
     land_points = [point for point in mesh_points if point['is_land']]
@@ -238,7 +333,9 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
     
     # Initialize LLM
     print(f"Initializing LLM: {model_name}")
-    llm = initialize_llm(model_name)
+    if simple_mode:
+        print("Simple mode: Using max_tokens=10 for faster processing")
+    llm = initialize_llm(model_name, simple_mode=simple_mode)
     prompt_template = create_climate_prompt(simple_mode, month)
     
     # Process each land point
@@ -254,20 +351,25 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
             'llm_responses': []
         }
         
-        # Make multiple queries for statistics
-        for repeat in range(num_repeats):
-            if num_repeats > 1:
-                print(f"  Query {repeat + 1}/{num_repeats}")
+        if use_batch and num_repeats > 1:
+            # Use batch processing for multiple repeats
+            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, num_repeats, simple_mode, month)
+            point_results['llm_responses'] = batch_responses
             
-            climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=3, simple_mode=simple_mode, month=month)
-            
-            if climate_response:
-                point_results['llm_responses'].append(climate_response)
-                print(f"  ✓ Successfully got climate data")
-            else:
-                print(f"  ✗ Failed to get climate data")
-                point_results['llm_responses'].append(None)
-            
+        else:
+            # Use individual processing (original method)
+            for repeat in range(num_repeats):
+                if num_repeats > 1:
+                    print(f"  Query {repeat + 1}/{num_repeats}")
+                
+                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=3, simple_mode=simple_mode, month=month)
+                
+                if climate_response:
+                    point_results['llm_responses'].append(climate_response)
+                    print(f"  ✓ Successfully got climate data")
+                else:
+                    print(f"  ✗ Failed to get climate data")
+                    point_results['llm_responses'].append(None)
         
         results.append(point_results)
         
@@ -277,11 +379,11 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
             intermediate_file = f"results/climate_results_intermediate_{i+1}{mode_suffix}.json"
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
-            save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month)
+            save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch)
     
     return results, mesh_data
 
-def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str, simple_mode: bool = False, month: str = "July"):
+def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str, simple_mode: bool = False, month: str = "July", use_batch: bool = True):
     """Save climate benchmark results"""
     print(f"Saving results to {output_file}...")
     
@@ -296,7 +398,8 @@ def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_n
             'num_repeats_per_point': len(results[0]['llm_responses']) if results else 0,
             'simple_mode': simple_mode,
             'query_type': f'{month.lower()}_temp_only' if simple_mode else 'full_climate_data',
-            'month': month if simple_mode else None
+            'month': month if simple_mode else None,
+            'batch_processing': use_batch
         }
     }
     
@@ -311,10 +414,12 @@ def main():
     
     # Parse command line arguments
     mesh_file = 'meshes/mesh_data_10deg.json'
-    num_repeats = 1
+    num_repeats = 10
     model_name = 'gpt-5-nano'
     simple_mode = True
     month = "July"
+    use_batch = True
+    disable_tracing = False
     
     if len(sys.argv) > 1:
         mesh_file = sys.argv[1]
@@ -330,12 +435,26 @@ def main():
             simple_mode = True
     if len(sys.argv) > 5:
         month = sys.argv[5].capitalize()
+    if len(sys.argv) > 6:
+        arg6 = sys.argv[6].lower()
+        if arg6 in ['false', '0', 'no', 'individual']:
+            use_batch = False
+        elif arg6 in ['true', '1', 'yes', 'batch']:
+            use_batch = True
+    if len(sys.argv) > 7:
+        arg7 = sys.argv[7].lower()
+        if arg7 in ['true', '1', 'yes', 'disable', 'no-trace']:
+            disable_tracing = True
+        elif arg7 in ['false', '0', 'no', 'enable', 'trace']:
+            disable_tracing = False
     
     print(f"Climate LLM Benchmark")
     print(f"Mesh file: {mesh_file}")
     print(f"Repeats per point: {num_repeats}")
     print(f"Model: {model_name}")
     print(f"Mode: {f'Simple ({month} temp only)' if simple_mode else 'Full (all months)'}")
+    print(f"Processing: {'Batch' if use_batch else 'Individual'}")
+    print(f"LangSmith tracing: {'Disabled' if disable_tracing else 'Enabled'}")
     
     # Check if mesh file exists
     if not Path(mesh_file).exists():
@@ -345,7 +464,7 @@ def main():
     
     try:
         # Process the benchmark
-        results, mesh_data = process_climate_benchmark(mesh_file, num_repeats, model_name, simple_mode, month)
+        results, mesh_data = process_climate_benchmark(mesh_file, num_repeats, model_name, simple_mode, month, use_batch, disable_tracing)
         
         # Save final results
         resolution = mesh_data['resolution']
@@ -353,7 +472,7 @@ def main():
         output_file = f"results/climate_results_{resolution}deg_r{num_repeats}{mode_suffix}.json"
         # Create results directory if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
-        save_results(results, mesh_data, output_file, model_name, simple_mode, month)
+        save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch)
         
         # Print summary
         successful_points = sum(1 for r in results if any(resp for resp in r['llm_responses'] if resp))
