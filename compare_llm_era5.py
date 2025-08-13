@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import geopandas as gpd
 import xarray as xr
 import json
 from pathlib import Path
@@ -244,6 +246,190 @@ def plot_llm_era5_comparison(combined_data, output_file=None):
     
     return fig, (rmse, mae, bias, r_corr)
 
+def create_temperature_colormap():
+    """Create a temperature colormap from cold (blue) to hot (red)"""
+    # Custom temperature colormap: blue -> cyan -> green -> yellow -> orange -> red
+    colors_list = ['#000080', '#0000FF', '#00FFFF', '#00FF00', '#FFFF00', '#FFA500', '#FF0000', '#800000']
+    n_bins = 256
+    cmap = colors.LinearSegmentedColormap.from_list('temperature', colors_list, N=n_bins)
+    return cmap
+
+def plot_temperature_map_comparison(mesh_data, combined_data, temp_type='llm', 
+                                  land_shapefile_path='./data/land/ne_10m_land.shp',
+                                  output_file=None, figsize=(15, 10), vmin=None, vmax=None):
+    """Plot temperature map with color-coded temperature values from comparison data"""
+    
+    # Get all mesh points
+    mesh_points = mesh_data['mesh_points']
+    
+    # Extract temperature data based on type
+    temp_data = {}
+    if temp_type == 'llm':
+        temp_key = 'llm_temp_mean'
+        title_prefix = 'LLM Temperature'
+    elif temp_type == 'era5':
+        temp_key = 'era5_temp_mean'
+        title_prefix = 'ERA5 Temperature'
+    elif temp_type == 'difference':
+        temp_key = 'temp_difference'
+        title_prefix = 'Temperature Difference (LLM - ERA5)'
+    else:
+        raise ValueError("temp_type must be 'llm', 'era5', or 'difference'")
+    
+    # Create temperature dictionary from combined data
+    for point in combined_data:
+        if not np.isnan(point.get(temp_key, np.nan)):
+            temp_data[(point['lat'], point['lon'])] = point[temp_key]
+    
+    # Collect only points that have temperature data
+    land_coords = []
+    temp_colors = []
+    
+    # Create temperature colormap
+    if temp_type == 'difference':
+        # Use diverging colormap for differences (blue-white-red)
+        temp_cmap = plt.cm.RdBu_r  # Reversed so red is positive (LLM > ERA5)
+    else:
+        temp_cmap = create_temperature_colormap()
+    
+    # Set temperature range if not provided - use ERA5 range for consistency
+    if vmin is None or vmax is None:
+        if temp_type == 'difference':
+            # For differences, use symmetric range around zero
+            abs_diffs = [abs(temp) for temp in temp_data.values()]
+            if abs_diffs:
+                max_abs_diff = max(abs_diffs)
+                vmin = -max_abs_diff
+                vmax = max_abs_diff
+            else:
+                vmin, vmax = -5, 5  # Default range for differences
+        else:
+            # For temperature maps, use ERA5 range from the comparison points
+            era5_temps = [point['era5_temp_mean'] for point in combined_data 
+                         if not np.isnan(point.get('era5_temp_mean', np.nan))]
+            if era5_temps:
+                if vmin is None:
+                    vmin = min(era5_temps)
+                if vmax is None:
+                    vmax = max(era5_temps)
+            else:
+                vmin, vmax = 0, 30  # Default range
+    
+    # Process all mesh points: only keep land points that have temperature data
+    for point in mesh_points:
+        lat, lon = point['lat'], point['lon']
+        if point['is_land'] and (lat, lon) in temp_data:
+            temp = temp_data[(lat, lon)]
+            # Normalize temperature to [0, 1] range for colormap
+            normalized_temp = (temp - vmin) / (vmax - vmin) if vmax != vmin else 0.5
+            normalized_temp = max(0, min(1, normalized_temp))  # Clamp to [0, 1]
+            land_coords.append([lon, lat])
+            temp_colors.append(temp_cmap(normalized_temp))
+    
+    # Create the plot
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Plot land points with temperature colors
+    if land_coords:
+        land_coords = np.array(land_coords)
+        ax.scatter(land_coords[:, 0], land_coords[:, 1], c=temp_colors, s=15,
+                  alpha=0.9, label='Temperature data points')
+    
+    # Load and plot land boundaries (on top)
+    try:
+        land_gdf = gpd.read_file(land_shapefile_path)
+        land_gdf.plot(ax=ax, color='none', edgecolor='gray', linewidth=0.5, alpha=0.8, zorder=10)
+    except Exception as e:
+        print(f"Could not load land shapefile: {e}")
+    
+    # Customize the plot
+    ax.set_xlim(-180, 180)
+    ax.set_ylim(-60, 85)
+    ax.set_xlabel('Longitude (degrees)', fontsize=12)
+    ax.set_ylabel('Latitude (degrees)', fontsize=12)
+    ax.set_title(f'{title_prefix} Map\nRange: {vmin:.1f}°C to {vmax:.1f}°C', fontsize=14)
+    ax.grid(True, alpha=0.3)
+    
+    # Add colorbar
+    sm = plt.cm.ScalarMappable(cmap=temp_cmap, norm=plt.Normalize(vmin=vmin, vmax=vmax))
+    sm.set_array([])
+    cbar = plt.colorbar(sm, ax=ax, shrink=0.8, aspect=30)
+    if temp_type == 'difference':
+        cbar.set_label('Temperature Difference (°C)', fontsize=12)
+    else:
+        cbar.set_label('Temperature (°C)', fontsize=12)
+    
+    # Add statistics
+    temp_points = len([t for t in temp_data.values() if not np.isnan(t)])
+    stats_text = f'Temperature data points: {temp_points}'
+    if temp_points > 0:
+        temps_list = [t for t in temp_data.values() if not np.isnan(t)]
+        mean_temp = np.mean(temps_list)
+        std_temp = np.std(temps_list)
+        stats_text += f'\nMean: {mean_temp:.1f}°C\nStd: {std_temp:.1f}°C'
+    
+    ax.text(0.02, 0.98, stats_text, transform=ax.transAxes, fontsize=10,
+            verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+    
+    plt.tight_layout()
+    
+    # Save or show the plot
+    if output_file:
+        # Create png directory if it doesn't exist
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        plt.savefig(output_file, dpi=300, bbox_inches='tight')
+        print(f"Temperature map saved to {output_file}")
+    else:
+        plt.show()
+    
+    return fig, ax, vmin, vmax
+
+def create_comparison_maps(mesh_data, combined_data, resolution, output_dir='png'):
+    """Create temperature comparison maps (LLM, ERA5, and difference maps)"""
+    
+    # Determine temperature range from ERA5 data at comparison points
+    era5_temps = [point['era5_temp_mean'] for point in combined_data 
+                 if not np.isnan(point.get('era5_temp_mean', np.nan))]
+    
+    if not era5_temps:
+        print("No valid ERA5 temperature data for mapping")
+        return
+    
+    era5_vmin = min(era5_temps)
+    era5_vmax = max(era5_temps)
+    
+    print(f"Temperature maps will use ERA5 range: {era5_vmin:.1f}°C to {era5_vmax:.1f}°C")
+    
+    # Create output directory
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    
+    # 1. LLM Temperature Map
+    print("Creating LLM temperature map...")
+    llm_output = output_path / f"llm_temperature_map_{resolution}deg.png"
+    plot_temperature_map_comparison(mesh_data, combined_data, temp_type='llm', 
+                                   output_file=str(llm_output), 
+                                   vmin=era5_vmin, vmax=era5_vmax)
+    
+    # 2. ERA5 Temperature Map  
+    print("Creating ERA5 temperature map...")
+    era5_output = output_path / f"era5_temperature_map_{resolution}deg.png"
+    plot_temperature_map_comparison(mesh_data, combined_data, temp_type='era5',
+                                   output_file=str(era5_output),
+                                   vmin=era5_vmin, vmax=era5_vmax)
+    
+    # 3. Difference Map (LLM - ERA5)
+    print("Creating temperature difference map...")
+    diff_output = output_path / f"temperature_difference_map_{resolution}deg.png"
+    plot_temperature_map_comparison(mesh_data, combined_data, temp_type='difference',
+                                   output_file=str(diff_output))
+    
+    print(f"All comparison maps saved to {output_dir}/")
+    
+    return era5_vmin, era5_vmax
+
 def print_comparison_summary(combined_data):
     """Print summary statistics of the comparison"""
     
@@ -349,6 +535,10 @@ def main():
         # Create comparison plot
         plot_filename = f"png/llm_era5_comparison_{mesh_data['resolution']}deg.png"
         plot_llm_era5_comparison(combined_data, plot_filename)
+        
+        # Create temperature comparison maps
+        print("\nCreating temperature comparison maps...")
+        create_comparison_maps(mesh_data, combined_data, mesh_data['resolution'])
         
         print("\nComparison completed successfully!")
         
