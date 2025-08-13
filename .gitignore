@@ -37,3 +37,7 @@ Thumbs.db
 *.log
 *.tmp
 *_intermediate_*
+
+# Results
+results/*.json
+results/*.csv
