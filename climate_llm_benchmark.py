@@ -14,9 +14,10 @@ def initialize_llm(model_name="gpt-5-nano", temperature=0.1):
     llm = ChatOpenAI(
         model=model_name,
         temperature=temperature,
-        max_tokens=2000,
-        timeout=30
+        verbosity="low",
+        reasoning_effort="minimal",
     )
+    
     return llm
 
 def create_climate_prompt():
@@ -32,13 +33,13 @@ Location Information:
 - City: {city}
 
 Please provide the following climate data for this location:
-1. Temperature at 2m above surface (°C) - monthly climatological means for 1991-2020
-2. Total precipitation (mm/day) - monthly climatological means for 1991-2020
+1. Temperature at 2m above surface (°C) - monthly climatological means, minimums and maximums for 1991-2020
+2. Total precipitation (mm/day) - monthly climatological means, minimums and maximums for 1991-2020
 
 For each month (January through December), provide:
 - mean: average value
-- min: minimum typical value 
-- max: maximum typical value
+- min: minimum value 
+- max: maximum value
 
 IMPORTANT: return only JSON object nothing else!!!!!!!!!!!!!!!!!!!!!!!
 

@@ -25,16 +25,16 @@ def plot_mesh_with_land(mesh_points, resolution, land_shapefile_path='./data/lan
     
     # Plot ocean points (black)
     if ocean_lons:
-        ax.scatter(ocean_lons, ocean_lats, c='black', s=20, alpha=0.6, label='Ocean points')
+        ax.scatter(ocean_lons, ocean_lats, c='black', s=10, alpha=0.6, label='Ocean points')
     
     # Plot land points (colored)
     if land_lons:
-        ax.scatter(land_lons, land_lats, c='red', s=30, alpha=0.8, label='Land points')
+        ax.scatter(land_lons, land_lats, c='red', s=15, alpha=0.8, label='Land points')
     
-    # Load and plot land boundaries from shapefile
+    # Load and plot land boundaries from shapefile (on top)
     try:
         land_gdf = gpd.read_file(land_shapefile_path)
-        land_gdf.plot(ax=ax, color='none', edgecolor='green', linewidth=0.5, alpha=0.7)
+        land_gdf.plot(ax=ax, color='none', edgecolor='green', linewidth=0.8, alpha=0.9, zorder=10)
         print("Land boundaries loaded and plotted")
     except Exception as e:
         print(f"Could not load land shapefile: {e}")
@@ -104,7 +104,7 @@ def plot_mesh_countries(mesh_points, resolution, land_shapefile_path='./data/lan
     # Plot ocean points
     ocean_df = df[~df['is_land']]
     if not ocean_df.empty:
-        ax.scatter(ocean_df['lon'], ocean_df['lat'], c='black', s=20, alpha=0.6, label='Ocean')
+        ax.scatter(ocean_df['lon'], ocean_df['lat'], c='black', s=10, alpha=0.6, label='Ocean')
     
     # Plot land points by country
     land_df = df[df['is_land']]
@@ -115,13 +115,13 @@ def plot_mesh_countries(mesh_points, resolution, land_shapefile_path='./data/lan
         for country, color in zip(unique_countries, colors):
             if country and country != 'Ocean':
                 country_df = land_df[land_df['country'] == country]
-                ax.scatter(country_df['lon'], country_df['lat'], c=[color], s=30, 
+                ax.scatter(country_df['lon'], country_df['lat'], c=[color], s=15, 
                           alpha=0.8, label=country if len(country) < 15 else country[:12] + '...')
     
-    # Load and plot land boundaries
+    # Load and plot land boundaries (on top)
     try:
         land_gdf = gpd.read_file(land_shapefile_path)
-        land_gdf.plot(ax=ax, color='none', edgecolor='gray', linewidth=0.3, alpha=0.5)
+        land_gdf.plot(ax=ax, color='none', edgecolor='gray', linewidth=0.5, alpha=0.8, zorder=10)
     except Exception as e:
         print(f"Could not load land shapefile: {e}")
     
