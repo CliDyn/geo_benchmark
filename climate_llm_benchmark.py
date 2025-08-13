@@ -20,10 +20,26 @@ def initialize_llm(model_name="gpt-5-nano", temperature=0.1):
     
     return llm
 
-def create_climate_prompt():
+def create_climate_prompt(simple_mode=False):
     """Create prompt template for climate data requests"""
     
-    prompt_template = """You are a climate data expert. Given the location coordinates and address information below, provide climatological mean values for temperature and precipitation for the period 1991-2020.
+    if simple_mode:
+        prompt_template = """You are a climate data expert. Given the location coordinates and address information below, provide the mean July temperature for the period 1991-2020.
+
+Location Information:
+- Longitude: {longitude}
+- Latitude: {latitude}
+- Country: {country}
+- State/Region: {state}
+- City: {city}
+
+Provide ONLY the mean July temperature at 2m above surface (°C) for this location for the climatological period 1991-2020.
+
+IMPORTANT: Return ONLY a single number (float) representing the mean July temperature in Celsius. No text, no JSON, just the number.
+
+Example: 25.4"""
+    else:
+        prompt_template = """You are a climate data expert. Given the location coordinates and address information below, provide climatological mean values for temperature and precipitation for the period 1991-2020.
 
 Location Information:
 - Longitude: {longitude}
@@ -77,64 +93,83 @@ Return ONLY a JSON object with this exact structure (no additional text):
 
     return ChatPromptTemplate.from_template(prompt_template)
 
-def validate_and_parse_response(response_text: str) -> Optional[Dict]:
-    """Validate and parse LLM JSON response"""
+def validate_and_parse_response(response_text: str, simple_mode: bool = False) -> Optional[Dict]:
+    """Validate and parse LLM response"""
     try:
-        # Try to extract JSON from response
         response_text = response_text.strip()
         
-        # Remove any markdown formatting
-        if response_text.startswith("```json"):
-            response_text = response_text[7:]
-        if response_text.endswith("```"):
-            response_text = response_text[:-3]
-        
-        # Parse JSON
-        data = json.loads(response_text)
-        
-        # Validate structure
-        required_keys = ["temperature_2m_celsius", "precipitation_mm_per_day"]
-        months = ["january", "february", "march", "april", "may", "june",
-                 "july", "august", "september", "october", "november", "december"]
-        
-        for key in required_keys:
-            if key not in data:
-                return None
-                
-            for month in months:
-                if month not in data[key]:
+        if simple_mode:
+            # For simple mode, expect just a number
+            try:
+                temperature = float(response_text)
+                # Basic sanity check for temperature range
+                if -100 <= temperature <= 60:  # Reasonable temperature range in Celsius
+                    return {'july_temp_mean': temperature}
+                else:
                     return None
-                if not all(stat in data[key][month] for stat in ["mean", "min", "max"]):
+            except ValueError:
+                return None
+        
+        else:
+            # Original JSON validation for full mode
+            # Remove any markdown formatting
+            if response_text.startswith("```json"):
+                response_text = response_text[7:]
+            if response_text.endswith("```"):
+                response_text = response_text[:-3]
+            
+            # Parse JSON
+            data = json.loads(response_text)
+            
+            # Validate structure
+            required_keys = ["temperature_2m_celsius", "precipitation_mm_per_day"]
+            months = ["january", "february", "march", "april", "may", "june",
+                     "july", "august", "september", "october", "november", "december"]
+            
+            for key in required_keys:
+                if key not in data:
                     return None
                     
-        return data
+                for month in months:
+                    if month not in data[key]:
+                        return None
+                    if not all(stat in data[key][month] for stat in ["mean", "min", "max"]):
+                        return None
+                        
+            return data
         
     except json.JSONDecodeError:
         return None
     except Exception:
         return None
 
-def convert_to_numpy_arrays(climate_data: Dict) -> Dict:
+def convert_to_numpy_arrays(climate_data: Dict, simple_mode: bool = False) -> Dict:
     """Convert climate data to numpy arrays for easier analysis"""
-    months = ["january", "february", "march", "april", "may", "june",
-             "july", "august", "september", "october", "november", "december"]
+    if simple_mode:
+        # For simple mode, just return the temperature value
+        return {'july_temp_mean': climate_data.get('july_temp_mean', np.nan)}
     
-    result = {
-        "temperature_2m_celsius": {
-            "mean": np.array([climate_data["temperature_2m_celsius"][month]["mean"] for month in months]),
-            "min": np.array([climate_data["temperature_2m_celsius"][month]["min"] for month in months]),
-            "max": np.array([climate_data["temperature_2m_celsius"][month]["max"] for month in months])
-        },
-        "precipitation_mm_per_day": {
-            "mean": np.array([climate_data["precipitation_mm_per_day"][month]["mean"] for month in months]),
-            "min": np.array([climate_data["precipitation_mm_per_day"][month]["min"] for month in months]),
-            "max": np.array([climate_data["precipitation_mm_per_day"][month]["max"] for month in months])
+    else:
+        # Original conversion for full mode
+        months = ["january", "february", "march", "april", "may", "june",
+                 "july", "august", "september", "october", "november", "december"]
+        
+        result = {
+            "temperature_2m_celsius": {
+                "mean": np.array([climate_data["temperature_2m_celsius"][month]["mean"] for month in months]),
+                "min": np.array([climate_data["temperature_2m_celsius"][month]["min"] for month in months]),
+                "max": np.array([climate_data["temperature_2m_celsius"][month]["max"] for month in months])
+            },
+            "precipitation_mm_per_day": {
+                "mean": np.array([climate_data["precipitation_mm_per_day"][month]["mean"] for month in months]),
+                "min": np.array([climate_data["precipitation_mm_per_day"][month]["min"] for month in months]),
+                "max": np.array([climate_data["precipitation_mm_per_day"][month]["max"] for month in months])
+            }
         }
-    }
-    
-    return result
+        
+        return result
 
-def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3) -> Optional[Dict]:
+def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False) -> Optional[Dict]:
     """Query LLM for climate data with retry logic"""
     
     # Prepare location info
@@ -160,17 +195,18 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
             response_text = response.content
             
             # Validate and parse response
-            parsed_data = validate_and_parse_response(response_text)
+            parsed_data = validate_and_parse_response(response_text, simple_mode)
             
             if parsed_data is not None:
                 return {
                     'raw_response': response_text,
                     'parsed_data': parsed_data,
-                    'numpy_arrays': convert_to_numpy_arrays(parsed_data),
+                    'numpy_arrays': convert_to_numpy_arrays(parsed_data, simple_mode),
                     'attempt': attempt + 1
                 }
             else:
-                print(f"  Attempt {attempt + 1}: Invalid JSON response, retrying...")
+                validation_msg = "Invalid number response" if simple_mode else "Invalid JSON response"
+                print(f"  Attempt {attempt + 1}: {validation_msg}, retrying...")
                 
         except Exception as e:
             print(f"  Attempt {attempt + 1}: Error querying LLM: {e}")
@@ -179,7 +215,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
     print(f"  Failed to get valid response after {max_retries} attempts")
     return None
 
-def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: str = "gpt-5-nano"):
+def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: str = "gpt-5-nano", simple_mode: bool = False):
     """Main function to process climate benchmark"""
     
     print(f"Loading mesh data from {mesh_file}...")
@@ -187,7 +223,9 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
     mesh_points = mesh_data['mesh_points']
     resolution = mesh_data['resolution']
     
+    mode_str = "Simple (July temp only)" if simple_mode else "Full (all months)"
     print(f"Loaded {len(mesh_points)} points with {resolution}° resolution")
+    print(f"Mode: {mode_str}")
     
     # Filter land points
     land_points = [point for point in mesh_points if point['is_land']]
@@ -196,13 +234,13 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
     # Initialize LLM
     print(f"Initializing LLM: {model_name}")
     llm = initialize_llm(model_name)
-    prompt_template = create_climate_prompt()
+    prompt_template = create_climate_prompt(simple_mode)
     
     # Process each land point
     results = []
     
     for i, point_data in enumerate(land_points):
-        print(f"\nProcessing point {i+1}/{len(land_points)}: ({point_data['lat']:.1f}, {point_data['lon']:.1f})")
+        print(f"\nProcessing land point {i+1}/{len(land_points)}: ({point_data['lat']:.1f}, {point_data['lon']:.1f})")
         if point_data.get('country'):
             print(f"  Location: {point_data['country']}, {point_data.get('state', 'N/A')}, {point_data.get('city', 'N/A')}")
         
@@ -216,7 +254,7 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
             if num_repeats > 1:
                 print(f"  Query {repeat + 1}/{num_repeats}")
             
-            climate_response = query_climate_data(llm, prompt_template, point_data)
+            climate_response = query_climate_data(llm, prompt_template, point_data, simple_mode=simple_mode)
             
             if climate_response:
                 point_results['llm_responses'].append(climate_response)
@@ -230,11 +268,15 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 1, model_name: 
         
         # Save intermediate results every 10 points
         if (i + 1) % 10 == 0:
-            save_results(results, mesh_data, f"climate_results_intermediate_{i+1}.json", model_name)
+            mode_suffix = "_simple" if simple_mode else ""
+            intermediate_file = f"results/climate_results_intermediate_{i+1}{mode_suffix}.json"
+            # Create results directory if it doesn't exist
+            Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
+            save_results(results, mesh_data, intermediate_file, model_name, simple_mode)
     
     return results, mesh_data
 
-def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str):
+def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str, simple_mode: bool = False):
     """Save climate benchmark results"""
     print(f"Saving results to {output_file}...")
     
@@ -246,7 +288,9 @@ def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_n
         'metadata': {
             'processing_date': time.strftime('%Y-%m-%d %H:%M:%S'),
             'model_used': model_name,
-            'num_repeats_per_point': len(results[0]['llm_responses']) if results else 0
+            'num_repeats_per_point': len(results[0]['llm_responses']) if results else 0,
+            'simple_mode': simple_mode,
+            'query_type': 'july_temp_only' if simple_mode else 'full_climate_data'
         }
     }
     
@@ -260,9 +304,10 @@ def main():
     import sys
     
     # Parse command line arguments
-    mesh_file = 'mesh_data_10deg.json'
+    mesh_file = 'meshes/mesh_data_10deg.json'
     num_repeats = 1
     model_name = 'gpt-5-nano'
+    simple_mode = False
     
     if len(sys.argv) > 1:
         mesh_file = sys.argv[1]
@@ -270,11 +315,14 @@ def main():
         num_repeats = int(sys.argv[2])
     if len(sys.argv) > 3:
         model_name = sys.argv[3]
+    if len(sys.argv) > 4:
+        simple_mode = sys.argv[4].lower() in ['true', '1', 'yes', 'simple']
     
     print(f"Climate LLM Benchmark")
     print(f"Mesh file: {mesh_file}")
     print(f"Repeats per point: {num_repeats}")
     print(f"Model: {model_name}")
+    print(f"Mode: {'Simple (July temp only)' if simple_mode else 'Full (all months)'}")
     
     # Check if mesh file exists
     if not Path(mesh_file).exists():
@@ -284,12 +332,15 @@ def main():
     
     try:
         # Process the benchmark
-        results, mesh_data = process_climate_benchmark(mesh_file, num_repeats, model_name)
+        results, mesh_data = process_climate_benchmark(mesh_file, num_repeats, model_name, simple_mode)
         
         # Save final results
         resolution = mesh_data['resolution']
-        output_file = f"climate_results_{resolution}deg_r{num_repeats}.json"
-        save_results(results, mesh_data, output_file, model_name)
+        mode_suffix = "_simple" if simple_mode else ""
+        output_file = f"results/climate_results_{resolution}deg_r{num_repeats}{mode_suffix}.json"
+        # Create results directory if it doesn't exist
+        Path(output_file).parent.mkdir(parents=True, exist_ok=True)
+        save_results(results, mesh_data, output_file, model_name, simple_mode)
         
         # Print summary
         successful_points = sum(1 for r in results if any(resp for resp in r['llm_responses'] if resp))
