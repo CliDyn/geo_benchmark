@@ -9,3 +9,5 @@ numpy
 pandas
 matplotlib
 requests
+xarray
+netcdf4
