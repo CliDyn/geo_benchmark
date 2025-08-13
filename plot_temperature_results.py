@@ -276,8 +276,8 @@ def main():
     import sys
     
     # Default files
-    mesh_file = 'meshes/mesh_data_20.0deg.json'
-    results_file = 'results/climate_results_20.0deg_r1_simple.json'
+    mesh_file = 'meshes/mesh_data_10.0deg.json'
+    results_file = 'results/climate_results_10.0deg_r10_simple.json'
     output_prefix = 'temperature_map'
     
     # Parse command line arguments
