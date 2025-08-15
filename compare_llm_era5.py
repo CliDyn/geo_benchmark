@@ -78,8 +78,11 @@ def extract_era5_climatology(climatology_file, coordinates, month):
     
     for lat, lon in coordinates:
         try:
+            # Convert longitude from -180-180 to 0-360 if needed
+            era5_lon = lon if lon >= 0 else lon + 360
+            
             # Select nearest grid point
-            point_data = ds.sel(latitude=lat, longitude=lon, month=month_num, method='nearest')
+            point_data = ds.sel(latitude=lat, longitude=era5_lon, month=month_num, method='nearest')
             
             era5_data.append({
                 'era5_temp_mean': float(point_data['t2m_mean'].values),
