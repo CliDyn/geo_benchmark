@@ -7,6 +7,7 @@ from geo_mesh_processor import load_mesh_data
 
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
+import glob
 
 def configure_langsmith(disable_tracing: bool = False):
     """Configure LangSmith tracing"""
@@ -19,6 +20,63 @@ def configure_langsmith(disable_tracing: bool = False):
             pass  # LangSmith not installed, ignore
     else:
         print("LangSmith tracing enabled (default)")
+
+def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) -> Optional[str]:
+    """Find the latest intermediate file for resuming"""
+    mode_suffix = "_simple" if simple_mode else ""
+    pattern = f"results/climate_results_intermediate_*{mode_suffix}.json"
+    
+    # Find all matching intermediate files
+    intermediate_files = glob.glob(pattern)
+    
+    if not intermediate_files:
+        return None
+    
+    # Extract numbers and sort to find the latest
+    file_numbers = []
+    for file_path in intermediate_files:
+        try:
+            # Extract number from filename like "climate_results_intermediate_1840_simple.json"
+            filename = Path(file_path).stem
+            if simple_mode:
+                number_part = filename.replace("climate_results_intermediate_", "").replace("_simple", "")
+            else:
+                number_part = filename.replace("climate_results_intermediate_", "")
+            
+            number = int(number_part)
+            file_numbers.append((number, file_path))
+        except ValueError:
+            continue
+    
+    if not file_numbers:
+        return None
+    
+    # Sort by number and return the path of the latest file
+    file_numbers.sort(key=lambda x: x[0], reverse=True)
+    latest_file = file_numbers[0][1]
+    
+    return latest_file
+
+def load_intermediate_results(intermediate_file: str) -> tuple[List[Dict], Dict, int]:
+    """Load intermediate results and return results, mesh_data, and start_index"""
+    print(f"Loading intermediate results from {intermediate_file}...")
+    
+    with open(intermediate_file, 'r') as f:
+        data = json.load(f)
+    
+    results = data['results']
+    
+    # Reconstruct mesh_data from the saved data
+    mesh_data = {
+        'mesh_info': data['mesh_info'],
+        'resolution': data['resolution'],
+        'mesh_points': []  # Will be loaded from the original mesh file
+    }
+    
+    start_index = len(results)
+    print(f"Found {start_index} completed points, resuming from point {start_index + 1}")
+    
+    return results, mesh_data, start_index
 
 def initialize_llm(model_name="gpt-5-nano", temperature=0, simple_mode=False):
     """Initialize OpenAI LLM with LangChain"""
@@ -309,7 +367,7 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, num_repeats
     print(f"  ✓ Batch completed: {successful_responses}/{num_repeats} successful responses")
     return processed_results
 
-def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name: str = "gpt-5-nano", simple_mode: bool = False, month: str = "July", use_batch: bool = True, disable_tracing: bool = False):
+def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name: str = "gpt-5-nano", simple_mode: bool = False, month: str = "July", use_batch: bool = True, disable_tracing: bool = False, resume: bool = False):
     """Main function to process climate benchmark"""
     
     # Configure LangSmith tracing
@@ -331,6 +389,21 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name:
     land_points = [point for point in mesh_points if point['is_land']]
     print(f"Found {len(land_points)} land points")
     
+    # Check for resuming from intermediate file
+    results = []
+    start_index = 0
+    
+    if resume:
+        latest_file = find_latest_intermediate_file(resolution, simple_mode)
+        if latest_file:
+            results, saved_mesh_data, start_index = load_intermediate_results(latest_file)
+            print(f"Resuming from intermediate file: {latest_file}")
+            print(f"Will continue from land point {start_index + 1}/{len(land_points)}")
+        else:
+            print("No intermediate files found, starting from beginning")
+    else:
+        print("Starting fresh processing")
+    
     # Initialize LLM
     print(f"Initializing LLM: {model_name}")
     if simple_mode:
@@ -338,10 +411,9 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name:
     llm = initialize_llm(model_name, simple_mode=simple_mode)
     prompt_template = create_climate_prompt(simple_mode, month)
     
-    # Process each land point
-    results = []
+    # Process each land point (starting from start_index if resuming)
     
-    for i, point_data in enumerate(land_points):
+    for i, point_data in enumerate(land_points[start_index:], start=start_index):
         print(f"\nProcessing land point {i+1}/{len(land_points)}: ({point_data['lat']:.1f}, {point_data['lon']:.1f})")
         if point_data.get('country'):
             print(f"  Location: {point_data['country']}, {point_data.get('state', 'N/A')}, {point_data.get('city', 'N/A')}")
@@ -420,6 +492,7 @@ def main():
     month = "July"
     use_batch = True
     disable_tracing = False
+    resume = False
     
     if len(sys.argv) > 1:
         mesh_file = sys.argv[1]
@@ -447,6 +520,12 @@ def main():
             disable_tracing = True
         elif arg7 in ['false', '0', 'no', 'enable', 'trace']:
             disable_tracing = False
+    if len(sys.argv) > 8:
+        arg8 = sys.argv[8].lower()
+        if arg8 in ['true', '1', 'yes', 'resume']:
+            resume = True
+        elif arg8 in ['false', '0', 'no', 'fresh']:
+            resume = False
     
     print(f"Climate LLM Benchmark")
     print(f"Mesh file: {mesh_file}")
@@ -455,6 +534,7 @@ def main():
     print(f"Mode: {f'Simple ({month} temp only)' if simple_mode else 'Full (all months)'}")
     print(f"Processing: {'Batch' if use_batch else 'Individual'}")
     print(f"LangSmith tracing: {'Disabled' if disable_tracing else 'Enabled'}")
+    print(f"Resume mode: {'Enabled' if resume else 'Disabled'}")
     
     # Check if mesh file exists
     if not Path(mesh_file).exists():
@@ -464,7 +544,7 @@ def main():
     
     try:
         # Process the benchmark
-        results, mesh_data = process_climate_benchmark(mesh_file, num_repeats, model_name, simple_mode, month, use_batch, disable_tracing)
+        results, mesh_data = process_climate_benchmark(mesh_file, num_repeats, model_name, simple_mode, month, use_batch, disable_tracing, resume)
         
         # Save final results
         resolution = mesh_data['resolution']
