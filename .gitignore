@@ -43,4 +43,4 @@ Thumbs.db
 results/*
 results/*.csv
 
-!results/climate_results_1.0deg_r10_simple_era5.json
+!results/climate_results_1.0deg_r10_simple.json
