@@ -28,6 +28,7 @@ data/land/*.shx
 data/land/*.dbf
 data/land/*.prj
 data/*nc
+!data/t2m_climatology_1991-2020.nc
 
 # OS files
 .DS_Store
