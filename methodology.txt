@@ -1,0 +1,54 @@
+METHODOLOGY
+
+Geographic Mesh Generation
+
+A regular geographic coordinate grid was generated using numpy meshgrid operations with user-specified resolution in degrees. The coordinate space spans longitude -180° to 180° and latitude -60° to 85°, excluding polar regions where climate models exhibit reduced accuracy. For each resolution r, coordinate pairs were generated at intervals of r degrees, producing (360/r) × (145/r) total grid points.
+
+Land-ocean classification was performed using Natural Earth 10m Land shapefiles via geopandas geometric operations. Each coordinate pair was converted to a Shapely Point geometry and tested for containment within land polygons using the 'contains' method. Only land-classified points were retained for climate assessment, as ERA5 reanalysis data provides more reliable terrestrial than oceanic temperature estimates.
+
+Geographic metadata enrichment was performed via Nominatim reverse geocoding API for each land point. The system retrieved administrative boundaries (country, state/province, city) with 1-second rate limiting to comply with OpenStreetMap usage policies. This geographic information was subsequently incorporated into LLM prompts to provide contextual location data.
+
+Large Language Model Querying Protocol
+
+LLM queries were executed using the LangChain framework with OpenAI's API. Two operational modes were implemented: 'simple' mode requesting single-month temperature values, and 'full' mode requesting complete annual climatology including temperature and precipitation statistics.
+
+For simple mode, the prompt template specified: "You are a climate data expert. Given the location coordinates and address information below, provide the mean [MONTH] temperature for the period 1991-2020. Provide ONLY the mean [MONTH] temperature at 2m above surface (°C) for this location for the climatological period 1991-2020. IMPORTANT: Return ONLY a single number (float) representing the mean [MONTH] temperature in Celsius."
+
+Parallel batch processing was implemented to optimize API throughput, with configurable repeat parameters (typically 10-20 queries per coordinate) to quantify LLM response variability. Temperature constraints of -100°C to +60°C were applied for response validation. Failed queries were retried up to 3 attempts before exclusion from analysis.
+
+The system incorporated checkpoint functionality, automatically saving intermediate results every 10 processed points to enable recovery from interruptions during large-scale experiments. Resume operations detected the highest-numbered intermediate file and continued processing from the subsequent coordinate.
+
+ERA5 Climatology Processing
+
+ERA5 reanalysis climatology data (1991-2020 period) was processed using xarray for NetCDF file operations. Monthly temperature statistics (mean, minimum, maximum, standard deviation) were extracted at 0.25° resolution. For each LLM query coordinate, the nearest ERA5 grid point was selected using xarray's 'nearest' interpolation method.
+
+Longitude coordinate transformation was applied when necessary, converting ERA5's 0-360° longitude convention to the standard -180° to 180° range used in the geographic mesh. Month selection was performed via integer mapping (January=1, December=12) to extract appropriate temporal slices from the ERA5 dataset.
+
+Statistical Analysis and Error Quantification
+
+LLM temperature predictions were aggregated using numpy statistical functions. For each coordinate with multiple LLM responses, mean temperature, standard deviation, and response count were calculated. Points with insufficient valid responses (<1 successful query) were excluded from comparative analysis.
+
+Statistical comparison between LLM predictions and ERA5 climatology employed standard meteorological error metrics:
+
+Root Mean Square Error: RMSE = √(Σ(T_LLM - T_ERA5)²/N)
+Mean Absolute Error: MAE = Σ|T_LLM - T_ERA5|/N  
+Bias: BIAS = Σ(T_LLM - T_ERA5)/N
+Pearson correlation coefficient: r = cov(T_LLM, T_ERA5)/(σ_LLM × σ_ERA5)
+
+Where T_LLM represents LLM temperature predictions, T_ERA5 represents ERA5 climatological means, and N is the number of valid comparison points.
+
+Error bars in scatter plot visualizations represent two distinct uncertainty sources: horizontal error bars indicate ERA5 climatological standard deviation (1991-2020 interannual variability), while vertical error bars represent LLM response variability (standard deviation across multiple queries for each coordinate).
+
+Visualization and Spatial Analysis
+
+Temperature mapping employed custom colormaps with consistent scaling across LLM and ERA5 visualizations. The temperature colormap progressed from blue (cold) through cyan, green, yellow, orange to red (warm) using LinearSegmentedColormap with 256 discrete levels. Difference maps utilized a diverging red-blue colormap where red indicates LLM > ERA5 and blue indicates LLM < ERA5.
+
+Spatial interpolation was not applied; visualizations display point data at original mesh resolution to preserve spatial accuracy. All temperature maps maintained ERA5-derived color scale bounds to enable direct visual comparison between datasets.
+
+Country-level performance analysis aggregated points by administrative boundaries, calculating per-country error statistics for nations with ≥3 comparison points. This approach enabled identification of geographic regions where LLM predictions exhibited systematic biases relative to reanalysis climatology.
+
+Data Management and Reproducibility
+
+All intermediate and final results were serialized to JSON format with comprehensive metadata including processing timestamps, model parameters, and mesh configuration. Output filenames encoded resolution and repeat parameters (e.g., climate_results_10.0deg_r10_simple.json) for systematic organization.
+
+The framework implemented automatic directory creation for organized output storage: meshes/ for coordinate grids, results/ for LLM query outputs, and png/ for visualization products. This structure ensures reproducible workflows and facilitates batch processing across multiple resolution and parameter configurations.
