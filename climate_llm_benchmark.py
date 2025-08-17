@@ -1,13 +1,67 @@
 import numpy as np
 import json
 import time
+import os
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from geo_mesh_processor import load_mesh_data
 
-from langchain_openai import ChatOpenAI
+# Core langchain imports
 from langchain.prompts import ChatPromptTemplate
+from langchain.schema import BaseMessage
 import glob
+import yaml
+
+# Model provider imports (with optional handling)
+try:
+    from langchain_openai import ChatOpenAI
+except ImportError:
+    ChatOpenAI = None
+
+try:
+    from langchain_anthropic import ChatAnthropic
+except ImportError:
+    ChatAnthropic = None
+
+try:
+    from langchain_google_genai import ChatGoogleGenerativeAI
+except ImportError:
+    ChatGoogleGenerativeAI = None
+
+try:
+    from langchain_community.llms import Ollama
+    from langchain_community.chat_models import ChatOllama
+except ImportError:
+    Ollama = None
+    ChatOllama = None
+
+def load_config(config_path: str = "config.yaml") -> Dict:
+    """Load configuration from YAML file"""
+    if not Path(config_path).exists():
+        print(f"Warning: Config file {config_path} not found. Using defaults.")
+        return {}
+    
+    try:
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        print(f"Loaded configuration from {config_path}")
+        return config
+    except Exception as e:
+        print(f"Error loading config file {config_path}: {e}")
+        return {}
+
+def get_config_value(config: Dict, key_path: str, default=None):
+    """Get nested configuration value using dot notation"""
+    keys = key_path.split('.')
+    value = config
+    
+    for key in keys:
+        if isinstance(value, dict) and key in value:
+            value = value[key]
+        else:
+            return default
+    
+    return value
 
 def configure_langsmith(disable_tracing: bool = False):
     """Configure LangSmith tracing"""
@@ -78,41 +132,105 @@ def load_intermediate_results(intermediate_file: str) -> tuple[List[Dict], Dict,
     
     return results, mesh_data, start_index
 
-def initialize_llm(model_name="gpt-5-nano", temperature=0, simple_mode=False):
-    """Initialize OpenAI LLM with LangChain"""
+def initialize_llm(config: Dict, model_name: str = None, temperature: float = None, simple_mode: bool = None):
+    """Initialize LLM based on configuration and provider"""
     
-    # Configure parameters based on model and mode
-    if "gpt-5" in model_name:
-        if simple_mode:
-            llm = ChatOpenAI(
-                model=model_name,
-                temperature=temperature,
-                verbosity="low",
-                reasoning_effort="minimal",
-                max_tokens=300,
-            )
-        else:
-            llm = ChatOpenAI(
-                model=model_name,
-                temperature=temperature,
-                verbosity="low",
-                reasoning_effort="minimal",
-            )
+    # Get values from config or use provided values
+    provider = get_config_value(config, 'model.provider', 'openai')
+    model_name = model_name or get_config_value(config, 'model.name', 'gpt-5-nano')
+    temperature = temperature if temperature is not None else get_config_value(config, 'model.temperature', 0)
+    max_tokens = get_config_value(config, 'model.max_tokens', 300 if simple_mode else None)
+    timeout = get_config_value(config, 'model.timeout', 30)
+    
+    print(f"Initializing {provider} model: {model_name}")
+    
+    if provider == "openai":
+        if ChatOpenAI is None:
+            raise ImportError("langchain-openai not installed. Install with: pip install langchain-openai")
+        
+        api_key_env = get_config_value(config, 'providers.openai.api_key_env', 'OPENAI_API_KEY')
+        base_url = get_config_value(config, 'providers.openai.base_url')
+        organization = get_config_value(config, 'providers.openai.organization')
+        
+        llm_kwargs = {
+            'model': model_name,
+            'temperature': temperature,
+            'request_timeout': timeout,
+        }
+        
+        if max_tokens:
+            llm_kwargs['max_tokens'] = max_tokens
+        if base_url:
+            llm_kwargs['base_url'] = base_url
+        if organization:
+            llm_kwargs['organization'] = organization
+        
+        # Special handling for GPT-5 models
+        if "gpt-5" in model_name:
+            llm_kwargs.update({
+                'verbosity': "low",
+                'reasoning_effort': "minimal",
+            })
+        
+        return ChatOpenAI(**llm_kwargs)
+    
+    elif provider == "anthropic":
+        if ChatAnthropic is None:
+            raise ImportError("langchain-anthropic not installed. Install with: pip install langchain-anthropic")
+        
+        api_key_env = get_config_value(config, 'providers.anthropic.api_key_env', 'ANTHROPIC_API_KEY')
+        base_url = get_config_value(config, 'providers.anthropic.base_url')
+        
+        llm_kwargs = {
+            'model': model_name,
+            'temperature': temperature,
+            'timeout': timeout,
+        }
+        
+        if max_tokens:
+            llm_kwargs['max_tokens'] = max_tokens
+        if base_url:
+            llm_kwargs['base_url'] = base_url
+        
+        return ChatAnthropic(**llm_kwargs)
+    
+    elif provider == "google":
+        if ChatGoogleGenerativeAI is None:
+            raise ImportError("langchain-google-genai not installed. Install with: pip install langchain-google-genai")
+        
+        api_key_env = get_config_value(config, 'providers.google.api_key_env', 'GOOGLE_API_KEY')
+        
+        llm_kwargs = {
+            'model': model_name,
+            'temperature': temperature,
+        }
+        
+        if max_tokens:
+            llm_kwargs['max_output_tokens'] = max_tokens
+        
+        return ChatGoogleGenerativeAI(**llm_kwargs)
+    
+    elif provider == "ollama":
+        if ChatOllama is None:
+            raise ImportError("langchain-community not installed. Install with: pip install langchain-community")
+        
+        base_url = get_config_value(config, 'providers.ollama.base_url', 'http://localhost:11434')
+        ollama_timeout = get_config_value(config, 'providers.ollama.timeout', 60)
+        
+        llm_kwargs = {
+            'model': model_name,
+            'temperature': temperature,
+            'base_url': base_url,
+            'timeout': ollama_timeout,
+        }
+        
+        if max_tokens:
+            llm_kwargs['num_predict'] = max_tokens
+        
+        return ChatOllama(**llm_kwargs)
+    
     else:
-        # For other models (gpt-4o, gpt-4o-mini, etc.)
-        if simple_mode:
-            llm = ChatOpenAI(
-                model=model_name,
-                temperature=temperature,
-                max_tokens=300,
-            )
-        else:
-            llm = ChatOpenAI(
-                model=model_name,
-                temperature=temperature,
-            )
-    
-    return llm
+        raise ValueError(f"Unsupported provider: {provider}. Supported providers: openai, anthropic, google, ollama")
 
 def create_climate_prompt(simple_mode=False, month="July"):
     """Create prompt template for climate data requests"""
@@ -314,7 +432,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
     print(f"  Failed to get valid response after {max_retries} attempts")
     return None
 
-def query_climate_data_batch(llm, prompt_template, point_data: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July") -> List[Optional[Dict]]:
+def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July") -> List[Optional[Dict]]:
     """Query LLM for climate data using batch processing"""
     
     # Prepare location info
@@ -333,42 +451,92 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, num_repeats
         city=city
     )
     
-    # Create batch inputs (same prompt repeated)
-    inputs = [messages] * num_repeats
+    # Get max concurrency from config
+    max_concurrency = get_config_value(config, 'batch.max_concurrency', num_repeats)
     
-    # Run batch query
-    print(f"  Running {num_repeats} queries in parallel batch...")
-    results = llm.batch(inputs, config={"max_concurrency": num_repeats})
+    # Check if the LLM supports batch processing
+    provider = get_config_value(config, 'model.provider', 'openai')
     
-    # Process results
-    processed_results = []
-    successful_responses = 0
-    
-    for i, response in enumerate(results):
-        if response and hasattr(response, 'content'):
-            response_text = response.content
-            
-            # Validate and parse response
-            parsed_data = validate_and_parse_response(response_text, simple_mode, month)
-            
-            if parsed_data is not None:
-                processed_results.append({
-                    'raw_response': response_text,
-                    'parsed_data': parsed_data,
-                    'numpy_arrays': convert_to_numpy_arrays(parsed_data, simple_mode),
-                    'batch_index': i + 1
-                })
-                successful_responses += 1
+    if hasattr(llm, 'batch') and provider in ['openai', 'anthropic']:
+        # Use native batch processing for supported providers
+        # Create batch inputs (same prompt repeated)
+        inputs = [messages] * num_repeats
+        
+        # Run batch query
+        print(f"  Running {num_repeats} queries in parallel batch...")
+        results = llm.batch(inputs, config={"max_concurrency": max_concurrency})
+        
+        # Process results
+        processed_results = []
+        successful_responses = 0
+        
+        for i, response in enumerate(results):
+            if response and hasattr(response, 'content'):
+                response_text = response.content
+                
+                # Validate and parse response
+                parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+                
+                if parsed_data is not None:
+                    processed_results.append({
+                        'raw_response': response_text,
+                        'parsed_data': parsed_data,
+                        'numpy_arrays': convert_to_numpy_arrays(parsed_data, simple_mode),
+                        'batch_index': i + 1
+                    })
+                    successful_responses += 1
+                else:
+                    processed_results.append(None)
             else:
                 processed_results.append(None)
-        else:
-            processed_results.append(None)
+        
+        print(f"  ✓ Batch completed: {successful_responses}/{num_repeats} successful responses")
+        return processed_results
     
-    print(f"  ✓ Batch completed: {successful_responses}/{num_repeats} successful responses")
-    return processed_results
+    else:
+        # Fallback to individual queries for providers that don't support batch processing
+        print(f"  Running {num_repeats} individual queries (batch not supported for {provider})...")
+        processed_results = []
+        successful_responses = 0
+        
+        for i in range(num_repeats):
+            try:
+                response = llm.invoke(messages)
+                response_text = response.content if hasattr(response, 'content') else str(response)
+                
+                # Validate and parse response
+                parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+                
+                if parsed_data is not None:
+                    processed_results.append({
+                        'raw_response': response_text,
+                        'parsed_data': parsed_data,
+                        'numpy_arrays': convert_to_numpy_arrays(parsed_data, simple_mode),
+                        'batch_index': i + 1
+                    })
+                    successful_responses += 1
+                else:
+                    processed_results.append(None)
+            
+            except Exception as e:
+                print(f"    Query {i+1} failed: {e}")
+                processed_results.append(None)
+        
+        print(f"  ✓ Individual queries completed: {successful_responses}/{num_repeats} successful responses")
+        return processed_results
 
-def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name: str = "gpt-5-nano", simple_mode: bool = False, month: str = "July", use_batch: bool = True, disable_tracing: bool = False, resume: bool = False):
+def process_climate_benchmark(config: Dict):
     """Main function to process climate benchmark"""
+    
+    # Get all values from config
+    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
+    model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
+    simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
+    month = get_config_value(config, 'benchmark.month', 'July')
+    use_batch = get_config_value(config, 'benchmark.use_batch', True)
+    disable_tracing = get_config_value(config, 'benchmark.disable_tracing', False)
+    resume = get_config_value(config, 'benchmark.resume', False)
     
     # Configure LangSmith tracing
     configure_langsmith(disable_tracing)
@@ -380,7 +548,9 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name:
     
     mode_str = f"Simple ({month} temp only)" if simple_mode else "Full (all months)"
     batch_str = "Batch processing" if use_batch else "Individual processing"
+    provider = get_config_value(config, 'model.provider', 'openai')
     print(f"Loaded {len(mesh_points)} points with {resolution}° resolution")
+    print(f"Provider: {provider}")
     print(f"Mode: {mode_str}")
     print(f"Processing: {batch_str}")
     print(f"Repeats per point: {num_repeats}")
@@ -405,14 +575,13 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name:
         print("Starting fresh processing")
     
     # Initialize LLM
-    print(f"Initializing LLM: {model_name}")
-    if simple_mode:
-        print("Simple mode: Using max_tokens=10 for faster processing")
-    llm = initialize_llm(model_name, simple_mode=simple_mode)
+    llm = initialize_llm(config, model_name, simple_mode=simple_mode)
     prompt_template = create_climate_prompt(simple_mode, month)
     
-    # Process each land point (starting from start_index if resuming)
+    # Get save interval from config
+    save_interval = get_config_value(config, 'batch.save_interval', 10)
     
+    # Process each land point (starting from start_index if resuming)
     for i, point_data in enumerate(land_points[start_index:], start=start_index):
         print(f"\nProcessing land point {i+1}/{len(land_points)}: ({point_data['lat']:.1f}, {point_data['lon']:.1f})")
         if point_data.get('country'):
@@ -425,16 +594,17 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name:
         
         if use_batch and num_repeats > 1:
             # Use batch processing for multiple repeats
-            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, num_repeats, simple_mode, month)
+            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, config, num_repeats, simple_mode, month)
             point_results['llm_responses'] = batch_responses
             
         else:
             # Use individual processing (original method)
+            max_retries = get_config_value(config, 'model.max_retries', 3)
             for repeat in range(num_repeats):
                 if num_repeats > 1:
                     print(f"  Query {repeat + 1}/{num_repeats}")
                 
-                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=3, simple_mode=simple_mode, month=month)
+                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=max_retries, simple_mode=simple_mode, month=month)
                 
                 if climate_response:
                     point_results['llm_responses'].append(climate_response)
@@ -445,10 +615,13 @@ def process_climate_benchmark(mesh_file: str, num_repeats: int = 10, model_name:
         
         results.append(point_results)
         
-        # Save intermediate results every 10 points
-        if (i + 1) % 10 == 0:
+        # Save intermediate results at configured interval
+        if (i + 1) % save_interval == 0:
             mode_suffix = "_simple" if simple_mode else ""
-            intermediate_file = f"results/climate_results_intermediate_{i+1}{mode_suffix}.json"
+            # Clean model name for filename (replace special characters)
+            clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
+            results_dir = get_config_value(config, 'output.results_dir', 'results')
+            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{mode_suffix}.json"
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
             save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch)
@@ -484,52 +657,29 @@ def main():
     """Main function"""
     import sys
     
-    # Parse command line arguments
-    mesh_file = 'meshes/mesh_data_10deg.json'
-    num_repeats = 10
-    model_name = 'gpt-5-nano'
-    simple_mode = True
-    month = "July"
-    use_batch = True
-    disable_tracing = False
-    resume = False
-    
+    # Load configuration (only allow specifying config file)
+    config_file = "config.yaml"
     if len(sys.argv) > 1:
-        mesh_file = sys.argv[1]
-    if len(sys.argv) > 2:
-        num_repeats = int(sys.argv[2])
-    if len(sys.argv) > 3:
-        model_name = sys.argv[3]
-    if len(sys.argv) > 4:
-        arg4 = sys.argv[4].lower()
-        if arg4 in ['false', '0', 'no', 'full']:
-            simple_mode = False
-        elif arg4 in ['true', '1', 'yes', 'simple']:
-            simple_mode = True
-    if len(sys.argv) > 5:
-        month = sys.argv[5].capitalize()
-    if len(sys.argv) > 6:
-        arg6 = sys.argv[6].lower()
-        if arg6 in ['false', '0', 'no', 'individual']:
-            use_batch = False
-        elif arg6 in ['true', '1', 'yes', 'batch']:
-            use_batch = True
-    if len(sys.argv) > 7:
-        arg7 = sys.argv[7].lower()
-        if arg7 in ['true', '1', 'yes', 'disable', 'no-trace']:
-            disable_tracing = True
-        elif arg7 in ['false', '0', 'no', 'enable', 'trace']:
-            disable_tracing = False
-    if len(sys.argv) > 8:
-        arg8 = sys.argv[8].lower()
-        if arg8 in ['true', '1', 'yes', 'resume']:
-            resume = True
-        elif arg8 in ['false', '0', 'no', 'fresh']:
-            resume = False
+        config_file = sys.argv[1]
+    
+    config = load_config(config_file)
+    
+    # Get all values from config
+    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
+    model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
+    simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
+    month = get_config_value(config, 'benchmark.month', 'July')
+    use_batch = get_config_value(config, 'benchmark.use_batch', True)
+    disable_tracing = get_config_value(config, 'benchmark.disable_tracing', False)
+    resume = get_config_value(config, 'benchmark.resume', False)
+    provider = get_config_value(config, 'model.provider', 'openai')
     
     print(f"Climate LLM Benchmark")
+    print(f"Configuration: {config_file}")
     print(f"Mesh file: {mesh_file}")
     print(f"Repeats per point: {num_repeats}")
+    print(f"Provider: {provider}")
     print(f"Model: {model_name}")
     print(f"Mode: {f'Simple ({month} temp only)' if simple_mode else 'Full (all months)'}")
     print(f"Processing: {'Batch' if use_batch else 'Individual'}")
@@ -544,12 +694,15 @@ def main():
     
     try:
         # Process the benchmark
-        results, mesh_data = process_climate_benchmark(mesh_file, num_repeats, model_name, simple_mode, month, use_batch, disable_tracing, resume)
+        results, mesh_data = process_climate_benchmark(config)
         
         # Save final results
         resolution = mesh_data['resolution']
         mode_suffix = "_simple" if simple_mode else ""
-        output_file = f"results/climate_results_{resolution}deg_r{num_repeats}{mode_suffix}.json"
+        # Clean model name for filename (replace special characters)
+        clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
+        results_dir = get_config_value(config, 'output.results_dir', 'results')
+        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{mode_suffix}.json"
         # Create results directory if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
         save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch)
@@ -568,6 +721,8 @@ def main():
         
     except Exception as e:
         print(f"Error running benchmark: {e}")
+        import traceback
+        traceback.print_exc()
 
 if __name__ == "__main__":
     main()
