@@ -28,25 +28,105 @@ pip install -r requirements.txt
 # 1. Generate geographic mesh (resolution in degrees)
 python geo_mesh_processor.py {resolution}
 
-# 2. Run LLM benchmark with all parameters
-python climate_llm_benchmark.py {mesh_file} {num_repeats} {model} {mode} {month} {processing} {tracing} {resume}
+# 2. Configure your settings in config.yaml, then run:
+python climate_llm_benchmark.py
 
-# 3. Compare LLM results with ERA5 climatology
+# 3. Or use a custom config file:
+python climate_llm_benchmark.py my_custom_config.yaml
+
+# 4. Compare LLM results with ERA5 climatology
 python compare_llm_era5.py {mesh_file} {results_file} {era5_climatology_file}
 
-# 4. Visualize temperature results
+# 5. Visualize temperature results
 python plot_temperature_results.py {mesh_file} {results_file}
 
-# 5. Plot mesh visualization
+# 6. Plot mesh visualization
 python plot_mesh.py {mesh_file}
 ```
 
-### Example Workflows
+## Model Provider Support
+
+The framework now supports multiple LLM providers:
+
+### OpenAI (Default)
 ```bash
-# Quick evaluation (coarse resolution)
+# Set environment variable
+export OPENAI_API_KEY="your-api-key"
+
+# Configure in config.yaml
+model:
+  provider: "openai"
+  name: "gpt-5-nano"  # or gpt-4o, gpt-4o-mini, gpt-3.5-turbo
+```
+
+### Anthropic Claude
+```bash
+# Install dependencies
+pip install langchain-anthropic
+
+# Set environment variable
+export ANTHROPIC_API_KEY="your-api-key"
+
+# Configure in config.yaml
+model:
+  provider: "anthropic"
+  name: "claude-3-5-sonnet-20241022"
+```
+
+### Google Gemini
+```bash
+# Install dependencies
+pip install langchain-google-genai
+
+# Set environment variable
+export GOOGLE_API_KEY="your-api-key"
+
+# Configure in config.yaml
+model:
+  provider: "google"
+  name: "gemini-1.5-pro"
+```
+
+### Ollama (Local Models)
+```bash
+# Install dependencies
+pip install langchain-community
+
+# Start Ollama server
+ollama serve
+
+# Pull a model
+ollama pull llama3.1:8b
+
+# Configure in config.yaml
+model:
+  provider: "ollama"
+  name: "llama3.1:8b"
+```
+
+### Example Workflows
+
+#### Quick evaluation with OpenAI
+```bash
 python geo_mesh_processor.py 20
-python climate_llm_benchmark.py meshes/mesh_data_20.0deg.json 3 gpt-5-nano simple July batch disable
-python compare_llm_era5.py meshes/mesh_data_20.0deg.json results/climate_results_20.0deg_r3_simple.json data/t2m_climatology_1991-2020.nc
+# Edit config.yaml to set mesh_file: "meshes/mesh_data_20.0deg.json"
+python climate_llm_benchmark.py
+python compare_llm_era5.py meshes/mesh_data_20.0deg.json results/climate_results_20.0deg_r10_simple.json data/t2m_climatology_1991-2020.nc
+```
+
+#### Using different model providers
+```bash
+# For Anthropic Claude
+# Edit config.yaml to set provider: "anthropic", name: "claude-3-5-sonnet-20241022"
+python climate_llm_benchmark.py
+
+# For Google Gemini  
+# Edit config.yaml to set provider: "google", name: "gemini-1.5-pro"
+python climate_llm_benchmark.py
+
+# For Ollama local models
+# Edit config.yaml to set provider: "ollama", name: "llama3.1:8b"
+python climate_llm_benchmark.py
 
 # High-resolution production run with resume capability
 python geo_mesh_processor.py 1

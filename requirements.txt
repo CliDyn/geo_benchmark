@@ -11,3 +11,16 @@ matplotlib
 requests
 xarray
 netcdf4
+pyyaml
+
+# Optional model provider dependencies
+# Install only the providers you plan to use:
+
+# For Anthropic Claude models
+# langchain-anthropic
+
+# For Google Gemini models  
+# langchain-google-genai
+
+# For Ollama local models
+# langchain-community
