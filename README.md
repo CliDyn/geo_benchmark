@@ -9,8 +9,10 @@ This tool creates global geographic meshes, queries LLMs for climate data, and c
 ## Key Features
 
 - **Mesh Generation**: Create global coordinate grids with land/ocean detection
+- **Multi-Provider Support**: OpenAI, Anthropic Claude, Google Gemini, and Ollama local models
 - **LLM Benchmarking**: Parallel batch processing with resume functionality  
 - **Climate Comparison**: Compare LLM predictions vs ERA5 climatology
+- **Configuration-Based**: YAML configuration for easy setup and reproducibility
 - **Visualization**: Generate temperature maps, comparison plots, and statistical charts
 - **ERA5 Integration**: Process and compare against ERA5 reanalysis data
 
@@ -18,13 +20,17 @@ This tool creates global geographic meshes, queries LLMs for climate data, and c
 
 ```bash
 # 1. Generate mesh
-python geo_mesh_processor.py 10
+python geo_mesh_processor.py 20
 
-# 2. Run LLM benchmark (batch mode, 10 repeats)
-python climate_llm_benchmark.py meshes/mesh_data_10.0deg.json 10 gpt-5-nano
+# 2. Configure settings in config.yaml
+# Set mesh_file: "meshes/mesh_data_20.0deg.json"
+# Set provider: "openai" and model: "gpt-5-nano"
 
-# 3. Compare with ERA5 climatology
-python compare_llm_era5.py meshes/mesh_data_10.0deg.json results/climate_results_10.0deg_r10_simple.json data/t2m_climatology_1991-2020.nc
+# 3. Run LLM benchmark
+python climate_llm_benchmark.py
+
+# 4. Compare with ERA5 climatology  
+python compare_llm_era5.py meshes/mesh_data_20.0deg.json results/climate_results_20.0deg_r10_gpt-5-nano_simple.json data/t2m_climatology_1991-2020.nc
 ```
 
 ## Documentation
@@ -35,11 +41,27 @@ python compare_llm_era5.py meshes/mesh_data_10.0deg.json results/climate_results
 ## Requirements
 
 - Python 3.8+
-- OpenAI API key  
+- API keys for your chosen provider:
+  - OpenAI API key (for GPT models)
+  - Anthropic API key (for Claude models) 
+  - Google API key (for Gemini models)
+  - Ollama server (for local models)
 - ERA5 climatology data (NetCDF format)
 - Land boundary shapefile: [Natural Earth 10m Land](https://www.naturalearthdata.com/downloads/10m-physical-vectors/) → `data/land/`
 
 Install dependencies: `pip install -r requirements.txt`
+
+**Optional provider dependencies:**
+```bash
+# For Anthropic Claude
+pip install langchain-anthropic
+
+# For Google Gemini
+pip install langchain-google-genai
+
+# For Ollama local models
+pip install langchain-community
+```
 
 ## Citation
 
