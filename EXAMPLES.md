@@ -179,3 +179,54 @@ python compare_llm_era5.py meshes/mesh_data_10.0deg.json results/climate_results
 
 *Times vary based on model, API performance, and batch size.*
 
+## Example 4: Comprehensive Analysis Pipeline
+
+**Goal**: Full analysis with geographic covariates and statistical modeling.
+
+```bash
+# Step 1: Complete data enhancement
+python extend_results_with_spatial_rmse.py results/climate_results_1.0deg_r10_simple_era5.json
+python add_population_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse.json
+python aggregate_bathymetry.py
+python add_bathymetry_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse_population.json
+
+# Step 2: Advanced visualizations
+python plot_spatial_analysis.py
+python plot_temperature_comparison_colored.py
+python plot_elevation_clusters.py
+python plot_population_clusters.py
+
+# Step 3: Statistical analysis
+python multivariate_rmse_analysis.py
+```
+
+**Outputs**:
+- Enhanced result file with 20+ parameters per point
+- Density scatter plots with geographic coloring
+- 3×3 clustering grids by elevation/population
+- Statistical modeling report (GAM/XGBoost if available)
+
+## Example 5: Publication-Ready Analysis
+
+**Goal**: Generate comprehensive publication figures.
+
+```bash
+# Core analysis
+python plot_temperature_comparison_colored.py  # Combined 3-panel figure
+python plot_elevation_clusters.py              # 3×3 elevation clusters  
+python multivariate_rmse_analysis.py          # Statistical distributions
+
+# Geographic maps
+python plot_population_map.py                 # Population density
+python plot_bathymetry_map.py                # Elevation/roughness
+
+# Correlation analysis  
+python plot_spatial_analysis.py              # Density plots with KDE
+```
+
+**Key Outputs**:
+- `temperature_comparison_1.0deg_combined.png` - Main comparison figure
+- `elevation_clusters_1.0deg.png` - Performance by elevation
+- `correlation_matrix.png` - Variable relationships
+- `multivariate_rmse_report.txt` - Statistical summary
+

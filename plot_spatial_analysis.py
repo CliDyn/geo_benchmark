@@ -12,7 +12,7 @@ Usage:
     python plot_spatial_analysis.py [results_file]
 
 Default: results/climate_results_20.0deg_r10_simple_spatial_rmse.json
-Output: png/spatial_analysis_*_{resolution}deg.png
+Output: png/{results_filename}/spatial_analysis_*_{resolution}deg.png
 """
 
 import numpy as np
@@ -480,16 +480,16 @@ def create_all_spatial_maps(results_data, resolution, output_dir='png'):
         'spatial_r4_bias': ('(9×9 neighborhood)', 'RdBu_r'),
         
         # Neighborhood LLM mean temperature
-        'spatial_r2_neighborhood_llm_mean': ('(5×5 neighborhood)', 'temperature'),
-        'spatial_r4_neighborhood_llm_mean': ('(9×9 neighborhood)', 'temperature'),
+        'spatial_r2_neighborhood_llm_mean': ('(5×5 neighborhood)', 'coolwarm'),
+        'spatial_r4_neighborhood_llm_mean': ('(9×9 neighborhood)', 'coolwarm'),
         
         # Neighborhood ERA5 mean temperature
-        'spatial_r2_neighborhood_era5_mean': ('(5×5 neighborhood)', 'temperature'),
-        'spatial_r4_neighborhood_era5_mean': ('(9×9 neighborhood)', 'temperature'),
+        'spatial_r2_neighborhood_era5_mean': ('(5×5 neighborhood)', 'coolwarm'),
+        'spatial_r4_neighborhood_era5_mean': ('(9×9 neighborhood)', 'coolwarm'),
         
         # Individual point temperatures
-        'llm_temp_mean': ('(Individual Points)', 'temperature'),
-        'era5_temp_mean': ('(Individual Points)', 'temperature'),
+        'llm_temp_mean': ('(Individual Points)', 'coolwarm'),
+        'era5_temp_mean': ('(Individual Points)', 'coolwarm'),
     }
     
     created_maps = []
@@ -614,11 +614,17 @@ def main():
         # Extract resolution from metadata
         resolution = results_data.get('resolution', 20.0)
         
+        # Create subfolder based on results filename
+        results_filename = Path(results_file).stem  # Get filename without extension
+        output_dir = Path('png') / results_filename
+        output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"Output directory: {output_dir}")
+        
         # Create all spatial maps
-        created_maps = create_all_spatial_maps(results_data, resolution)
+        created_maps = create_all_spatial_maps(results_data, resolution, str(output_dir))
         
         # Create comparison plots
-        created_comparison_plots = create_all_comparison_plots(results_data, resolution)
+        created_comparison_plots = create_all_comparison_plots(results_data, resolution, str(output_dir))
         
         # Print summary statistics
         print_summary_statistics(results_data)
@@ -628,6 +634,7 @@ def main():
         print(f"Created {len(created_maps)} spatial maps")
         print(f"Created {len(created_comparison_plots)} comparison plots")
         print(f"Total: {total_plots} plots")
+        print(f"All files saved in: {output_dir}/")
         
     except Exception as e:
         print(f"Error during plotting: {e}")
