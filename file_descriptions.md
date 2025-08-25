@@ -48,6 +48,12 @@ Extends LLM result files with spatial RMSE calculations for each point. Automati
 ### plot_spatial_analysis.py
 Creates comprehensive spatial analysis maps and LLM vs ERA5 comparison plots from spatial RMSE-enhanced result files. Generates maps for RMSE, bias, neighborhood temperatures, and individual point temperatures for both radius 2 and 4. Creates density scatter plots with KDE-based point density coloring, 1:1 line, regression line with equation, and statistical analysis. Includes difference histograms with normal distribution overlay. Uses smart colormaps and includes detailed statistics. **Output**: `png/spatial_analysis_{resolution}deg_{field}.png`, `png/llm_era5_comparison_{resolution}deg.png`
 
+### add_population_to_results.py
+Adds population density data to existing result files by reading ASCII grid format population data. Reads GPW v4 population density data (1° resolution, 360×180 global grid) and matches coordinates using nearest neighbor interpolation. Adds population density field to each point. Handles NODATA values and provides comprehensive population statistics. **Output**: `results/*_population.json`
+
+### plot_population_map.py
+Creates population density maps and comparison plots from population-enhanced result files. Generates population map with log-scale visualization and comprehensive comparison analysis: population vs spatial RMSE/MAE/bias (r2 and r4), population vs LLM-ERA5 temperature differences, spatial RMSE r2 vs r4 comparisons. Uses density scatter plots with population coloring, regression lines, and correlation analysis. Provides detailed population statistics and correlation summaries. **Output**: `png/population_density_map_{resolution}deg.png`, `png/population_comparison_{resolution}deg_*.png`
+
 ### test.py
 Simple LangChain test script for Ollama model integration. Tests basic model invocation with location queries in English and Russian. Used for development and debugging LLM connections.
 
@@ -117,6 +123,16 @@ Simple LangChain test script for Ollama model integration. Tests basic model inv
     "spatial_r4_n_neighbors": 45,
     "spatial_r4_neighborhood_llm_mean": 25.1,
     "spatial_r4_neighborhood_era5_mean": 25.4
+  }
+}
+```
+
+### Population-Enhanced Result File (after add_population_to_results.py)
+```json
+{
+  "point_info": {
+    // Basic + ERA5 + Spatial RMSE fields...
+    "population_density": 145.7
   }
 }
 ```
