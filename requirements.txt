@@ -12,6 +12,7 @@ requests
 xarray
 netcdf4
 pyyaml
+scipy
 
 # Optional model provider dependencies
 # Install only the providers you plan to use:
