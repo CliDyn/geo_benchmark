@@ -5,9 +5,11 @@ Complete guide for using the GEO Benchmark framework to evaluate LLM climate pre
 ## Workflow Overview
 
 1. **Generate Mesh** → Create global coordinate grid
-2. **Run LLM Benchmark** → Query LLMs for climate data
+2. **Run LLM Benchmark** → Query LLMs for climate data  
 3. **Process ERA5 Data** → Prepare reference climatology
-4. **Compare Results** → Generate analysis and visualizations
+4. **Enhance with Spatial RMSE** → Add neighborhood analysis
+5. **Add Population/Bathymetry** → Integrate geographic datasets
+6. **Advanced Analysis** → Clustering, multivariate modeling
 
 ## 1. Mesh Generation
 
@@ -305,20 +307,83 @@ python climate_llm_benchmark.py
 - Validate with multiple months/seasons
 - Compare different LLM models
 
+## 6. Advanced Analysis Pipeline
+
+### Spatial RMSE Enhancement
+```bash
+# Add neighborhood analysis to existing results
+python extend_results_with_spatial_rmse.py results/climate_results_1.0deg_r10_simple_era5.json
+```
+
+### Population Integration  
+```bash
+# Add population density data
+python add_population_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse.json
+```
+
+### Bathymetry Integration
+```bash
+# 1. Aggregate GEBCO data to 1° grid
+python aggregate_bathymetry.py
+
+# 2. Add elevation parameters  
+python add_bathymetry_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse_population.json
+```
+
+### Comprehensive Visualization
+```bash
+# Enhanced spatial analysis with density plots
+python plot_spatial_analysis.py
+
+# Population analysis
+python plot_population_map.py
+
+# Bathymetry analysis  
+python plot_bathymetry_map.py
+
+# Colored comparison plots
+python plot_temperature_comparison_colored.py
+```
+
+### Clustering Analysis
+```bash
+# Elevation-based clusters (3×3 grid)
+python plot_elevation_clusters.py
+
+# Population-based clusters (3×3 grid)
+python plot_population_clusters.py
+```
+
+### Multivariate Analysis
+```bash
+# Comprehensive statistical modeling
+python multivariate_rmse_analysis.py
+# Outputs: distributions, correlations, GAM/XGBoost (if available), spatial CV
+```
+
 ## File Structure
 
 ```
 geo_benchmark/
 ├── data/
 │   ├── land/                    # Natural Earth shapefiles
-│   └── t2m_climatology_*.nc    # ERA5 climatology
+│   ├── t2m_climatology_*.nc    # ERA5 climatology
+│   └── bathymetry_1deg_aggregated.nc  # GEBCO elevation data
 ├── meshes/
 │   └── mesh_data_*.json        # Generated meshes
 ├── results/
-│   ├── climate_results_*.json  # LLM benchmark results
-│   └── climate_results_*_era5.json  # Combined LLM+ERA5
+│   ├── climate_results_*.json           # Basic LLM results
+│   ├── climate_results_*_era5.json     # + ERA5 data  
+│   ├── climate_results_*_spatial_rmse.json  # + spatial analysis
+│   ├── climate_results_*_population.json   # + population data
+│   └── climate_results_*_bathymetry.json   # + elevation data
+├── reports/
+│   └── multivariate_rmse_report.txt    # Statistical analysis
 └── png/
     ├── mesh_plot_*.png         # Mesh visualizations
     ├── temperature_map_*.png   # Temperature maps
-    └── *_comparison_*.png      # Comparison plots
+    ├── *_comparison_*.png      # Comparison plots
+    ├── *_clusters_*.png        # Clustering analysis
+    ├── distributions.png       # Statistical distributions
+    └── correlation_matrix.png  # Variable correlations
 ```

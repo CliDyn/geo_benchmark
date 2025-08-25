@@ -13,8 +13,8 @@ Usage:
     python plot_population_map.py [results_file]
 
 Default: results/climate_results_1.0deg_r10_simple_spatial_rmse_population.json
-Output: png/population_density_map_{resolution}deg.png
-        png/population_comparison_{resolution}deg_*.png
+Output: png/{results_filename}/population_density_map_{resolution}deg.png
+        png/{results_filename}/population_comparison_{resolution}deg_*.png
 """
 
 import numpy as np
@@ -604,8 +604,13 @@ def main():
             print("No valid population data found for mapping.")
             return
         
+        # Create subfolder based on results filename
+        results_filename = Path(results_file).stem
+        output_dir = Path('png') / results_filename
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
         # Generate output filename
-        output_file = f"png/population_density_map_{resolution}deg.png"
+        output_file = str(output_dir / f"population_density_map_{resolution}deg.png")
         
         # Create population map
         fig = plot_population_map(population_data, resolution, output_file)
@@ -621,7 +626,7 @@ def main():
         
         if comparison_data:
             # Create population comparison plots
-            created_plots, correlations = create_population_comparison_plots(comparison_data, resolution)
+            created_plots, correlations = create_population_comparison_plots(comparison_data, resolution, str(output_dir))
             
             if created_plots:
                 print(f"\nCreated {len(created_plots)} comparison plots")

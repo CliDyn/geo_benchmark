@@ -54,6 +54,27 @@ Adds population density data to existing result files by reading ASCII grid form
 ### plot_population_map.py
 Creates population density maps and comparison plots from population-enhanced result files. Generates population map with log-scale visualization and comprehensive comparison analysis: population vs spatial RMSE/MAE/bias (r2 and r4), population vs LLM-ERA5 temperature differences, spatial RMSE r2 vs r4 comparisons. Uses density scatter plots with population coloring, regression lines, and correlation analysis. Provides detailed population statistics and correlation summaries. **Output**: `png/population_density_map_{resolution}deg.png`, `png/population_comparison_{resolution}deg_*.png`
 
+### aggregate_bathymetry.py
+Aggregates GEBCO 1 arc-minute elevation data to 1° × 1° grid matching project mesh system. Calculates area-weighted statistics (mean, min, max, std) and terrain roughness metric (mean absolute deviation). Uses consistent coordinate system: lats [-60°, 84°], lons [-180°, 179°]. Handles pixel area weighting and CF-compliant NetCDF output. **Output**: `data/bathymetry_1deg_aggregated.nc`
+
+### add_bathymetry_to_results.py
+Adds bathymetry/elevation parameters to existing result files. Reads aggregated bathymetry NetCDF and matches coordinates using nearest neighbor. Adds mean_elevation, min_elevation, max_elevation, std_elevation, roughness to each point. Sets negative elevations to 0 for land points. **Output**: `results/*_bathymetry.json`
+
+### plot_bathymetry_map.py
+Creates elevation and roughness maps using contour visualization. Generates gridded maps (not scatter) with proper coordinate mapping. Uses 'terrain' colormap for elevation, 'plasma' for roughness with log scale. Includes comparison scatter plots: spatial RMSE/MAE vs elevation/roughness, temperature differences vs bathymetry parameters. **Output**: `png/mean_elevation_map_{resolution}deg.png`, `png/terrain_roughness_map_{resolution}deg.png`, comparison plots
+
+### plot_temperature_comparison_colored.py  
+Creates combined LLM vs ERA5 scatter plots with three coloring schemes in single 3-panel figure. Colors points by elevation (linear), population density (log), terrain roughness (log). Each panel includes 1:1 line, regression, statistics. Compact format without histograms. **Output**: `png/temperature_comparison_{resolution}deg_combined.png`
+
+### plot_elevation_clusters.py
+Generates 3×3 grid of LLM vs ERA5 comparisons clustered by elevation ranges (0-500m, 500-1000m, ..., 4000m+). Each subplot shows cluster-specific scatter plot with statistics. Points colored by elevation within cluster. **Output**: `png/elevation_clusters_{resolution}deg.png`
+
+### plot_population_clusters.py  
+Generates 3×3 grid of LLM vs ERA5 comparisons clustered by population density ranges (0-1, 1-5, ..., 500+ people/km²). Log-distributed bins for population clustering. Points colored by population within cluster. **Output**: `png/population_clusters_{resolution}deg.png`
+
+### multivariate_rmse_analysis.py
+Comprehensive multivariate analysis explaining spatial_r2_rmse using population, elevation, roughness. Includes distribution analysis, log/standardization transforms, GAM modeling (if available), XGBoost+SHAP (if available), spatial block cross-validation. Handles missing dependencies gracefully. **Output**: `png/distributions.png`, `png/correlation_matrix.png`, `png/rmse_scatter_plots.png`, `reports/multivariate_rmse_report.txt`
+
 ### test.py
 Simple LangChain test script for Ollama model integration. Tests basic model invocation with location queries in English and Russian. Used for development and debugging LLM connections.
 
@@ -133,6 +154,24 @@ Simple LangChain test script for Ollama model integration. Tests basic model inv
   "point_info": {
     // Basic + ERA5 + Spatial RMSE fields...
     "population_density": 145.7
+  }
+}
+```
+
+### Bathymetry-Enhanced Result File (after add_bathymetry_to_results.py)
+```json
+{
+  "point_info": {
+    // Basic + ERA5 + Spatial RMSE + Population fields...
+    "mean_elevation": 1247.3,
+    "min_elevation": 856.0,
+    "max_elevation": 1634.0,
+    "std_elevation": 187.4,
+    "roughness": 142.8,
+    "bathymetry_nearest_lat": 45.0,
+    "bathymetry_nearest_lon": -120.0,
+    "bathymetry_distance_lat": 0.0,
+    "bathymetry_distance_lon": 0.0
   }
 }
 ```
