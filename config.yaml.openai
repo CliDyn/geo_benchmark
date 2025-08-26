@@ -4,7 +4,7 @@
 
 # Basic benchmark settings
 benchmark:
-  mesh_file: "meshes/mesh_data_20deg.json"  # Path to mesh data file
+  mesh_file: "meshes/mesh_data_20.0deg.json"  # Path to mesh data file
   num_repeats: 10                           # Number of queries per mesh point
   simple_mode: true                         # Simple mode (single month) vs full mode (all months)
   month: "July"                             # Month for simple mode (ignored in full mode)
@@ -19,7 +19,7 @@ model:
   temperature: 0                            # Temperature for generation (0-1)
   max_tokens: 300                           # Max tokens for response (simple mode uses less)
   max_retries: 3                            # Max retries per query
-  timeout: 30                               # Timeout in seconds for individual requests
+  timeout: 300                               # Timeout in seconds for individual requests
 
 # Provider-specific configurations
 providers:
@@ -42,7 +42,7 @@ providers:
 # Batch processing settings
 batch:
   max_concurrency: 10                       # Max concurrent requests in batch mode
-  save_interval: 10                        # Save intermediate results every N points
+  save_interval: 100                        # Save intermediate results every N points
 
 # Output settings
 output:
