@@ -12,6 +12,7 @@ This script runs the complete analysis pipeline:
 7. Generates population clustering plots
 8. Generates bathymetry maps and comparisons
 9. Generates population maps and comparisons
+10. Generates filtered spatial analysis plots (pop≥5/km², elev≤2000m)
 
 Usage:
     python run_complete_analysis_pipeline.py [original_results_file]
@@ -72,6 +73,9 @@ def main():
     
     # Step 9: Generate population maps and comparisons
     run_script('plot_population_map.py', [str(final_file)])
+    
+    # Step 10: Generate filtered spatial analysis plots
+    run_script('plot_spatial_analysis_filtered.py', [str(final_file)])
     
     return 0
 
