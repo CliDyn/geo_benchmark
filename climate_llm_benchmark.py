@@ -4,6 +4,7 @@ import time
 import os
 from pathlib import Path
 from typing import Dict, List, Optional, Union
+import re
 from geo_mesh_processor import load_mesh_data
 
 # Core langchain imports
@@ -305,51 +306,92 @@ Return ONLY a JSON object with this exact structure (no additional text):
 
     return ChatPromptTemplate.from_template(prompt_template)
 
-def validate_and_parse_response(response_text: str, simple_mode: bool = False, month: str = "July") -> Optional[Dict]:
-    """Validate and parse LLM response"""
+def extract_first_float(text: str) -> float:
+    """Estrae il primo numero float da una stringa dopo aver rimosso eventuali blocchi <think>...</think>.
+    Ritorna NaN se non trova numeri."""
+    # rimuovi blocchi di reasoning (deepseek-r1 / qwen reasoning ecc.)
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
+    m = re.search(r"[-+]?\d+(?:\.\d+)?", text)
+    return float(m.group(0)) if m else float("nan")
+
+
+def validate_and_parse_response(
+    response_text: str,
+    simple_mode: bool = False,
+    month: str = "July",
+    provider: Optional[str] = None,
+    model_name: Optional[str] = None,
+) -> Optional[Dict]:
+    """Validate and parse LLM response.
+
+    Aggiornato: per provider 'ollama' con modelli che iniziano con 'qwen' o 'deepseek'
+    (es. deepseek-r1) pulisce e estrae il primo numero anche se il modello restituisce
+    testo aggiuntivo o blocchi <think>."""
     try:
-        response_text = response_text.strip()
-        
+        raw = response_text or ""
+        response_text = raw.strip()
+
         if simple_mode:
-            # For simple mode, expect just a number
-            try:
-                temperature = float(response_text)
-                # Basic sanity check for temperature range
-                if -100 <= temperature <= 60:  # Reasonable temperature range in Celsius
-                    return {f'{month.lower()}_temp_mean': temperature}
-                else:
-                    return None
-            except ValueError:
+            temperature: Optional[float] = None
+
+            # Caso speciale: reasoning / output prolisso (qwen, deepseek via ollama)
+            if provider == "ollama" and model_name:
+                lowered = model_name.lower()
+                if lowered.startswith("qwen") or lowered.startswith("deepseek"):
+                    val = extract_first_float(response_text)
+                    if not (val != val):  # check not NaN
+                        temperature = val
+
+            # Fallback: prova conversione diretta
+            if temperature is None:
+                try:
+                    temperature = float(response_text)
+                except ValueError:
+                    # ultimo tentativo generico: estrai primo float
+                    val2 = extract_first_float(response_text)
+                    if not (val2 != val2):  # not NaN
+                        temperature = val2
+
+            if temperature is None:
                 return None
-        
-        else:
-            # Original JSON validation for full mode
-            # Remove any markdown formatting
-            if response_text.startswith("```json"):
-                response_text = response_text[7:]
-            if response_text.endswith("```"):
-                response_text = response_text[:-3]
-            
-            # Parse JSON
-            data = json.loads(response_text)
-            
-            # Validate structure
-            required_keys = ["temperature_2m_celsius", "precipitation_mm_per_day"]
-            months = ["january", "february", "march", "april", "may", "june",
-                     "july", "august", "september", "october", "november", "december"]
-            
-            for key in required_keys:
-                if key not in data:
+
+            # Range plausibile
+            if -100 <= temperature <= 60:
+                return {f"{month.lower()}_temp_mean": temperature}
+            return None
+
+        # Full mode JSON
+        # Rimuove blocchi markdown json
+        if response_text.startswith("```json"):
+            response_text = response_text[7:]
+        if response_text.endswith("```"):
+            response_text = response_text[:-3]
+
+        data = json.loads(response_text)
+        required_keys = ["temperature_2m_celsius", "precipitation_mm_per_day"]
+        months = [
+            "january",
+            "february",
+            "march",
+            "april",
+            "may",
+            "june",
+            "july",
+            "august",
+            "september",
+            "october",
+            "november",
+            "december",
+        ]
+        for key in required_keys:
+            if key not in data:
+                return None
+            for m in months:
+                if m not in data[key]:
                     return None
-                    
-                for month in months:
-                    if month not in data[key]:
-                        return None
-                    if not all(stat in data[key][month] for stat in ["mean", "min", "max"]):
-                        return None
-                        
-            return data
-        
+                if not all(stat in data[key][m] for stat in ["mean", "min", "max"]):
+                    return None
+        return data
     except json.JSONDecodeError:
         return None
     except Exception:
@@ -386,7 +428,7 @@ def convert_to_numpy_arrays(climate_data: Dict, simple_mode: bool = False) -> Di
         
         return result
 
-def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False, month: str = "July") -> Optional[Dict]:
+def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None) -> Optional[Dict]:
     """Query LLM for climate data with retry logic (single request)"""
     
     # Prepare location info
@@ -412,7 +454,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
             response_text = response.content
             
             # Validate and parse response
-            parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+            parsed_data = validate_and_parse_response(response_text, simple_mode, month, provider=provider, model_name=model_name)
             
             if parsed_data is not None:
                 return {
@@ -432,7 +474,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
     print(f"  Failed to get valid response after {max_retries} attempts")
     return None
 
-def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July") -> List[Optional[Dict]]:
+def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None) -> List[Optional[Dict]]:
     """Query LLM for climate data using batch processing"""
     
     # Prepare location info
@@ -475,7 +517,7 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
                 response_text = response.content
                 
                 # Validate and parse response
-                parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+                parsed_data = validate_and_parse_response(response_text, simple_mode, month, provider=provider, model_name=model_name)
                 
                 if parsed_data is not None:
                     processed_results.append({
@@ -505,7 +547,7 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
                 response_text = response.content if hasattr(response, 'content') else str(response)
                 
                 # Validate and parse response
-                parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+                parsed_data = validate_and_parse_response(response_text, simple_mode, month, provider=provider, model_name=model_name)
                 
                 if parsed_data is not None:
                     processed_results.append({
@@ -594,7 +636,7 @@ def process_climate_benchmark(config: Dict):
         
         if use_batch and num_repeats > 1:
             # Use batch processing for multiple repeats
-            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, config, num_repeats, simple_mode, month)
+            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, config, num_repeats, simple_mode, month, provider=provider, model_name=model_name)
             point_results['llm_responses'] = batch_responses
             
         else:
@@ -604,7 +646,7 @@ def process_climate_benchmark(config: Dict):
                 if num_repeats > 1:
                     print(f"  Query {repeat + 1}/{num_repeats}")
                 
-                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=max_retries, simple_mode=simple_mode, month=month)
+                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=max_retries, simple_mode=simple_mode, month=month, provider=provider, model_name=model_name)
                 
                 if climate_response:
                     point_results['llm_responses'].append(climate_response)
