@@ -8,14 +8,14 @@ benchmark:
   num_repeats: 10                           # Number of queries per mesh point
   simple_mode: true                         # Simple mode (single month) vs full mode (all months)
   month: "July"                             # Month for simple mode (ignored in full mode)
-  use_batch: false                           # Use batch processing for multiple repeats
+  use_batch: true                           # Use batch processing for multiple repeats
   disable_tracing: true                    # Disable LangSmith tracing for faster processing
   resume: false                             # Resume from latest intermediate file
 
 # Model configuration
 model:
-  provider: "ollama"                        # openai, anthropic, google, ollama
-  name: "gemma3:4b"                        # Model name
+  provider: "openai"                        # openai, anthropic, google, ollama
+  name: "gpt-5-nano"                        # Model name
   temperature: 0                            # Temperature for generation (0-1)
   max_tokens: 300                           # Max tokens for response (simple mode uses less)
   max_retries: 3                            # Max retries per query

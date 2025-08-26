@@ -78,7 +78,7 @@ def configure_langsmith(disable_tracing: bool = False):
 def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) -> Optional[str]:
     """Find the latest intermediate file for resuming"""
     mode_suffix = "_simple" if simple_mode else ""
-    pattern = f"results/climate_results_intermediate_*{mode_suffix}.json"
+    pattern = f"results/climate_results_intermediate_*{mode_suffix}_noaddress.json"
     
     # Find all matching intermediate files
     intermediate_files = glob.glob(pattern)
@@ -90,12 +90,12 @@ def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) ->
     file_numbers = []
     for file_path in intermediate_files:
         try:
-            # Extract number from filename like "climate_results_intermediate_1840_simple.json"
+            # Extract number from filename like "climate_results_intermediate_1840_simple_noaddress.json"
             filename = Path(file_path).stem
             if simple_mode:
-                number_part = filename.replace("climate_results_intermediate_", "").replace("_simple", "")
+                number_part = filename.replace("climate_results_intermediate_", "").replace("_simple_noaddress", "")
             else:
-                number_part = filename.replace("climate_results_intermediate_", "")
+                number_part = filename.replace("climate_results_intermediate_", "").replace("_noaddress", "")
             
             number = int(number_part)
             file_numbers.append((number, file_path))
@@ -236,14 +236,11 @@ def create_climate_prompt(simple_mode=False, month="July"):
     """Create prompt template for climate data requests"""
     
     if simple_mode:
-        prompt_template = f"""You are a climate data expert. Given the location coordinates and address information below, provide the mean {month} temperature for the period 1991-2020.
+        prompt_template = f"""You are a climate data expert. Given the location coordinates below, provide the mean {month} temperature for the period 1991-2020.
 
 Location Information:
 - Longitude: {{longitude}}
 - Latitude: {{latitude}}
-- Country: {{country}}
-- State/Region: {{state}}
-- City: {{city}}
 
 Provide ONLY the mean {month} temperature at 2m above surface (°C) for this location for the climatological period 1991-2020.
 
@@ -251,14 +248,11 @@ IMPORTANT: Return ONLY a single number (float) representing the mean {month} tem
 
 Example: 25.4"""
     else:
-        prompt_template = """You are a climate data expert. Given the location coordinates and address information below, provide climatological mean values for temperature and precipitation for the period 1991-2020.
+        prompt_template = """You are a climate data expert. Given the location coordinates below, provide climatological mean values for temperature and precipitation for the period 1991-2020.
 
 Location Information:
 - Longitude: {longitude}
 - Latitude: {latitude}
-- Country: {country}
-- State/Region: {state}
-- City: {city}
 
 Please provide the following climate data for this location:
 1. Temperature at 2m above surface (°C) - monthly climatological means, minimums and maximums for 1991-2020
@@ -401,10 +395,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
             # Create the prompt
             messages = prompt_template.format_messages(
                 longitude=longitude,
-                latitude=latitude,
-                country=country,
-                state=state,
-                city=city
+                latitude=latitude
             )
             
             # Query the LLM
@@ -445,10 +436,7 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
     # Create the same prompt for all repeats
     messages = prompt_template.format_messages(
         longitude=longitude,
-        latitude=latitude,
-        country=country,
-        state=state,
-        city=city
+        latitude=latitude
     )
     
     # Get max concurrency from config
@@ -621,7 +609,7 @@ def process_climate_benchmark(config: Dict):
             # Clean model name for filename (replace special characters)
             clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
             results_dir = get_config_value(config, 'output.results_dir', 'results')
-            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{mode_suffix}.json"
+            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{mode_suffix}_noaddress.json"
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
             save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch)
@@ -702,7 +690,7 @@ def main():
         # Clean model name for filename (replace special characters)
         clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
         results_dir = get_config_value(config, 'output.results_dir', 'results')
-        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{mode_suffix}.json"
+        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{mode_suffix}_noaddress.json"
         # Create results directory if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
         save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch)
