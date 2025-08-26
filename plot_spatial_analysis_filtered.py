@@ -4,7 +4,7 @@ Filtered spatial RMSE analysis plotting script.
 
 This script creates spatial analysis plots similar to plot_spatial_analysis.py but applies filters:
 - Excludes points where population density < 5 people/km²
-- Excludes points where elevation > 1500m
+- Excludes points where elevation > 2000m
 
 Creates the same maps as plot_spatial_analysis.py but with filtered data:
 - RMSE maps (radius 2 and 4)
@@ -59,7 +59,7 @@ def load_enhanced_results(results_file):
     return results_data
 
 
-def extract_filtered_mapping_data(results_data, field_name, min_population=5.0, max_elevation=1500.0):
+def extract_filtered_mapping_data(results_data, field_name, min_population=5.0, max_elevation=2000.0):
     """Extract mapping data for a specific field with population and elevation filtering"""
     mapping_data = []
     total_land_points = 0
@@ -229,12 +229,12 @@ def create_spatial_map(mapping_data, field_name, field_label, colormap, resoluti
     ax.set_ylim(lat_grid.min(), lat_grid.max())
     ax.set_xlabel('Longitude (degrees)', fontsize=12)
     ax.set_ylabel('Latitude (degrees)', fontsize=12)
-    ax.set_title(f'{field_label} Map (Filtered: pop≥5/km², elev≤1500m)\nLand Points: {len(mapping_data)}', 
+    ax.set_title(f'{field_label} Map (Filtered: pop≥5/km², elev≤2000m)\nLand Points: {len(mapping_data)}', 
                 fontsize=14, fontweight='bold')
     ax.grid(True, alpha=0.3)
     
     # Add filter info
-    filter_text = f'Filters: Population ≥ 5 people/km²\n         Elevation ≤ 1500m'
+    filter_text = f'Filters: Population ≥ 5 people/km²\n         Elevation ≤ 2000m'
     ax.text(0.02, 0.98, filter_text, transform=ax.transAxes, fontsize=10,
             verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
     
@@ -284,7 +284,7 @@ def create_density_scatter_with_filters(results_data, resolution, output_file=No
                 filtered_out_pop += 1
                 continue
                 
-            if elevation > 1500.0:
+            if elevation > 2000.0:
                 filtered_out_elev += 1
                 continue
             
@@ -300,7 +300,7 @@ def create_density_scatter_with_filters(results_data, resolution, output_file=No
     print(f"\nFiltering results for comparison plot:")
     print(f"  Total land points with data: {total_land_points}")
     print(f"  Filtered out (pop < 5): {filtered_out_pop}")
-    print(f"  Filtered out (elev > 1500m): {filtered_out_elev}")
+    print(f"  Filtered out (elev > 2000m): {filtered_out_elev}")
     print(f"  Final comparison points: {len(comparison_data)}")
     
     if len(comparison_data) == 0:
@@ -363,7 +363,7 @@ def create_density_scatter_with_filters(results_data, resolution, output_file=No
     stats_text += f'Correlation = {r_corr:.3f}\n\n'
     stats_text += f'Filters Applied:\n'
     stats_text += f'Pop ≥ 5 people/km²\n'
-    stats_text += f'Elev ≤ 1500m'
+    stats_text += f'Elev ≤ 2000m'
     
     ax1.text(0.02, 0.98, stats_text, transform=ax1.transAxes, fontsize=10,
              verticalalignment='top', bbox=dict(boxstyle='round', facecolor='white', alpha=0.9))
@@ -374,6 +374,11 @@ def create_density_scatter_with_filters(results_data, resolution, output_file=No
     ax2.axvline(0, color='red', linestyle='--', linewidth=2, label='Zero difference')
     ax2.axvline(np.mean(differences), color='blue', linestyle='-', linewidth=2, 
                 label=f'Mean diff = {np.mean(differences):+.2f}°C')
+    
+    # Add normal distribution overlay for reference
+    x_norm = np.linspace(differences.min(), differences.max(), 100)
+    y_norm = (1/np.sqrt(2*np.pi*np.var(differences))) * np.exp(-0.5*((x_norm - np.mean(differences))**2)/np.var(differences))
+    ax2.plot(x_norm, y_norm, 'g--', alpha=0.8, linewidth=2, label='Normal fit')
     
     ax2.set_xlabel('Temperature Difference (LLM - ERA5) °C', fontsize=12)
     ax2.set_ylabel('Probability Density', fontsize=12)
@@ -494,7 +499,7 @@ def main():
     print("Filtered Spatial Analysis Plotting")
     print("=" * 50)
     print(f"Results file: {results_file}")
-    print(f"Filters: Population ≥ 5 people/km², Elevation ≤ 1500m")
+    print(f"Filters: Population ≥ 5 people/km², Elevation ≤ 2000m")
     print()
     
     # Check if file exists
