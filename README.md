@@ -13,28 +13,33 @@ This tool creates global geographic meshes, queries LLMs for climate data, and c
 - **LLM Benchmarking**: Parallel batch processing with resume functionality  
 - **Climate Comparison**: Compare LLM predictions vs ERA5 climatology
 - **Configuration-Based**: YAML configuration for easy setup and reproducibility
-- **Visualization**: Generate temperature maps, comparison plots, and statistical charts
+- **Enhanced Analysis**: Spatial RMSE, population density, and bathymetry integration
+- **Comprehensive Visualization**: Temperature maps, clustering analysis, filtered views, and statistical comparisons
+- **Complete Pipeline**: Automated analysis workflow from raw results to publication-ready plots
 - **ERA5 Integration**: Process and compare against ERA5 reanalysis data
 
 ## Quick Start
 
+The framework uses a simple configuration-based approach where you edit `config.yaml` to specify your mesh file, model provider (OpenAI, Anthropic, Google, or **Ollama for local models**), model name, and benchmark parameters, then run `python climate_llm_benchmark.py` to execute the LLM evaluation. For Ollama local models, simply start the Ollama server (`ollama serve`), pull your desired model (`ollama pull llama3.1:8b`), set `provider: "ollama"` and `name: "llama3.1:8b"` in config.yaml, and run the benchmark - no API keys required, making it ideal for offline research and experimentation.
+
+**For fast complete analysis:**
 ```bash
-# 1. Generate mesh
+# 1. Generate mesh and configure settings
 python geo_mesh_processor.py 20
+# Edit config.yaml: set mesh_file, provider, and model
 
-# 2. Configure settings in config.yaml
-# Set mesh_file: "meshes/mesh_data_20.0deg.json"
-# Set provider: "openai" and model: "gpt-5-nano"
-
-# 3. Run LLM benchmark
+# 2. Run LLM benchmark  
 python climate_llm_benchmark.py
 
-# 4. Compare with ERA5 climatology  
-python compare_llm_era5.py meshes/mesh_data_20.0deg.json results/climate_results_20.0deg_r10_gpt-5-nano_simple.json data/t2m_climatology_1991-2020.nc
+# 3. Complete analysis with all enhancements and visualizations
+python run_complete_analysis_pipeline.py results/climate_results_20.0deg_r10_simple.json
 ```
+
+This automated pipeline handles spatial RMSE analysis, population/bathymetry integration, and generates 25+ publication-ready plots organized in subfolders.
 
 ## Documentation
 
+- **[File Descriptions](file_descriptions.md)** - Complete overview of all scripts and data structures
 - **[Usage Guide](USAGE.md)** - Detailed examples and workflows
 - **[Examples](EXAMPLES.md)** - Common use cases and commands
 

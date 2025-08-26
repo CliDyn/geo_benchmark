@@ -6,10 +6,9 @@ Complete guide for using the GEO Benchmark framework to evaluate LLM climate pre
 
 1. **Generate Mesh** → Create global coordinate grid
 2. **Run LLM Benchmark** → Query LLMs for climate data  
-3. **Process ERA5 Data** → Prepare reference climatology
-4. **Enhance with Spatial RMSE** → Add neighborhood analysis
-5. **Add Population/Bathymetry** → Integrate geographic datasets
-6. **Advanced Analysis** → Clustering, multivariate modeling
+3. **Complete Analysis Pipeline** → Automated enhancement and visualization
+4. **Individual Analysis** → Custom spatial RMSE, population, bathymetry analysis
+5. **Advanced Visualization** → Clustering, filtering, multivariate modeling
 
 ## 1. Mesh Generation
 
@@ -260,8 +259,8 @@ python climate_llm_benchmark.py
 # Edit config.yaml: resume: true
 python climate_llm_benchmark.py
 
-# 5. Full analysis
-python compare_llm_era5.py meshes/mesh_data_1.0deg.json results/climate_results_1.0deg_r10_gpt-5-nano_simple.json data/t2m_climatology_1991-2020.nc
+# 5. Run complete analysis pipeline
+python run_complete_analysis_pipeline.py results/climate_results_1.0deg_r10_gpt-5-nano_simple.json
 ```
 
 ### Seasonal Analysis
@@ -307,57 +306,78 @@ python climate_llm_benchmark.py
 - Validate with multiple months/seasons
 - Compare different LLM models
 
-## 6. Advanced Analysis Pipeline
+## 6. Complete Analysis Pipeline
 
-### Spatial RMSE Enhancement
+### Automated Pipeline
+Run the complete enhancement and visualization workflow in one command:
 ```bash
-# Add neighborhood analysis to existing results
-python extend_results_with_spatial_rmse.py results/climate_results_1.0deg_r10_simple_era5.json
+# Complete analysis from raw results to all plots
+python run_complete_analysis_pipeline.py results/climate_results_1.0deg_r10_simple.json
 ```
 
-### Population Integration  
+This pipeline automatically:
+1. Extends results with spatial RMSE calculations
+2. Adds bathymetry/elevation data
+3. Adds population density data  
+4. Generates all spatial analysis plots
+5. Creates temperature comparison plots
+6. Generates elevation clustering analysis
+7. Creates population clustering plots
+8. Produces bathymetry maps and comparisons
+9. Builds population maps and correlations
+10. Creates filtered spatial analysis (pop≥5/km², elev≤2000m)
+
+### Individual Analysis Steps
+
+#### Spatial RMSE Enhancement
+```bash
+# Add neighborhood analysis to existing results
+python extend_results_with_spatial_rmse.py results/climate_results_1.0deg_r10_simple.json
+```
+
+#### Population Integration  
 ```bash
 # Add population density data
 python add_population_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse.json
 ```
 
-### Bathymetry Integration
+#### Bathymetry Integration
 ```bash
-# 1. Aggregate GEBCO data to 1° grid
+# 1. Aggregate GEBCO data to 1° grid (one-time setup)
 python aggregate_bathymetry.py
 
 # 2. Add elevation parameters  
 python add_bathymetry_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse_population.json
 ```
 
-### Comprehensive Visualization
+#### Individual Visualization Scripts
 ```bash
 # Enhanced spatial analysis with density plots
-python plot_spatial_analysis.py
+python plot_spatial_analysis.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
 
-# Population analysis
-python plot_population_map.py
+# Colored comparison plots (elevation, population, roughness)
+python plot_temperature_comparison_colored.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
 
-# Bathymetry analysis  
-python plot_bathymetry_map.py
+# Elevation-based clustering (3×3 grid)
+python plot_elevation_clusters.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
 
-# Colored comparison plots
-python plot_temperature_comparison_colored.py
+# Population-based clustering (3×3 grid)  
+python plot_population_clusters.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+
+# Bathymetry maps and correlations
+python plot_bathymetry_map.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+
+# Population maps and comparisons
+python plot_population_map.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+
+# Filtered analysis (populated, low elevation areas)
+python plot_spatial_analysis_filtered.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
 ```
 
-### Clustering Analysis
-```bash
-# Elevation-based clusters (3×3 grid)
-python plot_elevation_clusters.py
-
-# Population-based clusters (3×3 grid)
-python plot_population_clusters.py
-```
-
-### Multivariate Analysis
+#### Multivariate Analysis
 ```bash
 # Comprehensive statistical modeling
-python multivariate_rmse_analysis.py
+python multivariate_rmse_analysis.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
 # Outputs: distributions, correlations, GAM/XGBoost (if available), spatial CV
 ```
 
@@ -372,18 +392,21 @@ geo_benchmark/
 ├── meshes/
 │   └── mesh_data_*.json        # Generated meshes
 ├── results/
-│   ├── climate_results_*.json           # Basic LLM results
-│   ├── climate_results_*_era5.json     # + ERA5 data  
-│   ├── climate_results_*_spatial_rmse.json  # + spatial analysis
-│   ├── climate_results_*_population.json   # + population data
-│   └── climate_results_*_bathymetry.json   # + elevation data
+│   ├── climate_results_*.json                              # Basic LLM results
+│   ├── climate_results_*_spatial_rmse.json                # + spatial analysis
+│   ├── climate_results_*_spatial_rmse_bathymetry.json     # + elevation data
+│   └── climate_results_*_spatial_rmse_bathymetry_population.json  # Complete enhanced data
 ├── reports/
 │   └── multivariate_rmse_report.txt    # Statistical analysis
 └── png/
-    ├── mesh_plot_*.png         # Mesh visualizations
-    ├── temperature_map_*.png   # Temperature maps
-    ├── *_comparison_*.png      # Comparison plots
-    ├── *_clusters_*.png        # Clustering analysis
-    ├── distributions.png       # Statistical distributions
-    └── correlation_matrix.png  # Variable correlations
+    └── {results_filename}/      # Organized by results file
+        ├── spatial_analysis_*.png        # Spatial maps
+        ├── llm_era5_comparison_*.png     # Comparison plots
+        ├── temperature_comparison_*.png  # Colored scatter plots
+        ├── elevation_clusters_*.png      # Elevation clustering
+        ├── population_clusters_*.png     # Population clustering
+        ├── bathymetry_*.png             # Elevation/roughness maps
+        ├── population_*.png             # Population analysis
+        ├── filtered_*.png               # Filtered analysis
+        └── multivariate_*.png           # Statistical plots
 ```

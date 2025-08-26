@@ -22,11 +22,8 @@ model:
 # Step 3: Run benchmark
 python climate_llm_benchmark.py
 
-# Step 4: Visualize results
-python plot_temperature_results.py meshes/mesh_data_20.0deg.json results/climate_results_20.0deg_r3_gpt-5-nano_simple.json
-
-# Step 5: Compare with ERA5
-python compare_llm_era5.py meshes/mesh_data_20.0deg.json results/climate_results_20.0deg_r3_gpt-5-nano_simple.json data/t2m_climatology_1991-2020.nc
+# Step 4: Run complete analysis pipeline
+python run_complete_analysis_pipeline.py results/climate_results_20.0deg_r3_gpt-5-nano_simple.json
 ```
 
 **Expected Output**:
@@ -59,10 +56,8 @@ python climate_llm_benchmark.py
 # Edit config.yaml: resume: true
 python climate_llm_benchmark.py
 
-# Step 4: Generate all visualizations
-python plot_temperature_results.py meshes/mesh_data_1.0deg.json results/climate_results_1.0deg_r10_gpt-5-nano_simple.json
-
-python compare_llm_era5.py meshes/mesh_data_1.0deg.json results/climate_results_1.0deg_r10_gpt-5-nano_simple.json data/t2m_climatology_1991-2020.nc
+# Step 4: Run complete analysis pipeline
+python run_complete_analysis_pipeline.py results/climate_results_1.0deg_r10_gpt-5-nano_simple.json
 ```
 
 **Expected Output**:
@@ -156,9 +151,10 @@ benchmark:
 
 python climate_llm_benchmark.py
 
-# Step 6: Compare results
-python compare_llm_era5.py meshes/mesh_data_10.0deg.json results/climate_results_10.0deg_r5_gpt-4o_simple.json data/t2m_climatology_1991-2020.nc
-python compare_llm_era5.py meshes/mesh_data_10.0deg.json results/climate_results_10.0deg_r5_claude-3-5-sonnet-20241022_simple.json data/t2m_climatology_1991-2020.nc
+# Step 6: Run analysis pipeline for each model
+python run_complete_analysis_pipeline.py results/climate_results_10.0deg_r5_gpt-4o_simple.json
+python run_complete_analysis_pipeline.py results/climate_results_10.0deg_r5_claude-3-5-sonnet-20241022_simple.json
+python run_complete_analysis_pipeline.py results/climate_results_10.0deg_r3_llama3.1_8b_simple.json
 ```
 
 **Comparison Benefits**:
@@ -179,54 +175,66 @@ python compare_llm_era5.py meshes/mesh_data_10.0deg.json results/climate_results
 
 *Times vary based on model, API performance, and batch size.*
 
-## Example 4: Comprehensive Analysis Pipeline
+## Example 4: Complete Analysis Pipeline
 
-**Goal**: Full analysis with geographic covariates and statistical modeling.
-
-```bash
-# Step 1: Complete data enhancement
-python extend_results_with_spatial_rmse.py results/climate_results_1.0deg_r10_simple_era5.json
-python add_population_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse.json
-python aggregate_bathymetry.py
-python add_bathymetry_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse_population.json
-
-# Step 2: Advanced visualizations
-python plot_spatial_analysis.py
-python plot_temperature_comparison_colored.py
-python plot_elevation_clusters.py
-python plot_population_clusters.py
-
-# Step 3: Statistical analysis
-python multivariate_rmse_analysis.py
-```
-
-**Outputs**:
-- Enhanced result file with 20+ parameters per point
-- Density scatter plots with geographic coloring
-- 3×3 clustering grids by elevation/population
-- Statistical modeling report (GAM/XGBoost if available)
-
-## Example 5: Publication-Ready Analysis
-
-**Goal**: Generate comprehensive publication figures.
+**Goal**: Automated comprehensive analysis with all enhancements and visualizations.
 
 ```bash
-# Core analysis
-python plot_temperature_comparison_colored.py  # Combined 3-panel figure
-python plot_elevation_clusters.py              # 3×3 elevation clusters  
-python multivariate_rmse_analysis.py          # Statistical distributions
+# Step 1: Basic LLM benchmark (from Example 2)
+python climate_llm_benchmark.py
 
-# Geographic maps
-python plot_population_map.py                 # Population density
-python plot_bathymetry_map.py                # Elevation/roughness
-
-# Correlation analysis  
-python plot_spatial_analysis.py              # Density plots with KDE
+# Step 2: Run complete analysis pipeline 
+python run_complete_analysis_pipeline.py results/climate_results_1.0deg_r10_gpt-5-nano_simple.json
 ```
 
-**Key Outputs**:
-- `temperature_comparison_1.0deg_combined.png` - Main comparison figure
-- `elevation_clusters_1.0deg.png` - Performance by elevation
-- `correlation_matrix.png` - Variable relationships
-- `multivariate_rmse_report.txt` - Statistical summary
+**Pipeline Steps** (all automated):
+1. Extends results with spatial RMSE calculations (5×5 and 9×9 neighborhoods)
+2. Adds bathymetry/elevation data from GEBCO
+3. Adds population density data  
+4. Generates comprehensive spatial analysis plots
+5. Creates temperature comparison plots with geographic coloring
+6. Produces elevation clustering analysis (3×3 grid)
+7. Creates population clustering plots (3×3 grid)  
+8. Generates bathymetry maps and correlations
+9. Builds population maps and spatial metric comparisons
+10. Creates filtered analysis (populated areas, elevation ≤2000m)
+
+**Outputs** (in `png/climate_results_1.0deg_r10_gpt-5-nano_simple/`):
+- 10+ spatial analysis maps
+- LLM vs ERA5 comparison plots with density coloring
+- Combined 3-panel temperature comparison (elevation, population, roughness coloring)
+- 3×3 elevation clustering grid
+- 3×3 population clustering grid
+- Bathymetry maps and correlations
+- Population analysis and spatial metric comparisons
+- Filtered spatial analysis for accessible regions
+
+## Example 5: Individual Analysis Components
+
+**Goal**: Run specific analysis components individually for customization.
+
+```bash
+# Enhanced data preparation (manual steps)
+python extend_results_with_spatial_rmse.py results/climate_results_1.0deg_r10_simple.json
+python add_bathymetry_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse.json
+python add_population_to_results.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry.json
+
+# Individual visualization components
+python plot_spatial_analysis.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+python plot_temperature_comparison_colored.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+python plot_elevation_clusters.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+python plot_population_clusters.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+python plot_bathymetry_map.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+python plot_population_map.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+python plot_spatial_analysis_filtered.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+
+# Advanced statistical analysis
+python multivariate_rmse_analysis.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
+```
+
+**Benefits of Individual Components**:
+- Customizable analysis workflow
+- Skip unnecessary steps for specific use cases  
+- Easier debugging and development
+- Targeted visualization updates
 
