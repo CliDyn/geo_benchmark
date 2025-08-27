@@ -198,16 +198,37 @@ def initialize_llm(config: Dict, model_name: str = None, temperature: float = No
         if ChatGoogleGenerativeAI is None:
             raise ImportError("langchain-google-genai not installed. Install with: pip install langchain-google-genai")
         
-        api_key_env = get_config_value(config, 'providers.google.api_key_env', 'GOOGLE_API_KEY')
-        
+        # Retrieve API key configuration.
+        # We support two patterns for backward compatibility:
+        # 1. providers.google.api_key -> contains the actual key (preferred, NOT committed!)
+        # 2. providers.google.api_key_env -> contains either the *name* of the env var (e.g. GOOGLE_API_KEY)
+        #    or (legacy / current file) the raw key starting with 'AIza'.
+        api_key_direct = get_config_value(config, 'providers.google.api_key')
+        api_key_config = get_config_value(config, 'providers.google.api_key_env', 'GOOGLE_API_KEY')
+
+        api_key = None
+        if api_key_direct:
+            api_key = api_key_direct.strip()
+        else:
+            # If the value looks like an API key (starts with AIza) treat it as the key, otherwise as env var name
+            if isinstance(api_key_config, str) and api_key_config.startswith('AIza'):
+                api_key = api_key_config.strip()
+                print("Warning: Detected a raw Google API key in 'api_key_env'. Consider moving it to an environment variable 'GOOGLE_API_KEY' and setting providers.google.api_key_env: GOOGLE_API_KEY")
+            else:
+                env_var_name = api_key_config or 'GOOGLE_API_KEY'
+                api_key = os.environ.get(env_var_name)
+                if not api_key:
+                    raise ValueError(f"Google API key not found. Set env var '{env_var_name}' or add 'providers.google.api_key' in config.yaml (do NOT commit the key).")
+
         llm_kwargs = {
             'model': model_name,
             'temperature': temperature,
+            'api_key': api_key,
         }
-        
+
         if max_tokens:
             llm_kwargs['max_output_tokens'] = max_tokens
-        
+
         return ChatGoogleGenerativeAI(**llm_kwargs)
     
     elif provider == "ollama":
