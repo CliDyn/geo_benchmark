@@ -29,6 +29,11 @@ secrets.json
 #data/land/*.prj
 data/*nc
 !data/t2m_climatology_1991-2020.nc
+!data/bathymetry_1deg_aggregated.nc
+!data/gpw_v4_population_density_rev11_2000_1_deg.asc
+!data/gpw_v4_population_density_rev11_2000_1_deg.prj
+!data/gpw_v4_population_density_rev11_2000_1_deg_asc_readme.txt
+!data/land/*
 
 # OS files
 .DS_Store
