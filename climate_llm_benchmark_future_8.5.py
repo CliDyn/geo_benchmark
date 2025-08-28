@@ -29,8 +29,9 @@ except ImportError:
     ChatGoogleGenerativeAI = None
 
 try:
+    from langchain_ollama import ChatOllama
     from langchain_community.llms import Ollama
-    from langchain_community.chat_models import ChatOllama
+    #from langchain_community.chat_models import ChatOllama
 except ImportError:
     Ollama = None
     ChatOllama = None
