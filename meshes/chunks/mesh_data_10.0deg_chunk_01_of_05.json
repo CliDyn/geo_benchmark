@@ -1,0 +1,1910 @@
+{
+  "mesh_info": {
+    "type": "regular_grid",
+    "resolution_degrees": 10.0,
+    "lon_range": [
+      -180,
+      180
+    ],
+    "lat_range": [
+      -60,
+      85
+    ],
+    "total_points": 540,
+    "chunk_id": 1,
+    "total_chunks": 5,
+    "land_points_in_chunk": 31
+  },
+  "resolution": 10.0,
+  "mesh_points": [
+    {
+      "lon": -70.0,
+      "lat": -50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 231016,
+              "osm_type": "relation",
+              "osm_id": 2672803,
+              "place_rank": 10,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.3315961781265068,
+              "addresstype": "state_district",
+              "name": "Corpen Aike",
+              "display_name": "Corpen Aike, Santa Cruz Province, Argentina",
+              "address": {
+                "state_district": "Corpen Aike",
+                "state": "Santa Cruz Province",
+                "ISO3166-2-lvl4": "AR-Z",
+                "country": "Argentina",
+                "country_code": "ar"
+              },
+              "extratags": {
+                "wikidata": "Q772748",
+                "wikipedia": "es:Departamento Corpen Aike"
+              },
+              "namedetails": {
+                "name": "Corpen Aike"
+              }
+            },
+            "bbox": [
+              -70.6440183,
+              -50.7667556,
+              -67.6766047,
+              -49.2044433
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -69.24913254950935,
+                -49.9854484
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: state_district: Corpen Aike, state: Santa Cruz Province, ISO3166-2-lvl4: AR-Z, country: Argentina, country_code: ar",
+      "address_formatted": "**Address:** Argentina, Santa Cruz Province",
+      "country": "Argentina",
+      "state": "Santa Cruz Province",
+      "city": ""
+    },
+    {
+      "lon": -70.0,
+      "lat": -40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 410342,
+              "osm_type": "node",
+              "osm_id": 5622159520,
+              "place_rank": 22,
+              "category": "place",
+              "type": "isolated_dwelling",
+              "importance": 0.10669666819256883,
+              "addresstype": "isolated_dwelling",
+              "name": "Villa Pichi Picun Leufu",
+              "display_name": "Villa Pichi Picun Leufu, Departamento Coll\u00f3n Cur\u00e1, Neuqu\u00e9n Province, Argentina",
+              "address": {
+                "isolated_dwelling": "Villa Pichi Picun Leufu",
+                "state_district": "Departamento Coll\u00f3n Cur\u00e1",
+                "state": "Neuqu\u00e9n Province",
+                "ISO3166-2-lvl4": "AR-Q",
+                "country": "Argentina",
+                "country_code": "ar"
+              },
+              "extratags": null,
+              "namedetails": {
+                "name": "Villa Pichi Picun Leufu"
+              }
+            },
+            "bbox": [
+              -69.993174,
+              -40.0035396,
+              -69.993074,
+              -40.0034396
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -69.993124,
+                -40.0034896
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: isolated_dwelling: Villa Pichi Picun Leufu, state_district: Departamento Coll\u00f3n Cur\u00e1, state: Neuqu\u00e9n Province, ISO3166-2-lvl4: AR-Q, country: Argentina, country_code: ar",
+      "address_formatted": "**Address:** Argentina, Neuqu\u00e9n Province",
+      "country": "Argentina",
+      "state": "Neuqu\u00e9n Province",
+      "city": ""
+    },
+    {
+      "lon": -70.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 4632547,
+              "osm_type": "node",
+              "osm_id": 214194114,
+              "place_rank": 25,
+              "category": "place",
+              "type": "locality",
+              "importance": 0.0667157007705806,
+              "addresstype": "locality",
+              "name": "Aguas del Volc\u00e1n",
+              "display_name": "Aguas del Volc\u00e1n, Vicu\u00f1a, Provincia de Elqui, Coquimbo Region, Chile",
+              "address": {
+                "locality": "Aguas del Volc\u00e1n",
+                "town": "Vicu\u00f1a",
+                "county": "Provincia de Elqui",
+                "state": "Coquimbo Region",
+                "ISO3166-2-lvl4": "CL-CO",
+                "country": "Chile",
+                "country_code": "cl"
+              },
+              "extratags": {
+                "is_in": "Chile, Latin America"
+              },
+              "namedetails": {
+                "name": "Aguas del Volc\u00e1n"
+              }
+            },
+            "bbox": [
+              -70.026667,
+              -30.01,
+              -70.006667,
+              -29.99
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -70.016667,
+                -30.0
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: locality: Aguas del Volc\u00e1n, town: Vicu\u00f1a, county: Provincia de Elqui, state: Coquimbo Region, ISO3166-2-lvl4: CL-CO, country: Chile, country_code: cl",
+      "address_formatted": "**Address:** Chile, Coquimbo Region",
+      "country": "Chile",
+      "state": "Coquimbo Region",
+      "city": ""
+    },
+    {
+      "lon": -60.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 5272641,
+              "osm_type": "relation",
+              "osm_id": 4226341,
+              "place_rank": 14,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.19934751714046123,
+              "addresstype": "village",
+              "name": "Comuna de Alejandra",
+              "display_name": "Comuna de Alejandra, Departamento San Javier, Santa Fe, Argentina",
+              "address": {
+                "village": "Comuna de Alejandra",
+                "state_district": "Departamento San Javier",
+                "state": "Santa Fe",
+                "ISO3166-2-lvl4": "AR-S",
+                "country": "Argentina",
+                "country_code": "ar"
+              },
+              "extratags": {
+                "wikidata": "Q1922863",
+                "wikipedia": "es:Alejandra (comuna)",
+                "population": "4161",
+                "linked_place": "village"
+              },
+              "namedetails": {
+                "name": "Comuna de Alejandra",
+                "name:es": "Comuna de Alejandra",
+                "_place_name": "Alejandra"
+              }
+            },
+            "bbox": [
+              -60.1770123,
+              -30.2586882,
+              -59.5663262,
+              -29.5887863
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -59.82723,
+                -29.9091987
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: village: Comuna de Alejandra, state_district: Departamento San Javier, state: Santa Fe, ISO3166-2-lvl4: AR-S, country: Argentina, country_code: ar",
+      "address_formatted": "**Address:** Argentina, Santa Fe",
+      "country": "Argentina",
+      "state": "Santa Fe",
+      "city": ""
+    },
+    {
+      "lon": 20.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 31018809,
+              "osm_type": "relation",
+              "osm_id": 3578269,
+              "place_rank": 20,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.1333737018387121,
+              "addresstype": "suburb",
+              "name": "Kh\u00e2i-Ma Ward 4",
+              "display_name": "Kh\u00e2i-Ma Ward 4, Kh\u00e2i-Ma Local Municipality, Namakwa District Municipality, Northern Cape, 8890, South Africa",
+              "address": {
+                "suburb": "Kh\u00e2i-Ma Ward 4",
+                "city": "Kh\u00e2i-Ma Local Municipality",
+                "county": "Namakwa District Municipality",
+                "state": "Northern Cape",
+                "ISO3166-2-lvl4": "ZA-NC",
+                "postcode": "8890",
+                "country": "South Africa",
+                "country_code": "za"
+              },
+              "extratags": null,
+              "namedetails": {
+                "ref": "30607004",
+                "name": "Kh\u00e2i-Ma Ward 4"
+              }
+            },
+            "bbox": [
+              18.59551,
+              -30.3942,
+              20.114075,
+              -28.9926491
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                19.185451363356584,
+                -29.6902902
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: suburb: Kh\u00e2i-Ma Ward 4, city: Kh\u00e2i-Ma Local Municipality, county: Namakwa District Municipality, state: Northern Cape, ISO3166-2-lvl4: ZA-NC, postcode: 8890, country: South Africa, country_code: za",
+      "address_formatted": "**Address:** South Africa, Northern Cape, Kh\u00e2i-Ma Local Municipality",
+      "country": "South Africa",
+      "state": "Northern Cape",
+      "city": "Kh\u00e2i-Ma Local Municipality"
+    },
+    {
+      "lon": 30.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 30950403,
+              "osm_type": "way",
+              "osm_id": 477437462,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "tertiary",
+              "importance": 0.05337078736552983,
+              "addresstype": "road",
+              "name": "P114",
+              "display_name": "P114, Ingwe Ward 6, Ingwe Local Municipality, Sisonke District Municipality, KwaZulu-Natal, South Africa",
+              "address": {
+                "road": "P114",
+                "suburb": "Ingwe Ward 6",
+                "city": "Ingwe Local Municipality",
+                "county": "Sisonke District Municipality",
+                "state": "KwaZulu-Natal",
+                "ISO3166-2-lvl4": "ZA-KZN",
+                "country": "South Africa",
+                "country_code": "za"
+              },
+              "extratags": {
+                "oneway": "no",
+                "surface": "gravel"
+              },
+              "namedetails": {
+                "ref": "P114"
+              }
+            },
+            "bbox": [
+              29.9958685,
+              -30.0324301,
+              30.0089997,
+              -29.9810525
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                30.0004690020681,
+                -30.000081695925566
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: P114, suburb: Ingwe Ward 6, city: Ingwe Local Municipality, county: Sisonke District Municipality, state: KwaZulu-Natal, ISO3166-2-lvl4: ZA-KZN, country: South Africa, country_code: za",
+      "address_formatted": "**Address:** South Africa, KwaZulu-Natal, Ingwe Local Municipality, P114",
+      "country": "South Africa",
+      "state": "KwaZulu-Natal",
+      "city": "Ingwe Local Municipality"
+    },
+    {
+      "lon": 120.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 29065919,
+              "osm_type": "relation",
+              "osm_id": 11690159,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16004634546425572,
+              "addresstype": "city_district",
+              "name": "Ularring",
+              "display_name": "Ularring, Shire Of Menzies, Western Australia, 6436, Australia",
+              "address": {
+                "city_district": "Ularring",
+                "municipality": "Shire Of Menzies",
+                "state": "Western Australia",
+                "ISO3166-2-lvl4": "AU-WA",
+                "postcode": "6436",
+                "country": "Australia",
+                "country_code": "au"
+              },
+              "extratags": {
+                "wikidata": "Q55448916",
+                "ref:psma:loc_pid": "WA1728"
+              },
+              "namedetails": {
+                "name": "Ularring"
+              }
+            },
+            "bbox": [
+              118.4357,
+              -30.163017,
+              120.837585,
+              -28.464001
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                119.63963047122832,
+                -29.309627499999998
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Ularring, municipality: Shire Of Menzies, state: Western Australia, ISO3166-2-lvl4: AU-WA, postcode: 6436, country: Australia, country_code: au",
+      "address_formatted": "**Address:** Australia, Western Australia",
+      "country": "Australia",
+      "state": "Western Australia",
+      "city": ""
+    },
+    {
+      "lon": 130.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 24049311,
+              "osm_type": "relation",
+              "osm_id": 6794421,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.41135747637279557,
+              "addresstype": "county",
+              "name": "Maralinga Tjarutja",
+              "display_name": "Maralinga Tjarutja, South Australia, Australia",
+              "address": {
+                "county": "Maralinga Tjarutja",
+                "state": "South Australia",
+                "ISO3166-2-lvl4": "AU-SA",
+                "country": "Australia",
+                "country_code": "au"
+              },
+              "extratags": {
+                "website": "http://maralingatjarutja.com/",
+                "wikidata": "Q431586",
+                "wikipedia": "en:Maralinga Tjarutja",
+                "ref:psma:lga_pid": "SA150"
+              },
+              "namedetails": {
+                "name": "Maralinga Tjarutja",
+                "name:en": "Maralinga Tjarutja",
+                "alt_name": "MaralingaTjatjura",
+                "short_name": "MT"
+              }
+            },
+            "bbox": [
+              129.0018731,
+              -30.7630366,
+              133.1104843,
+              -28.1159162
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                131.0003489584829,
+                -29.433616649999998
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Maralinga Tjarutja, state: South Australia, ISO3166-2-lvl4: AU-SA, country: Australia, country_code: au",
+      "address_formatted": "**Address:** Australia, South Australia",
+      "country": "Australia",
+      "state": "South Australia",
+      "city": ""
+    },
+    {
+      "lon": 140.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 24271384,
+              "osm_type": "relation",
+              "osm_id": 6189745,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16003780193789577,
+              "addresstype": "city_district",
+              "name": "Moolawatana",
+              "display_name": "Moolawatana, Pastoral Unincorporated Area, South Australia, 5732, Australia",
+              "address": {
+                "city_district": "Moolawatana",
+                "county": "Pastoral Unincorporated Area",
+                "state": "South Australia",
+                "ISO3166-2-lvl4": "AU-SA",
+                "postcode": "5732",
+                "country": "Australia",
+                "country_code": "au"
+              },
+              "extratags": {
+                "wikidata": "Q16895320",
+                "ref:psma:loc_pid": "SA210006130",
+                "ref:dpti:suburb_num": "573216"
+              },
+              "namedetails": {
+                "name": "Moolawatana"
+              }
+            },
+            "bbox": [
+              139.4218413,
+              -30.1831084,
+              140.1417382,
+              -29.6949247
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                139.8112783547047,
+                -29.939400499999998
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Moolawatana, county: Pastoral Unincorporated Area, state: South Australia, ISO3166-2-lvl4: AU-SA, postcode: 5732, country: Australia, country_code: au",
+      "address_formatted": "**Address:** Australia, South Australia",
+      "country": "Australia",
+      "state": "South Australia",
+      "city": ""
+    },
+    {
+      "lon": 150.0,
+      "lat": -30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 24263190,
+              "osm_type": "relation",
+              "osm_id": 5842293,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16004620965896085,
+              "addresstype": "hamlet",
+              "name": "Couradda",
+              "display_name": "Couradda, Narrabri Shire Council, New South Wales, 2390, Australia",
+              "address": {
+                "hamlet": "Couradda",
+                "municipality": "Narrabri Shire Council",
+                "state": "New South Wales",
+                "ISO3166-2-lvl4": "AU-NSW",
+                "postcode": "2390",
+                "country": "Australia",
+                "country_code": "au"
+              },
+              "extratags": {
+                "place": "hamlet",
+                "linked_place": "hamlet",
+                "ref:nswlpi:cadid": "108031036",
+                "ref:psma:loc_pid": "NSW1103"
+              },
+              "namedetails": {
+                "name": "Couradda"
+              }
+            },
+            "bbox": [
+              149.8966314,
+              -30.1175399,
+              150.0611589,
+              -29.9758288
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                149.9329904,
+                -30.0809809
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: hamlet: Couradda, municipality: Narrabri Shire Council, state: New South Wales, ISO3166-2-lvl4: AU-NSW, postcode: 2390, country: Australia, country_code: au",
+      "address_formatted": "**Address:** Australia, New South Wales",
+      "country": "Australia",
+      "state": "New South Wales",
+      "city": ""
+    },
+    {
+      "lon": -70.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 4094331,
+              "osm_type": "relation",
+              "osm_id": 239349,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.38360068645110323,
+              "addresstype": "village",
+              "name": "Huara",
+              "display_name": "Huara, Provincia del Tamarugal, Tarapac\u0430 Region, 1140000, Chile",
+              "address": {
+                "village": "Huara",
+                "county": "Provincia del Tamarugal",
+                "state": "Tarapac\u0430 Region",
+                "ISO3166-2-lvl4": "CL-TA",
+                "postcode": "1140000",
+                "country": "Chile",
+                "country_code": "cl"
+              },
+              "extratags": {
+                "capital": "8",
+                "wikidata": "Q13081",
+                "wikipedia": "es:Huara",
+                "population": "1082",
+                "dpachile:id": "01404",
+                "linked_place": "village",
+                "population:date": "2017",
+                "source:population": "INE"
+              },
+              "namedetails": {
+                "name": "Huara"
+              }
+            },
+            "bbox": [
+              -70.2862232,
+              -20.1020286,
+              -68.9079345,
+              -18.9664834
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -69.7727034,
+                -19.9957872
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: village: Huara, county: Provincia del Tamarugal, state: Tarapac\u0430 Region, ISO3166-2-lvl4: CL-TA, postcode: 1140000, country: Chile, country_code: cl",
+      "address_formatted": "**Address:** Chile, Tarapac\u0430 Region",
+      "country": "Chile",
+      "state": "Tarapac\u0430 Region",
+      "city": ""
+    },
+    {
+      "lon": -60.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 11922594,
+              "osm_type": "relation",
+              "osm_id": 8366032,
+              "place_rank": 20,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.1333733340962844,
+              "addresstype": "hamlet",
+              "name": "Lagerenza 4 de Mayo",
+              "display_name": "Lagerenza 4 de Mayo, Bah\u00eda Negra, Alto Paraguay, Regi\u00f3n Occidental, Paraguay",
+              "address": {
+                "hamlet": "Lagerenza 4 de Mayo",
+                "town": "Bah\u00eda Negra",
+                "state": "Alto Paraguay",
+                "ISO3166-2-lvl4": "PY-16",
+                "region": "Regi\u00f3n Occidental",
+                "country": "Paraguay",
+                "country_code": "py"
+              },
+              "extratags": {
+                "wikidata": "Q302441",
+                "wikipedia": "es:Mayor Pablo Lagerenza",
+                "population": "13",
+                "linked_place": "hamlet"
+              },
+              "namedetails": {
+                "name": "Lagerenza 4 de Mayo",
+                "_place_name": "Mayor Pablo Lagerenza",
+                "name:lt": "Major Pablo Lagerensa",
+                "old_name": "Ingavi"
+              }
+            },
+            "bbox": [
+              -61.009973,
+              -20.613721,
+              -59.962764,
+              -19.3312884
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -60.7717842,
+                -19.9308887
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: hamlet: Lagerenza 4 de Mayo, town: Bah\u00eda Negra, state: Alto Paraguay, ISO3166-2-lvl4: PY-16, region: Regi\u00f3n Occidental, country: Paraguay, country_code: py",
+      "address_formatted": "**Address:** Paraguay, Alto Paraguay",
+      "country": "Paraguay",
+      "state": "Alto Paraguay",
+      "city": ""
+    },
+    {
+      "lon": -50.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 11235207,
+              "osm_type": "relation",
+              "osm_id": 5349597,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16005460059510185,
+              "addresstype": "city_district",
+              "name": "Cardoso",
+              "display_name": "Cardoso, Regi\u00e3o Imediata de Votuporanga, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de S\u00e3o Jos\u00e9 do Rio Preto, S\u00e3o Paulo, Southeast Region, 15570-000, Brazil",
+              "address": {
+                "city_district": "Cardoso",
+                "town": "Cardoso",
+                "municipality": "Regi\u00e3o Imediata de Votuporanga",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de S\u00e3o Jos\u00e9 do Rio Preto",
+                "state": "S\u00e3o Paulo",
+                "ISO3166-2-lvl4": "BR-SP",
+                "region": "Southeast Region",
+                "postcode": "15570-000",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "IBGE:GEOCODIGO": "351070805"
+              },
+              "namedetails": {
+                "name": "Cardoso"
+              }
+            },
+            "bbox": [
+              -50.0486899,
+              -20.2171252,
+              -49.8026562,
+              -19.9182902
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -49.93388987340377,
+                -20.067404850000003
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Cardoso, town: Cardoso, municipality: Regi\u00e3o Imediata de Votuporanga, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de S\u00e3o Jos\u00e9 do Rio Preto, state: S\u00e3o Paulo, ISO3166-2-lvl4: BR-SP, region: Southeast Region, postcode: 15570-000, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, S\u00e3o Paulo",
+      "country": "Brazil",
+      "state": "S\u00e3o Paulo",
+      "city": ""
+    },
+    {
+      "lon": 20.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 29860771,
+              "osm_type": "relation",
+              "osm_id": 2279628,
+              "place_rank": 8,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.44053675713706325,
+              "addresstype": "state",
+              "name": "Otjozondjupa",
+              "display_name": "Otjozondjupa, Namibia",
+              "address": {
+                "state": "Otjozondjupa",
+                "ISO3166-2-lvl4": "NA-OD",
+                "country": "Namibia",
+                "country_code": "na"
+              },
+              "extratags": {
+                "wikidata": "Q876506",
+                "wikipedia": "en:Otjozondjupa Region",
+                "state_code": "OD",
+                "linked_place": "state"
+              },
+              "namedetails": {
+                "ref": "OD",
+                "name": "Otjozondjupa Region",
+                "name:af": "Otjozondjoepa",
+                "name:ar": "\u0625\u0642\u0644\u064a\u0645 \u0623\u0648\u062a\u062c\u0648\u0632\u0648\u0646\u062f\u062c\u0648\u0628\u0627",
+                "name:bg": "\u041e\u0447\u043e\u0441\u043e\u043d\u0434\u044e\u043f\u0430",
+                "name:de": "Otjozondjupa",
+                "name:en": "Otjozondjupa",
+                "name:es": "Otjozondjupa",
+                "name:et": "Otjozondjupa ringkond",
+                "name:fa": "\u0645\u0646\u0637\u0642\u0647 \u0627\u0648\u062a\u062c\u0648\u0632\u0648\u0646\u062f\u062c\u0648\u067e\u0627",
+                "name:fi": "Otjozondjupa",
+                "name:fo": "Otjozondjupa",
+                "name:fr": "Otjozondjupa",
+                "name:hi": "\u0913\u091f\u094d\u092f\u094b\u091c\u093c\u0928\u094d\u0926\u094d\u092f\u0942\u092a\u093e \u092a\u094d\u0930\u0926\u0947\u0936",
+                "name:hr": "Otjozondjupa",
+                "name:id": "Region Otjozondjupa",
+                "name:it": "Regione di Otjozondjupa",
+                "name:ja": "\u30aa\u30c1\u30e7\u30bd\u30f3\u30c7\u30e5\u30d1\u5dde",
+                "name:ka": "\u10dd\u10e9\u10dd\u10e1\u10dd\u10dc\u10d3\u10d8\u10e3\u10de\u10d8\u10e1 \u10e0\u10d4\u10d2\u10d8\u10dd\u10dc\u10d8",
+                "name:ko": "\uc624\ucd08\uc874\uc8fc\ud30c\uc8fc",
+                "name:mk": "\u041e\u0447\u043e\u0437\u043e\u043d\u0434\u0458\u0443\u043f\u0430",
+                "name:nl": "Otjozondjupa",
+                "name:no": "Otjozondjupa",
+                "name:pl": "Otjozondjupa",
+                "name:pt": "Otjozondjupa",
+                "name:ro": "Regiunea Otjozondjupa",
+                "name:ru": "\u041e\u0447\u043e\u0441\u043e\u043d\u0434\u044c\u044e\u043f\u0430",
+                "name:sw": "Mkoa wa Otjozondjupa",
+                "name:tr": "Otjozondjupa B\u00f6lgesi",
+                "name:uk": "\u041e\u0447\u043e\u0441\u043e\u043d\u0434\u044c\u044e\u043f\u0430",
+                "name:ur": "\u0627\u0648\u062a\u062c\u0648\u0632\u0648\u0646\u062f\u062c\u0648\u067e\u0627 \u0639\u0644\u0627\u0642\u06c1",
+                "name:zh": "\u5967\u55ac\u5b97\u6731\u5e15\u5340",
+                "name:zu": "Otjozondjupa Region",
+                "name:ceb": "Otjozondjupa",
+                "name:frr": "Otjozondjupa",
+                "name:nan": "Otjozondjupa Chiu",
+                "name:pnb": "\u0635\u0648\u0628\u06c1 \u0627\u0648\u0679\u06cc\u0648\u0632\u0646\u062f\u06cc\u0627\u067e\u0627",
+                "name:wuu": "\u5965\u4e54\u5b97\u6731\u5e15\u533a",
+                "ISO3166-2": "NA-OD",
+                "alt_name:en": "Otjozondjupa Region",
+                "alt_name:es": "Regi\u00f3n de Otjozondjupa",
+                "_place_name:de": "Region Otjozondjupa"
+              }
+            },
+            "bbox": [
+              15.5724597,
+              -22.3787758,
+              20.9990219,
+              -18.7475439
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                18.395886,
+                -19.9424962
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: state: Otjozondjupa, ISO3166-2-lvl4: NA-OD, country: Namibia, country_code: na",
+      "address_formatted": "**Address:** Namibia, Otjozondjupa",
+      "country": "Namibia",
+      "state": "Otjozondjupa",
+      "city": ""
+    },
+    {
+      "lon": 30.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 30023397,
+              "osm_type": "relation",
+              "osm_id": 5554784,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.3260874163190326,
+              "addresstype": "county",
+              "name": "Zvishawane",
+              "display_name": "Zvishawane, Midlands Province, Zimbabwe",
+              "address": {
+                "county": "Zvishawane",
+                "state": "Midlands Province",
+                "ISO3166-2-lvl4": "ZW-MI",
+                "country": "Zimbabwe",
+                "country_code": "zw"
+              },
+              "extratags": {
+                "wikidata": "Q24235929"
+              },
+              "namedetails": {
+                "name": "Zvishawane"
+              }
+            },
+            "bbox": [
+              29.7745246,
+              -20.644951,
+              30.46119,
+              -19.9487863
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                30.02222150077663,
+                -20.29726575
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Zvishawane, state: Midlands Province, ISO3166-2-lvl4: ZW-MI, country: Zimbabwe, country_code: zw",
+      "address_formatted": "**Address:** Zimbabwe, Midlands Province",
+      "country": "Zimbabwe",
+      "state": "Midlands Province",
+      "city": ""
+    },
+    {
+      "lon": 120.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 29186301,
+              "osm_type": "way",
+              "osm_id": 172909922,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "trunk",
+              "importance": 0.053379713893339405,
+              "addresstype": "road",
+              "name": "Great Northern Highway",
+              "display_name": "Great Northern Highway, Pardoo, Shire of East Pilbara, Western Australia, 6725, Australia",
+              "address": {
+                "road": "Great Northern Highway",
+                "city_district": "Pardoo",
+                "municipality": "Shire of East Pilbara",
+                "state": "Western Australia",
+                "ISO3166-2-lvl4": "AU-WA",
+                "postcode": "6725",
+                "country": "Australia",
+                "country_code": "au"
+              },
+              "extratags": {
+                "network": "AU:WA:NH",
+                "surface": "asphalt",
+                "maxspeed:backward": "110"
+              },
+              "namedetails": {
+                "ref": "1",
+                "name": "Great Northern Highway",
+                "name:en": "Great Northern Highway"
+              }
+            },
+            "bbox": [
+              119.8260384,
+              -20.0537564,
+              121.0889805,
+              -19.7678538
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                120.00022864464985,
+                -20.002591146586187
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: Great Northern Highway, city_district: Pardoo, municipality: Shire of East Pilbara, state: Western Australia, ISO3166-2-lvl4: AU-WA, postcode: 6725, country: Australia, country_code: au",
+      "address_formatted": "**Address:** Australia, Western Australia, Great Northern Highway",
+      "country": "Australia",
+      "state": "Western Australia",
+      "city": ""
+    },
+    {
+      "lon": 130.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 24400048,
+              "osm_type": "relation",
+              "osm_id": 11716635,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16001677042801554,
+              "addresstype": "city_district",
+              "name": "Tanami",
+              "display_name": "Tanami, Central Desert Region, Northern Territory, 0872, Australia",
+              "address": {
+                "city_district": "Tanami",
+                "county": "Central Desert Region",
+                "territory": "Northern Territory",
+                "ISO3166-2-lvl4": "AU-NT",
+                "postcode": "0872",
+                "country": "Australia",
+                "country_code": "au"
+              },
+              "extratags": {
+                "wikidata": "Q21883145",
+                "ref:psma:loc_pid": "loc6447f199d870"
+              },
+              "namedetails": {
+                "name": "Tanami"
+              }
+            },
+            "bbox": [
+              129.0004873,
+              -21.0012027,
+              132.371613,
+              -18.6826229
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                130.51245736183,
+                -19.84399115
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Tanami, county: Central Desert Region, territory: Northern Territory, ISO3166-2-lvl4: AU-NT, postcode: 0872, country: Australia, country_code: au",
+      "address_formatted": "**Address:** Australia",
+      "country": "Australia",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": 140.0,
+      "lat": -20.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 24358118,
+              "osm_type": "relation",
+              "osm_id": 11677397,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.20759174723523172,
+              "addresstype": "hamlet",
+              "name": "Three Rivers",
+              "display_name": "Three Rivers, Cloncurry Shire, Queensland, 4824, Australia",
+              "address": {
+                "hamlet": "Three Rivers",
+                "municipality": "Cloncurry Shire",
+                "state": "Queensland",
+                "ISO3166-2-lvl4": "AU-QLD",
+                "postcode": "4824",
+                "country": "Australia",
+                "country_code": "au"
+              },
+              "extratags": {
+                "wikidata": "Q28223959",
+                "gaz2012:ref": "QLD42495",
+                "linked_place": "hamlet",
+                "ref:psma:loc_pid": "loc9a4d0f770ec9"
+              },
+              "namedetails": {
+                "name": "Three Rivers"
+              }
+            },
+            "bbox": [
+              139.470009,
+              -20.592974,
+              140.899309,
+              -19.436571
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                140.1667328,
+                -19.8473797
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: hamlet: Three Rivers, municipality: Cloncurry Shire, state: Queensland, ISO3166-2-lvl4: AU-QLD, postcode: 4824, country: Australia, country_code: au",
+      "address_formatted": "**Address:** Australia, Queensland",
+      "country": "Australia",
+      "state": "Queensland",
+      "city": ""
+    },
+    {
+      "lon": -70.0,
+      "lat": -10.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 3005674,
+              "osm_type": "relation",
+              "osm_id": 6163924,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16005409552147706,
+              "addresstype": "city_district",
+              "name": "Sena Madureira",
+              "display_name": "Sena Madureira, Regi\u00e3o Geogr\u00e1fica Imediata de Sena Madureira, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Rio Branco, Acre, North Region, 69940-000, Brazil",
+              "address": {
+                "city_district": "Sena Madureira",
+                "town": "Sena Madureira",
+                "municipality": "Regi\u00e3o Geogr\u00e1fica Imediata de Sena Madureira",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Rio Branco",
+                "state": "Acre",
+                "ISO3166-2-lvl4": "BR-AC",
+                "region": "North Region",
+                "postcode": "69940-000",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "border_type": "district",
+                "IBGE:GEOCODIGO": "120050005"
+              },
+              "namedetails": {
+                "name": "Sena Madureira"
+              }
+            },
+            "bbox": [
+              -70.6137941,
+              -10.7314004,
+              -68.22,
+              -8.813
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -69.33285463659148,
+                -9.766
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Sena Madureira, town: Sena Madureira, municipality: Regi\u00e3o Geogr\u00e1fica Imediata de Sena Madureira, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Rio Branco, state: Acre, ISO3166-2-lvl4: BR-AC, region: North Region, postcode: 69940-000, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, Acre",
+      "country": "Brazil",
+      "state": "Acre",
+      "city": ""
+    },
+    {
+      "lon": -60.0,
+      "lat": -10.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 12283805,
+              "osm_type": "relation",
+              "osm_id": 333630,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.45784173546984624,
+              "addresstype": "municipality",
+              "name": "Aripuan\u00e3",
+              "display_name": "Aripuan\u00e3, Regi\u00e3o Geogr\u00e1fica Imediata de Ju\u00edna, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Sinop, Mato Grosso, Central-West Region, Brazil",
+              "address": {
+                "municipality": "Aripuan\u00e3",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Sinop",
+                "state": "Mato Grosso",
+                "ISO3166-2-lvl4": "BR-MT",
+                "region": "Central-West Region",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "place": "municipality",
+                "wikidata": "Q1805412",
+                "wikipedia": "pt:Aripuan\u00e3",
+                "population": "24626",
+                "linked_place": "town",
+                "wikipedia:en": "Aripuan\u00e3",
+                "wikipedia:pt": "Aripuan\u00e3",
+                "IBGE:GEOCODIGO": "5101407",
+                "population:date": "2023-08-31",
+                "source:population": "IBGE, DOU de 31/08/2023"
+              },
+              "namedetails": {
+                "name": "Aripuan\u00e3"
+              }
+            },
+            "bbox": [
+              -60.7052747,
+              -10.92,
+              -58.795,
+              -9.287
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -59.4439663,
+                -10.175806
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: municipality: Aripuan\u00e3, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Sinop, state: Mato Grosso, ISO3166-2-lvl4: BR-MT, region: Central-West Region, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, Mato Grosso",
+      "country": "Brazil",
+      "state": "Mato Grosso",
+      "city": ""
+    },
+    {
+      "lon": -50.0,
+      "lat": -10.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 12307168,
+              "osm_type": "relation",
+              "osm_id": 336786,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.44568815600055456,
+              "addresstype": "municipality",
+              "name": "Pium",
+              "display_name": "Pium, Regi\u00e3o Geogr\u00e1fica Imediata de Para\u00edso do Tocantins, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Palmas, Tocantins, North Region, 77570-000, Brazil",
+              "address": {
+                "municipality": "Pium",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Palmas",
+                "state": "Tocantins",
+                "ISO3166-2-lvl4": "BR-TO",
+                "region": "North Region",
+                "postcode": "77570-000",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "place": "municipality",
+                "wikidata": "Q1800961",
+                "wikipedia": "pt:Pium",
+                "population": "7128",
+                "linked_place": "village",
+                "IBGE:GEOCODIGO": "1717503",
+                "population:date": "2023-08-31",
+                "source:population": "IBGE, DOU de 31/08/2023"
+              },
+              "namedetails": {
+                "name": "Pium"
+              }
+            },
+            "bbox": [
+              -50.6035307,
+              -10.6608603,
+              -48.9768113,
+              -9.2282044
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -49.1747741,
+                -10.4421368
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: municipality: Pium, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Palmas, state: Tocantins, ISO3166-2-lvl4: BR-TO, region: North Region, postcode: 77570-000, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, Tocantins",
+      "country": "Brazil",
+      "state": "Tocantins",
+      "city": ""
+    },
+    {
+      "lon": -40.0,
+      "lat": -10.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 14675048,
+              "osm_type": "relation",
+              "osm_id": 362506,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.5188140568733318,
+              "addresstype": "municipality",
+              "name": "Jaguarari",
+              "display_name": "Jaguarari, Regi\u00e3o Geogr\u00e1fica Imediata de Senhor do Bonfim, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Juazeiro, Bahia, Northeast Region, Brazil",
+              "address": {
+                "municipality": "Jaguarari",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Juazeiro",
+                "state": "Bahia",
+                "ISO3166-2-lvl4": "BR-BA",
+                "region": "Northeast Region",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "place": "municipality",
+                "wikidata": "Q1070926",
+                "wikipedia": "pt:Jaguarari",
+                "population": "32703",
+                "linked_place": "town",
+                "IBGE:GEOCODIGO": "2917706",
+                "population:date": "2023-08-31"
+              },
+              "namedetails": {
+                "name": "Jaguarari"
+              }
+            },
+            "bbox": [
+              -40.411,
+              -10.3709778,
+              -39.7378046,
+              -9.74044
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -40.1944363,
+                -10.2575875
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: municipality: Jaguarari, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Juazeiro, state: Bahia, ISO3166-2-lvl4: BR-BA, region: Northeast Region, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, Bahia",
+      "country": "Brazil",
+      "state": "Bahia",
+      "city": ""
+    },
+    {
+      "lon": 20.0,
+      "lat": -10.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 401117536,
+              "osm_type": "way",
+              "osm_id": 1365050138,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.0533433333333333,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "Lunda Sul Province, Angola",
+              "address": {
+                "state": "Lunda Sul Province",
+                "ISO3166-2-lvl4": "AO-LSU",
+                "country": "Angola",
+                "country_code": "ao"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              20.0003743,
+              -10.0579434,
+              20.0377107,
+              -9.9949814
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                20.0044083,
+                -9.9996621
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: state: Lunda Sul Province, ISO3166-2-lvl4: AO-LSU, country: Angola, country_code: ao",
+      "address_formatted": "**Address:** Angola, Lunda Sul Province",
+      "country": "Angola",
+      "state": "Lunda Sul Province",
+      "city": ""
+    },
+    {
+      "lon": 30.0,
+      "lat": -10.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 34231301,
+              "osm_type": "relation",
+              "osm_id": 14464965,
+              "place_rank": 10,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.2666766666666667,
+              "addresstype": "state_district",
+              "name": "Lunte District",
+              "display_name": "Lunte District, Northern Province, Zambia",
+              "address": {
+                "state_district": "Lunte District",
+                "state": "Northern Province",
+                "ISO3166-2-lvl4": "ZM-05",
+                "country": "Zambia",
+                "country_code": "zm"
+              },
+              "extratags": {
+                "wikidata": "Q60769725",
+                "wikipedia": "en:Lunte District"
+              },
+              "namedetails": {
+                "name": "Lunte District"
+              }
+            },
+            "bbox": [
+              29.8022277,
+              -10.3276642,
+              31.1654086,
+              -9.313051
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                30.303732661337193,
+                -9.82035465
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: state_district: Lunte District, state: Northern Province, ISO3166-2-lvl4: ZM-05, country: Zambia, country_code: zm",
+      "address_formatted": "**Address:** Zambia, Northern Province",
+      "country": "Zambia",
+      "state": "Northern Province",
+      "city": ""
+    },
+    {
+      "lon": 120.0,
+      "lat": -10.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 25752861,
+              "osm_type": "way",
+              "osm_id": 260713740,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.053383334859235486,
+              "addresstype": "road",
+              "name": "Jalan Kabupaten",
+              "display_name": "Jalan Kabupaten, Desa Pindu Hurani, Kecamatan Tabundung, Sumba Timur, East Nusa Tenggara, Lesser Sunda Islands, Indonesia",
+              "address": {
+                "road": "Jalan Kabupaten",
+                "village": "Desa Pindu Hurani",
+                "municipality": "Kecamatan Tabundung",
+                "region": "Sumba Timur",
+                "state": "East Nusa Tenggara",
+                "ISO3166-2-lvl4": "ID-NT",
+                "archipelago": "Lesser Sunda Islands",
+                "ISO3166-2-lvl3": "ID-NU",
+                "country": "Indonesia",
+                "country_code": "id"
+              },
+              "extratags": {
+                "surface": "ground"
+              },
+              "namedetails": {
+                "ref": "Jalan Kabupaten"
+              }
+            },
+            "bbox": [
+              119.9823327,
+              -10.019175,
+              120.0400874,
+              -9.9909076
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                120.0008815,
+                -10.0012065
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: Jalan Kabupaten, village: Desa Pindu Hurani, municipality: Kecamatan Tabundung, region: Sumba Timur, state: East Nusa Tenggara, ISO3166-2-lvl4: ID-NT, archipelago: Lesser Sunda Islands, ISO3166-2-lvl3: ID-NU, country: Indonesia, country_code: id",
+      "address_formatted": "**Address:** Indonesia, East Nusa Tenggara, Jalan Kabupaten",
+      "country": "Indonesia",
+      "state": "East Nusa Tenggara",
+      "city": ""
+    },
+    {
+      "lon": -80.0,
+      "lat": 0.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 285610746,
+              "osm_type": "node",
+              "osm_id": 8240541591,
+              "place_rank": 20,
+              "category": "place",
+              "type": "hamlet",
+              "importance": 0.1333733340962844,
+              "addresstype": "hamlet",
+              "name": "La Felicidad",
+              "display_name": "La Felicidad, Pedernales, Manab\u00ed, Ecuador",
+              "address": {
+                "hamlet": "La Felicidad",
+                "town": "Pedernales",
+                "county": "Pedernales",
+                "state": "Manab\u00ed",
+                "ISO3166-2-lvl4": "EC-M",
+                "country": "Ecuador",
+                "country_code": "ec"
+              },
+              "extratags": null,
+              "namedetails": {
+                "name": "La Felicidad"
+              }
+            },
+            "bbox": [
+              -80.0241795,
+              -0.0040998,
+              -79.9841795,
+              0.0359002
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -80.0041795,
+                0.0159002
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: hamlet: La Felicidad, town: Pedernales, county: Pedernales, state: Manab\u00ed, ISO3166-2-lvl4: EC-M, country: Ecuador, country_code: ec",
+      "address_formatted": "**Address:** Ecuador, Manab\u00ed",
+      "country": "Ecuador",
+      "state": "Manab\u00ed",
+      "city": ""
+    },
+    {
+      "lon": -70.0,
+      "lat": 0.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 2892377,
+              "osm_type": "relation",
+              "osm_id": 6251410,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.1600492172121767,
+              "addresstype": "city_district",
+              "name": "Japur\u00e1",
+              "display_name": "Japur\u00e1, Regi\u00e3o Geogr\u00e1fica Imediata de Tef\u00e9, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Tef\u00e9, Amazonas, North Region, Brazil",
+              "address": {
+                "city_district": "Japur\u00e1",
+                "village": "Japur\u00e1",
+                "municipality": "Regi\u00e3o Geogr\u00e1fica Imediata de Tef\u00e9",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Tef\u00e9",
+                "state": "Amazonas",
+                "ISO3166-2-lvl4": "BR-AM",
+                "region": "North Region",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "border_type": "district",
+                "IBGE:GEOCODIGO": "130210805"
+              },
+              "namedetails": {
+                "name": "Japur\u00e1"
+              }
+            },
+            "bbox": [
+              -70.0432279,
+              -2.8409688,
+              -66.0013031,
+              0.0689996
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -68.79304962008632,
+                -1.3845443
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Japur\u00e1, village: Japur\u00e1, municipality: Regi\u00e3o Geogr\u00e1fica Imediata de Tef\u00e9, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Tef\u00e9, state: Amazonas, ISO3166-2-lvl4: BR-AM, region: North Region, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, Amazonas",
+      "country": "Brazil",
+      "state": "Amazonas",
+      "city": ""
+    },
+    {
+      "lon": -60.0,
+      "lat": 0.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 12459269,
+              "osm_type": "relation",
+              "osm_id": 6255488,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16004762569619285,
+              "addresstype": "city_district",
+              "name": "Urucar\u00e1",
+              "display_name": "Urucar\u00e1, Regi\u00e3o Geogr\u00e1fica Imediata de Itacoatiara, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Parintins, Amazonas, North Region, Brazil",
+              "address": {
+                "city_district": "Urucar\u00e1",
+                "town": "Urucar\u00e1",
+                "municipality": "Regi\u00e3o Geogr\u00e1fica Imediata de Itacoatiara",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Parintins",
+                "state": "Amazonas",
+                "ISO3166-2-lvl4": "BR-AM",
+                "region": "North Region",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "border_type": "district",
+                "IBGE:GEOCODIGO": "130430205"
+              },
+              "namedetails": {
+                "name": "Urucar\u00e1"
+              }
+            },
+            "bbox": [
+              -60.2397465,
+              -2.7629378,
+              -57.328,
+              0.264
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -58.78819189166667,
+                -1.2494397
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Urucar\u00e1, town: Urucar\u00e1, municipality: Regi\u00e3o Geogr\u00e1fica Imediata de Itacoatiara, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Parintins, state: Amazonas, ISO3166-2-lvl4: BR-AM, region: North Region, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, Amazonas",
+      "country": "Brazil",
+      "state": "Amazonas",
+      "city": ""
+    },
+    {
+      "lon": -50.0,
+      "lat": 0.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 12487421,
+              "osm_type": "relation",
+              "osm_id": 6426093,
+              "place_rank": 18,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.16004896849011976,
+              "addresstype": "city_district",
+              "name": "Chaves",
+              "display_name": "Chaves, Regi\u00e3o Geogr\u00e1fica Imediata de Breves, Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Breves, Par\u00e1, North Region, Brazil",
+              "address": {
+                "city_district": "Chaves",
+                "town": "Chaves",
+                "municipality": "Regi\u00e3o Geogr\u00e1fica Imediata de Breves",
+                "state_district": "Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Breves",
+                "state": "Par\u00e1",
+                "ISO3166-2-lvl4": "BR-PA",
+                "region": "North Region",
+                "country": "Brazil",
+                "country_code": "br"
+              },
+              "extratags": {
+                "border_type": "district",
+                "IBGE:GEOCODIGO": "150250905"
+              },
+              "namedetails": {
+                "name": "Chaves"
+              }
+            },
+            "bbox": [
+              -50.4154128,
+              -0.6670218,
+              -48.8643087,
+              0.418674
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -49.859317392076825,
+                -0.12137745
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city_district: Chaves, town: Chaves, municipality: Regi\u00e3o Geogr\u00e1fica Imediata de Breves, state_district: Regi\u00e3o Geogr\u00e1fica Intermedi\u00e1ria de Breves, state: Par\u00e1, ISO3166-2-lvl4: BR-PA, region: North Region, country: Brazil, country_code: br",
+      "address_formatted": "**Address:** Brazil, Par\u00e1",
+      "country": "Brazil",
+      "state": "Par\u00e1",
+      "city": ""
+    },
+    {
+      "lon": 0.0,
+      "lat": 0.0,
+      "is_land": true,
+      "location_info": {
+        "error": "Unable to geocode"
+      },
+      "address_full": null,
+      "address_formatted": null,
+      "country": null,
+      "state": null,
+      "city": null
+    },
+    {
+      "lon": 10.0,
+      "lat": 0.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 35350647,
+              "osm_type": "relation",
+              "osm_id": 2804107,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.3448456713926686,
+              "addresstype": "county",
+              "name": "Komo Department",
+              "display_name": "Komo Department, Estuaire Province, Gabon",
+              "address": {
+                "county": "Komo Department",
+                "state": "Estuaire Province",
+                "ISO3166-2-lvl4": "GA-1",
+                "country": "Gabon",
+                "country_code": "ga"
+              },
+              "extratags": {
+                "wikidata": "Q2575582",
+                "wikipedia": "en:Komo (department)"
+              },
+              "namedetails": {
+                "name": "Komo",
+                "name:en": "Komo Department",
+                "name:fr": "Komo"
+              }
+            },
+            "bbox": [
+              9.7833393,
+              -0.416938,
+              10.9739172,
+              0.8190322
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                10.244371695489008,
+                0.20037365000000001
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Komo Department, state: Estuaire Province, ISO3166-2-lvl4: GA-1, country: Gabon, country_code: ga",
+      "address_formatted": "**Address:** Gabon, Estuaire Province",
+      "country": "Gabon",
+      "state": "Estuaire Province",
+      "city": ""
+    }
+  ]
+}

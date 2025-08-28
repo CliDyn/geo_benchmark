@@ -1,0 +1,1987 @@
+{
+  "mesh_info": {
+    "type": "regular_grid",
+    "resolution_degrees": 10.0,
+    "lon_range": [
+      -180,
+      180
+    ],
+    "lat_range": [
+      -60,
+      85
+    ],
+    "total_points": 540,
+    "chunk_id": 3,
+    "total_chunks": 5,
+    "land_points_in_chunk": 31
+  },
+  "resolution": 10.0,
+  "mesh_points": [
+    {
+      "lon": 40.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 42019468,
+              "osm_type": "relation",
+              "osm_id": 12413342,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.4649447887113729,
+              "addresstype": "province",
+              "name": "Sakaka",
+              "display_name": "Sakaka, Al Jawf Region, Saudi Arabia",
+              "address": {
+                "province": "Sakaka",
+                "state": "Al Jawf Region",
+                "ISO3166-2-lvl4": "SA-12",
+                "country": "Saudi Arabia",
+                "country_code": "sa"
+              },
+              "extratags": {
+                "place": "province",
+                "GNS:id": "-3098949",
+                "capital": "4",
+                "wikidata": "Q27469",
+                "wikipedia": "en:Sakakah",
+                "population": "242813",
+                "GNS:dsg_code": "PPLA",
+                "GNS:dsg_name": "captial of a first-order administrative division",
+                "linked_place": "city",
+                "population:date": "2010",
+                "source:population": "stats.gov.sa"
+              },
+              "namedetails": {
+                "name": "\u0645\u062d\u0627\u0641\u0638\u0629 \u0633\u0643\u0627\u0643\u0627",
+                "name:ar": "\u0645\u062d\u0627\u0641\u0638\u0629 \u0633\u0643\u0627\u0643\u0627",
+                "name:en": "Sakaka",
+                "_place_name": "\u0633\u0643\u0627\u0643\u0627",
+                "_place_name:ar": "\u0633\u0643\u0627\u0643\u0627",
+                "name:de": "Sakaka",
+                "name:fr": "Sakaka",
+                "name:he": "\u05e1\u05d0\u05e7\u05d0\u05e7\u05d4",
+                "name:hi": "\u0938\u0915\u0915\u094d\u0915\u093e",
+                "name:ko": "\uc0ac\uce74\uce74",
+                "name:ku": "Sekaka",
+                "name:ml": "\u0d38\u0d15\u0d4d\u0d15\u0d3e\u0d15\u0d4d\u0d15",
+                "name:ru": "\u0421\u0430\u043a\u0430\u043a\u0430",
+                "name:uk": "\u0421\u0430\u043a\u0430\u043a\u0430",
+                "alt_name": "Sakakah;Sak\u0101kah;Skaka;Sk\u00e2ka",
+                "int_name": "Sak\u0101k\u0101",
+                "name:ckb": "\u0633\u06d5\u06a9\u0627\u06a9\u0627",
+                "name:ar_dmg": "Sak\u0101k\u0101"
+              }
+            },
+            "bbox": [
+              39.481883,
+              28.9136299,
+              41.99684,
+              30.9633369
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                40.2047701,
+                29.9784008
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: province: Sakaka, state: Al Jawf Region, ISO3166-2-lvl4: SA-12, country: Saudi Arabia, country_code: sa",
+      "address_formatted": "**Address:** Saudi Arabia, Al Jawf Region",
+      "country": "Saudi Arabia",
+      "state": "Al Jawf Region",
+      "city": ""
+    },
+    {
+      "lon": 60.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 41154571,
+              "osm_type": "relation",
+              "osm_id": 6558550,
+              "place_rank": 14,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.4557856082293204,
+              "addresstype": "city",
+              "name": "\u062f\u0647\u0633\u062a\u0627\u0646 \u0646\u0635\u0631\u062a \u0622\u0628\u0627\u062f",
+              "display_name": "\u062f\u0647\u0633\u062a\u0627\u0646 \u0646\u0635\u0631\u062a \u0622\u0628\u0627\u062f, Bakhsh-e NosratAbad, Zahedan County, Sistan and Baluchestan Province, Iran",
+              "address": {
+                "city": "\u062f\u0647\u0633\u062a\u0627\u0646 \u0646\u0635\u0631\u062a \u0622\u0628\u0627\u062f",
+                "district": "Bakhsh-e NosratAbad",
+                "county": "Zahedan County",
+                "state": "Sistan and Baluchestan Province",
+                "ISO3166-2-lvl4": "IR-11",
+                "country": "Iran",
+                "country_code": "ir"
+              },
+              "extratags": {
+                "wikidata": "Q14750899"
+              },
+              "namedetails": {
+                "name": "\u062f\u0647\u0633\u062a\u0627\u0646 \u0646\u0635\u0631\u062a \u0622\u0628\u0627\u062f"
+              }
+            },
+            "bbox": [
+              59.4249612,
+              29.102857,
+              60.5620826,
+              30.7626524
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                59.9183007630255,
+                29.9396028
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city: \u062f\u0647\u0633\u062a\u0627\u0646 \u0646\u0635\u0631\u062a \u0622\u0628\u0627\u062f, district: Bakhsh-e NosratAbad, county: Zahedan County, state: Sistan and Baluchestan Province, ISO3166-2-lvl4: IR-11, country: Iran, country_code: ir",
+      "address_formatted": "**Address:** Iran, Sistan and Baluchestan Province, \u062f\u0647\u0633\u062a\u0627\u0646 \u0646\u0635\u0631\u062a \u0622\u0628\u0627\u062f",
+      "country": "Iran",
+      "state": "Sistan and Baluchestan Province",
+      "city": "\u062f\u0647\u0633\u062a\u0627\u0646 \u0646\u0635\u0631\u062a \u0622\u0628\u0627\u062f"
+    },
+    {
+      "lon": 70.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 227785958,
+              "osm_type": "node",
+              "osm_id": 253888783,
+              "place_rank": 18,
+              "category": "place",
+              "type": "town",
+              "importance": 0.29699664641894313,
+              "addresstype": "town",
+              "name": "Fort Monroe",
+              "display_name": "Fort Monroe, Tribal Area, Dera Ghazi Khan District, Dera Ghazi Khan Division, Punjab, Pakistan",
+              "address": {
+                "town": "Fort Monroe",
+                "municipality": "Tribal Area",
+                "district": "Dera Ghazi Khan District",
+                "state_district": "Dera Ghazi Khan Division",
+                "state": "Punjab",
+                "ISO3166-2-lvl4": "PK-PB",
+                "country": "Pakistan",
+                "country_code": "pk"
+              },
+              "extratags": {
+                "is_in": "Balochistan, Pakistan",
+                "wikidata": "Q5471727",
+                "wikipedia": "en:Fort Munro"
+              },
+              "namedetails": {
+                "name": "\u0641\u0648\u0631\u0679 \u0645\u0646\u0631\u0648",
+                "name:en": "Fort Monroe",
+                "name:ml": "\u0d2b\u0d4b\u0d7c\u0d1f\u0d4d\u0d1f\u0d4d \u0d2e\u0d7a\u0d31\u0d4b",
+                "name:bal": "\u062a\u0645\u0646 \u0644\u06cc\u063a\u0627\u0631\u06cc"
+              }
+            },
+            "bbox": [
+              69.9460243,
+              29.8853333,
+              70.0260243,
+              29.9653333
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                69.9860243,
+                29.9253333
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: town: Fort Monroe, municipality: Tribal Area, district: Dera Ghazi Khan District, state_district: Dera Ghazi Khan Division, state: Punjab, ISO3166-2-lvl4: PK-PB, country: Pakistan, country_code: pk",
+      "address_formatted": "**Address:** Pakistan, Punjab",
+      "country": "Pakistan",
+      "state": "Punjab",
+      "city": ""
+    },
+    {
+      "lon": 80.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 224221231,
+              "osm_type": "node",
+              "osm_id": 7886854681,
+              "place_rank": 22,
+              "category": "place",
+              "type": "isolated_dwelling",
+              "importance": 0.10670416800183105,
+              "addresstype": "isolated_dwelling",
+              "name": "Bhainkuno",
+              "display_name": "Bhainkuno, Kapkot, Bageshwar, Uttarakhand, 263633, India",
+              "address": {
+                "isolated_dwelling": "Bhainkuno",
+                "county": "Kapkot",
+                "state_district": "Bageshwar",
+                "state": "Uttarakhand",
+                "ISO3166-2-lvl4": "IN-UK",
+                "postcode": "263633",
+                "country": "India",
+                "country_code": "in"
+              },
+              "extratags": null,
+              "namedetails": {
+                "name": "Bhainkuno"
+              }
+            },
+            "bbox": [
+              80.007273,
+              29.9984438,
+              80.007373,
+              29.9985438
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                80.007323,
+                29.9984938
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: isolated_dwelling: Bhainkuno, county: Kapkot, state_district: Bageshwar, state: Uttarakhand, ISO3166-2-lvl4: IN-UK, postcode: 263633, country: India, country_code: in",
+      "address_formatted": "**Address:** India, Uttarakhand",
+      "country": "India",
+      "state": "Uttarakhand",
+      "city": ""
+    },
+    {
+      "lon": 90.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 223647025,
+              "osm_type": "relation",
+              "osm_id": 12321536,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.24256732666913378,
+              "addresstype": "town",
+              "name": "Dechen",
+              "display_name": "Dechen, Baingoin County, Nagqu City, Tibet, 852500, China",
+              "address": {
+                "town": "Dechen",
+                "city": "Baingoin County",
+                "region": "Nagqu City",
+                "state": "Tibet",
+                "ISO3166-2-lvl4": "CN-XZ",
+                "postcode": "852500",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": {
+                "capital": "8",
+                "place:CN": "town",
+                "wikidata": "Q8848681",
+                "wikipedia": "zh:\u5fb7\u5e86\u9547 (\u73ed\u6208\u53bf)",
+                "source:name": "GNS",
+                "linked_place": "town"
+              },
+              "namedetails": {
+                "name": "\u5fb7\u5e86\u9547",
+                "name:zh": "\u5fb7\u5e86\u9547",
+                "name:bo": "\u0f56\u0f51\u0f7a\u0f0b\u0f46\u0f7a\u0f53\u0f0b",
+                "name:en": "Dechen",
+                "alt_name": "\u679c\u5c14\u9ea6;\u679c\u513f\u9ea6;\u5fb7\u5e86;Guo'ermai;Deqing Zhen;Deqing;Deqen Zhen;Degen",
+                "official_name": "\u5fb7\u5e86\u9547"
+              }
+            },
+            "bbox": [
+              89.8161505,
+              29.9393168,
+              90.655403,
+              30.8794271
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                90.1107689,
+                30.5218525
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: town: Dechen, city: Baingoin County, region: Nagqu City, state: Tibet, ISO3166-2-lvl4: CN-XZ, postcode: 852500, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Tibet, Baingoin County",
+      "country": "China",
+      "state": "Tibet",
+      "city": "Baingoin County"
+    },
+    {
+      "lon": 100.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 222061427,
+              "osm_type": "relation",
+              "osm_id": 14940096,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.2671990544766661,
+              "addresstype": "town",
+              "name": "Honying",
+              "display_name": "Honying, Litang County, Kardze, Sichuan, China",
+              "address": {
+                "town": "Honying",
+                "county": "Litang County",
+                "region": "Kardze",
+                "state": "Sichuan",
+                "ISO3166-2-lvl4": "CN-SC",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": {
+                "capital": "8",
+                "place:CN": "township",
+                "wikidata": "Q14077917",
+                "wikipedia": "zh:\u79be\u5c3c\u4e61",
+                "source:name": "GNS",
+                "linked_place": "town"
+              },
+              "namedetails": {
+                "name": "\u79be\u5c3c\u4e61",
+                "name:bo": "\u0f67\u0f7c\u0f0b\u0f62\u0f99\u0f72\u0f44\u0f0b\u0f0d",
+                "name:en": "Honying",
+                "name:zh": "\u79be\u5c3c\u4e61",
+                "alt_name": "\u79be\u5c3c;Heni",
+                "official_name": "\u79be\u5c3c\u4e61"
+              }
+            },
+            "bbox": [
+              99.5557907,
+              29.8400486,
+              100.1677608,
+              30.3251752
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                99.8228588,
+                30.2219507
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: town: Honying, county: Litang County, region: Kardze, state: Sichuan, ISO3166-2-lvl4: CN-SC, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Sichuan",
+      "country": "China",
+      "state": "Sichuan",
+      "city": ""
+    },
+    {
+      "lon": 110.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 223094352,
+              "osm_type": "way",
+              "osm_id": 1235561813,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "trunk",
+              "importance": 0.053388577859159195,
+              "addresstype": "road",
+              "name": "G351",
+              "display_name": "G351, Zhongying, Hefeng County, Enshi, Hubei, 445800, China",
+              "address": {
+                "road": "G351",
+                "town": "Zhongying",
+                "county": "Hefeng County",
+                "region": "Enshi",
+                "state": "Hubei",
+                "ISO3166-2-lvl4": "CN-HB",
+                "postcode": "445800",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": {
+                "lanes": "2",
+                "oneway": "no"
+              },
+              "namedetails": {
+                "ref": "G351"
+              }
+            },
+            "bbox": [
+              109.9906405,
+              29.9881318,
+              110.0044191,
+              29.9969908
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                110.0041187,
+                29.9969072
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: G351, town: Zhongying, county: Hefeng County, region: Enshi, state: Hubei, ISO3166-2-lvl4: CN-HB, postcode: 445800, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Hubei, G351",
+      "country": "China",
+      "state": "Hubei",
+      "city": ""
+    },
+    {
+      "lon": 120.0,
+      "lat": 30.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 409433425,
+              "osm_type": "way",
+              "osm_id": 1396051838,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.05339587930113676,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "\u8774\u8776\u9601\u519c\u5c45, Fuyang, Hangzhou City, Zhejiang, China",
+              "address": {
+                "residential": "\u8774\u8776\u9601\u519c\u5c45",
+                "city": "Fuyang",
+                "state": "Zhejiang",
+                "ISO3166-2-lvl4": "CN-ZJ",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              120.0000846,
+              30.0000733,
+              120.0003532,
+              30.0006768
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                120.0000846,
+                30.0000733
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: residential: \u8774\u8776\u9601\u519c\u5c45, city: Fuyang, state: Zhejiang, ISO3166-2-lvl4: CN-ZJ, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Zhejiang, Fuyang",
+      "country": "China",
+      "state": "Zhejiang",
+      "city": "Fuyang"
+    },
+    {
+      "lon": -120.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 298546157,
+              "osm_type": "relation",
+              "osm_id": 396469,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.5731647051072063,
+              "addresstype": "county",
+              "name": "Lassen County",
+              "display_name": "Lassen County, California, United States",
+              "address": {
+                "county": "Lassen County",
+                "state": "California",
+                "ISO3166-2-lvl4": "US-CA",
+                "country": "United States",
+                "country_code": "us"
+              },
+              "extratags": {
+                "website": "https://www.lassencounty.org/",
+                "wikidata": "Q156340",
+                "wikipedia": "en:Lassen County, California",
+                "population": "31345",
+                "border_type": "county",
+                "county:ansi": "035",
+                "county:name": "Lassen",
+                "linked_place": "county",
+                "county:abbrev": "LAS",
+                "nist:fips_code": "6035",
+                "nist:state_fips": "6"
+              },
+              "namedetails": {
+                "name": "Lassen County",
+                "name:en": "Lassen County",
+                "alt_name": "Lassen",
+                "_place_name": "Lassen"
+              }
+            },
+            "bbox": [
+              -121.3320021,
+              39.7076671,
+              -119.9956059,
+              41.1846248
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -120.730998,
+                40.7685579
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Lassen County, state: California, ISO3166-2-lvl4: US-CA, country: United States, country_code: us",
+      "address_formatted": "**Address:** United States, California",
+      "country": "United States",
+      "state": "California",
+      "city": ""
+    },
+    {
+      "lon": -110.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 306883529,
+              "osm_type": "way",
+              "osm_id": 10089732,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.0533433333333333,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "Duchesne County, Utah, United States",
+              "address": {
+                "county": "Duchesne County",
+                "state": "Utah",
+                "ISO3166-2-lvl4": "US-UT",
+                "country": "United States",
+                "country_code": "us"
+              },
+              "extratags": {
+                "surface": "unpaved"
+              },
+              "namedetails": null
+            },
+            "bbox": [
+              -110.0264259,
+              39.932157,
+              -109.9889857,
+              40.0548349
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -110.00419900971745,
+                39.99910771043505
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Duchesne County, state: Utah, ISO3166-2-lvl4: US-UT, country: United States, country_code: us",
+      "address_formatted": "**Address:** United States, Utah",
+      "country": "United States",
+      "state": "Utah",
+      "city": ""
+    },
+    {
+      "lon": -100.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 305517839,
+              "osm_type": "way",
+              "osm_id": 158621231,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.0533433333333333,
+              "addresstype": "road",
+              "name": "Road 702",
+              "display_name": "Road 702, Furnas County, Nebraska, United States",
+              "address": {
+                "road": "Road 702",
+                "county": "Furnas County",
+                "state": "Nebraska",
+                "ISO3166-2-lvl4": "US-NE",
+                "country": "United States",
+                "country_code": "us"
+              },
+              "extratags": {
+                "surface": "unpaved",
+                "maxspeed": "50 mph"
+              },
+              "namedetails": {
+                "name": "Road 702"
+              }
+            },
+            "bbox": [
+              -100.061812,
+              40.001581,
+              -99.9928076,
+              40.001711
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -100.00000112615301,
+                40.00166895875428
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: Road 702, county: Furnas County, state: Nebraska, ISO3166-2-lvl4: US-NE, country: United States, country_code: us",
+      "address_formatted": "**Address:** United States, Nebraska, Road 702",
+      "country": "United States",
+      "state": "Nebraska",
+      "city": ""
+    },
+    {
+      "lon": -90.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 312301182,
+              "osm_type": "way",
+              "osm_id": 21713404,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "residential",
+              "importance": 0.05336833524071104,
+              "addresstype": "road",
+              "name": "Pschirrer Road",
+              "display_name": "Pschirrer Road, Cass County, Illinois, United States",
+              "address": {
+                "road": "Pschirrer Road",
+                "county": "Cass County",
+                "state": "Illinois",
+                "ISO3166-2-lvl4": "US-IL",
+                "country": "United States",
+                "country_code": "us"
+              },
+              "extratags": null,
+              "namedetails": {
+                "name": "Pschirrer Road"
+              }
+            },
+            "bbox": [
+              -90.013587,
+              39.9961531,
+              -89.9948515,
+              39.9961557
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -89.99999946641202,
+                39.996154985596185
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: Pschirrer Road, county: Cass County, state: Illinois, ISO3166-2-lvl4: US-IL, country: United States, country_code: us",
+      "address_formatted": "**Address:** United States, Illinois, Pschirrer Road",
+      "country": "United States",
+      "state": "Illinois",
+      "city": ""
+    },
+    {
+      "lon": -80.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 362801828,
+              "osm_type": "way",
+              "osm_id": 15033556,
+              "place_rank": 30,
+              "category": "place",
+              "type": "house",
+              "importance": 9.99999999995449e-06,
+              "addresstype": "place",
+              "name": "",
+              "display_name": "1, Potters Alley, Fredericktown Hill, Fredericktown, East Bethlehem Township, Washington County, Pennsylvania, 15333, United States",
+              "address": {
+                "house_number": "1",
+                "road": "Potters Alley",
+                "hamlet": "Fredericktown Hill",
+                "village": "Fredericktown",
+                "city": "East Bethlehem Township",
+                "county": "Washington County",
+                "state": "Pennsylvania",
+                "ISO3166-2-lvl4": "US-PA",
+                "postcode": "15333",
+                "country": "United States",
+                "country_code": "us"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              -80.000011,
+              39.999946,
+              -79.999911,
+              40.000046
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -79.999961,
+                39.999996
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: house_number: 1, road: Potters Alley, hamlet: Fredericktown Hill, village: Fredericktown, city: East Bethlehem Township, county: Washington County, state: Pennsylvania, ISO3166-2-lvl4: US-PA, postcode: 15333, country: United States, country_code: us",
+      "address_formatted": "**Address:** United States, Pennsylvania, East Bethlehem Township, Potters Alley 1",
+      "country": "United States",
+      "state": "Pennsylvania",
+      "city": "East Bethlehem Township"
+    },
+    {
+      "lon": 0.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 47494003,
+              "osm_type": "way",
+              "osm_id": 28722123,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "residential",
+              "importance": 0.053397719539177504,
+              "addresstype": "road",
+              "name": "Entrador 1",
+              "display_name": "Entrador 1, Castell\u00f3 de la Plana, la Plana Alta, Castell\u00f3 / Castell\u00f3n, Valencian Community, 12100, Spain",
+              "address": {
+                "road": "Entrador 1",
+                "city": "Castell\u00f3 de la Plana",
+                "region": "la Plana Alta",
+                "province": "Castell\u00f3 / Castell\u00f3n",
+                "ISO3166-2-lvl6": "ES-CS",
+                "state": "Valencian Community",
+                "ISO3166-2-lvl4": "ES-VC",
+                "postcode": "12100",
+                "country": "Spain",
+                "country_code": "es"
+              },
+              "extratags": {
+                "oneway": "no"
+              },
+              "namedetails": {
+                "name": "Entrador 1",
+                "name:ca": "Entrador 1"
+              }
+            },
+            "bbox": [
+              0.0001541,
+              39.9976749,
+              0.0010294,
+              40.0005125
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                0.00016220587240084453,
+                40.00001712580855
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: Entrador 1, city: Castell\u00f3 de la Plana, region: la Plana Alta, province: Castell\u00f3 / Castell\u00f3n, ISO3166-2-lvl6: ES-CS, state: Valencian Community, ISO3166-2-lvl4: ES-VC, postcode: 12100, country: Spain, country_code: es",
+      "address_formatted": "**Address:** Spain, Valencian Community, Castell\u00f3 de la Plana, Entrador 1",
+      "country": "Spain",
+      "state": "Valencian Community",
+      "city": "Castell\u00f3 de la Plana"
+    },
+    {
+      "lon": 20.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 53921799,
+              "osm_type": "way",
+              "osm_id": 767384352,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "residential",
+              "importance": 0.053383334859235486,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "Fush\u00eb V\u00ebrri, Vergo, Bashkia Delvin\u00eb, Vlor\u00eb County, 9720, Albania",
+              "address": {
+                "village": "Fush\u00eb V\u00ebrri",
+                "municipality": "Bashkia Delvin\u00eb",
+                "county": "Vlor\u00eb County",
+                "ISO3166-2-lvl6": "AL-12",
+                "postcode": "9720",
+                "country": "Albania",
+                "country_code": "al"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              19.9997225,
+              40.0001457,
+              20.0019735,
+              40.0012471
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                20.00007394137177,
+                40.000193021920694
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: village: Fush\u00eb V\u00ebrri, municipality: Bashkia Delvin\u00eb, county: Vlor\u00eb County, ISO3166-2-lvl6: AL-12, postcode: 9720, country: Albania, country_code: al",
+      "address_formatted": "**Address:** Albania",
+      "country": "Albania",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": 30.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 53360457,
+              "osm_type": "way",
+              "osm_id": 309905248,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "residential",
+              "importance": 0.05337586404211486,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "Demirk\u00f6y, Pazaryeri, Bilecik, Marmara Region, Turkey",
+              "address": {
+                "village": "Demirk\u00f6y",
+                "town": "Pazaryeri",
+                "province": "Bilecik",
+                "ISO3166-2-lvl4": "TR-11",
+                "region": "Marmara Region",
+                "country": "Turkey",
+                "country_code": "tr"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              30.0042574,
+              39.9979113,
+              30.0081752,
+              40.002276
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                30.0042747,
+                39.9987794
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: village: Demirk\u00f6y, town: Pazaryeri, province: Bilecik, ISO3166-2-lvl4: TR-11, region: Marmara Region, country: Turkey, country_code: tr",
+      "address_formatted": "**Address:** Turkey",
+      "country": "Turkey",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": 40.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 192076454,
+              "osm_type": "node",
+              "osm_id": 9125587659,
+              "place_rank": 19,
+              "category": "place",
+              "type": "village",
+              "importance": 0.23790322239318296,
+              "addresstype": "village",
+              "name": "K\u00fc\u00e7\u00fck Otlukbeli",
+              "display_name": "K\u00fc\u00e7\u00fck Otlukbeli, Otlukbeli, Erzincan, Eastern Anatolia Region, Turkey",
+              "address": {
+                "village": "K\u00fc\u00e7\u00fck Otlukbeli",
+                "town": "Otlukbeli",
+                "province": "Erzincan",
+                "ISO3166-2-lvl4": "TR-24",
+                "region": "Eastern Anatolia Region",
+                "country": "Turkey",
+                "country_code": "tr"
+              },
+              "extratags": {
+                "wikidata": "Q10783350",
+                "wikipedia": "tr:K\u00fc\u00e7\u00fckotlukbeli, Otlukbeli"
+              },
+              "namedetails": {
+                "name": "K\u00fc\u00e7\u00fck Otlukbeli",
+                "name:tr": "K\u00fc\u00e7\u00fck Otlukbeli",
+                "alt_name": "K\u00fc\u00e7\u00fckotlukbeli"
+              }
+            },
+            "bbox": [
+              39.9652023,
+              40.0002778,
+              40.0052023,
+              40.0402778
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                39.9852023,
+                40.0202778
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: village: K\u00fc\u00e7\u00fck Otlukbeli, town: Otlukbeli, province: Erzincan, ISO3166-2-lvl4: TR-24, region: Eastern Anatolia Region, country: Turkey, country_code: tr",
+      "address_formatted": "**Address:** Turkey",
+      "country": "Turkey",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": 60.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 187425610,
+              "osm_type": "relation",
+              "osm_id": 15695444,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.34725686819858415,
+              "addresstype": "county",
+              "name": "Gorogly District",
+              "display_name": "Gorogly District, Dashoguz Region, 746380, Turkmenistan",
+              "address": {
+                "county": "Gorogly District",
+                "province": "Dashoguz Region",
+                "ISO3166-2-lvl4": "TM-D",
+                "postcode": "746380",
+                "country": "Turkmenistan",
+                "country_code": "tm"
+              },
+              "extratags": {
+                "wikidata": "Q4153315",
+                "wikipedia": "en:G\u00f6rogly District"
+              },
+              "namedetails": {
+                "name": "G\u00f6rogly etraby",
+                "name:az": "Koro\u011flu rayonu",
+                "name:en": "Gorogly District",
+                "name:fa": "\u0646\u0627\u062d\u06cc\u0647\u200c\u06cc \u06a9\u0648\u0631\u0627\u0648\u063a\u0644\u0648",
+                "name:kk": "\u041a\u04e9\u0440\u043e\u0493\u043b\u044b \u0430\u0442\u044b\u0440\u0430\u0431\u044b",
+                "name:ru": "\u0413\u0451\u0440\u043e\u0433\u043b\u044b\u043d\u0441\u043a\u0438\u0439 \u044d\u0442\u0440\u0430\u043f",
+                "name:tg": "\u041d\u043e\u04b3\u0438\u044f\u0438 \u0413\u04ef\u0440\u0493\u0443\u043b\u04e3",
+                "name:tk": "G\u00f6rogly etraby",
+                "name:tr": "K\u00f6ro\u011flu \u0130l\u00e7esi",
+                "name:uz": "Ko\u2018ro\u2018g\u2018li tumani",
+                "name:azb": "\u06a9\u0648\u0631\u0627\u0648\u063a\u0644\u0648 \u0628\u0624\u0644\u06af\u0647\u200c\u0633\u06cc",
+                "alt_name:en": "G\u00f6rogly District",
+                "old_name:az": "Taxta rayonu",
+                "old_name:en": "Tagta District",
+                "old_name:fa": "\u0646\u0627\u062d\u06cc\u0647\u200c\u06cc \u062a\u062e\u062a\u0647",
+                "old_name:kk": "\u0422\u0430\u049b\u0442\u0430 \u0430\u0442\u044b\u0440\u0430\u0431\u044b",
+                "old_name:ru": "\u0422\u0430\u0433\u0442\u0438\u043d\u0441\u043a\u0438\u0439 \u044d\u0442\u0440\u0430\u043f",
+                "old_name:tg": "\u041d\u043e\u04b3\u0438\u044f\u0438 \u0422\u0430\u0445\u0442\u0430",
+                "old_name:tk": "Tagta etraby",
+                "old_name:tr": "Tahta \u0130l\u00e7esi",
+                "old_name:uz": "Taxta tumani",
+                "name:kk-Arab": "\u0643\u0648\u0631\u0648\u0639\u0644\u0649 \u0627\u062a\u0649\u0631\u0627\u0628\u0649",
+                "name:kk-Cyrl": "\u041a\u04e9\u0440\u043e\u0493\u043b\u044b \u0430\u0442\u044b\u0440\u0430\u0431\u044b",
+                "name:kk-Latn": "K\u00f6ro\u011fly atyraby",
+                "name:tk-Arab": "\u06af\u0624\u0631\u0648\u063a\u0644\u06cc\u065b \u0627\u062a\u0631\u0627\u0628\u06cc\u065b",
+                "name:uz-Arab": "\u06a9\u06c9\u0631\u06c9\u063a\u0644\u06cc \u062a\u0648\u0645\u0646\u06cc",
+                "name:uz-Cyrl": "\u041a\u045e\u0440\u045e\u0493\u043b\u0438 \u0442\u0443\u043c\u0430\u043d\u0438",
+                "name:uz-Latn": "Ko\u2018ro\u2018g\u2018li tumani",
+                "old_name:azb": "\u062a\u0627\u062e\u062a\u0627 \u0628\u0624\u0644\u06af\u0647\u200c\u0633\u06cc",
+                "old_name:kk-Arab": "\u062a\u0627\u0642\u062a\u0627 \u0627\u062a\u0649\u0631\u0627\u0628\u0649",
+                "old_name:kk-Cyrl": "\u0422\u0430\u049b\u0442\u0430 \u0430\u0442\u044b\u0440\u0430\u0431\u044b",
+                "old_name:kk-Latn": "Taqta atyraby",
+                "old_name:tk-Arab": "\u062a\u0627\u063a\u062a\u0627 \u0627\u062a\u0631\u0627\u0628\u06cc\u065b",
+                "old_name:uz-Arab": "\u062a\u062e\u062a\u0647 \u062a\u0648\u0645\u0646\u06cc",
+                "old_name:uz-Cyrl": "\u0422\u0430\u0445\u0442\u0430 \u0442\u0443\u043c\u0430\u043d\u0438",
+                "old_name:uz-Latn": "Taxta tumani"
+              }
+            },
+            "bbox": [
+              58.8769848,
+              39.4672693,
+              60.9448991,
+              41.7559058
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                59.84114017162622,
+                40.6533894
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Gorogly District, province: Dashoguz Region, ISO3166-2-lvl4: TM-D, postcode: 746380, country: Turkmenistan, country_code: tm",
+      "address_formatted": "**Address:** Turkmenistan",
+      "country": "Turkmenistan",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": 70.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 199688101,
+              "osm_type": "way",
+              "osm_id": 955433051,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "residential",
+              "importance": 0.053370834668497714,
+              "addresstype": "road",
+              "name": "\u0443\u043b. \u0411\u0430\u043a\u044b\u0431\u0435\u043a",
+              "display_name": "\u0443\u043b. \u0411\u0430\u043a\u044b\u0431\u0435\u043a, \u041a\u0435\u0440\u0435\u0433\u0435-\u0422\u0430\u0448, Leylek District, Kyrgyzstan",
+              "address": {
+                "road": "\u0443\u043b. \u0411\u0430\u043a\u044b\u0431\u0435\u043a",
+                "village": "\u041a\u0435\u0440\u0435\u0433\u0435-\u0422\u0430\u0448",
+                "county": "Leylek District",
+                "country": "Kyrgyzstan",
+                "country_code": "kg"
+              },
+              "extratags": null,
+              "namedetails": {
+                "name": "\u0443\u043b. \u0411\u0430\u043a\u044b\u0431\u0435\u043a"
+              }
+            },
+            "bbox": [
+              70.0025423,
+              39.9958172,
+              70.0061204,
+              40.0110623
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                70.0054552,
+                40.0000418
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: road: \u0443\u043b. \u0411\u0430\u043a\u044b\u0431\u0435\u043a, village: \u041a\u0435\u0440\u0435\u0433\u0435-\u0422\u0430\u0448, county: Leylek District, country: Kyrgyzstan, country_code: kg",
+      "address_formatted": "**Address:** Kyrgyzstan, \u0443\u043b. \u0411\u0430\u043a\u044b\u0431\u0435\u043a",
+      "country": "Kyrgyzstan",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": 80.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 198613150,
+              "osm_type": "relation",
+              "osm_id": 2748929,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.4543962394956248,
+              "addresstype": "county",
+              "name": "Awat County",
+              "display_name": "Awat County, Aksu Prefecture, Xinjiang, China",
+              "address": {
+                "county": "Awat County",
+                "region": "Aksu Prefecture",
+                "state": "Xinjiang",
+                "ISO3166-2-lvl4": "CN-XJ",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": {
+                "wikidata": "Q791640",
+                "wikipedia": "de:Awat",
+                "source:name": "GNS",
+                "linked_place": "county",
+                "division_code": "652928"
+              },
+              "namedetails": {
+                "name": "\u963f\u74e6\u63d0\u53bf \u0626\u0627\u06cb\u0627\u062a \u0646\u0627\u06be\u0649\u064a\u0649\u0633\u0649",
+                "name:en": "Awat County",
+                "name:fa": "\u0634\u0647\u0631\u0633\u062a\u0627\u0646 \u0622\u0648\u0627\u062a",
+                "name:ug": "\u0626\u0627\u06cb\u0627\u062a \u0646\u0627\u06be\u0649\u064a\u0649\u0633\u0649",
+                "name:zh": "\u963f\u74e6\u63d0\u53bf",
+                "alt_name": "\u963f\u74e6\u63d0;Awat;\u0626\u0627\u06cb\u0627\u062a",
+                "_place_name": "\u963f\u74e6\u63d0\u53bf / \u0626\u0627\u06cb\u0627\u062a \u0646\u0627\u06be\u0649\u064a\u0649\u0633\u0649",
+                "name:zh-Hant": "\u963f\u74e6\u63d0\u7e23",
+                "name:de": "Awat",
+                "name:es": "Awat",
+                "name:fr": "Awat",
+                "_place_alt_name": "\u963f\u74e6\u63d0",
+                "alt_name:en": "A-wa-t'i Hsien;Awat;Awati;Awat Xian;\u0626\u0627\u06cb\u0627\u062a",
+                "alt_name:zh": "\u963f\u74e6\u63d0",
+                "name:zh-Hans": "\u963f\u74e6\u63d0\u53bf",
+                "name:zh-Latn-pinyin": "\u0100w\u01cet\u00ed Xi\u00e0n",
+                "official_name": "\u963f\u74e6\u63d0\u53bf"
+              }
+            },
+            "bbox": [
+              79.7619436,
+              39.4637646,
+              81.0931776,
+              40.8942133
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                80.5092961,
+                40.2031074
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Awat County, region: Aksu Prefecture, state: Xinjiang, ISO3166-2-lvl4: CN-XJ, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Xinjiang",
+      "country": "China",
+      "state": "Xinjiang",
+      "city": ""
+    },
+    {
+      "lon": 90.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 197203216,
+              "osm_type": "relation",
+              "osm_id": 5731736,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.22742205121143227,
+              "addresstype": "town",
+              "name": "Lopnur",
+              "display_name": "Lopnur, Ruoqiang County, Bayingolin, Xinjiang, China",
+              "address": {
+                "town": "Lopnur",
+                "county": "Ruoqiang County",
+                "region": "Bayingolin",
+                "state": "Xinjiang",
+                "ISO3166-2-lvl4": "CN-XJ",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": {
+                "capital": "8",
+                "place:CN": "town",
+                "wikidata": "Q8477090",
+                "wikipedia": "zh:\u7f57\u5e03\u6cca\u9547",
+                "linked_place": "town",
+                "division_code": "652824102"
+              },
+              "namedetails": {
+                "name": "\u7f57\u5e03\u6cca\u9547 \u0644\u0648\u067e\u0646\u06c7\u0631 \u0643\u06c6\u0644\u0649 \u0628\u0627\u0632\u0649\u0631\u0649",
+                "name:en": "Lopnur",
+                "name:ko": "\ub85c\ud504\ub204\ub974 \uc9c4",
+                "name:ug": "\u0644\u0648\u067e\u0646\u06c7\u0631 \u0643\u06c6\u0644\u0649 \u0628\u0627\u0632\u0649\u0631\u0649",
+                "name:zh": "\u7f57\u5e03\u6cca\u9547",
+                "alt_name": "\u7f57\u5e03\u6cca",
+                "_place_name": "\u7f57\u5e03\u6cca\u9547 \u0644\u0648\u067e\u0646\u06c7\u0631 \u0643\u06c6\u0644\u0649",
+                "alt_name:ug": "\u0644\u0648\u067e\u0646\u06c7\u0631 \u0628\u0627\u0632\u0649\u0631\u0649",
+                "official_name": "\u7f57\u5e03\u6cca\u9547",
+                "_place_alt_name:ug": "\u0644\u0648\u067e\u0646\u06c7\u0631 \u0643\u06c6\u0644\u0649",
+                "name:zh-Latn-pinyin": "Lu\u00f3b\u00f9b\u00f3 Zh\u00e8n",
+                "_place_name:zh-Latn-pinyin": "lu\u00f3b\u00f9b\u00f3 zh\u00e8n"
+              }
+            },
+            "bbox": [
+              86.6853599,
+              37.7837054,
+              93.8194653,
+              41.3767302
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                90.8758839,
+                40.4746583
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: town: Lopnur, county: Ruoqiang County, region: Bayingolin, state: Xinjiang, ISO3166-2-lvl4: CN-XJ, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Xinjiang",
+      "country": "China",
+      "state": "Xinjiang",
+      "city": ""
+    },
+    {
+      "lon": 100.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 203318180,
+              "osm_type": "relation",
+              "osm_id": 10327910,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.2049590550690361,
+              "addresstype": "town",
+              "name": "Altan Qog",
+              "display_name": "Altan Qog, Alxa Right Banner, Alxa League, Inner Mongolia, China",
+              "address": {
+                "town": "Altan Qog",
+                "district": "Alxa Right Banner",
+                "region": "Alxa League",
+                "state": "Inner Mongolia",
+                "ISO3166-2-lvl4": "CN-NM",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": {
+                "capital": "8",
+                "place:CN": "sumu",
+                "wikidata": "Q14249755",
+                "wikipedia": "zh:\u963f\u62c9\u817e\u671d\u683c\u82cf\u6728",
+                "population": "1383",
+                "source:name": "GNS",
+                "linked_place": "town",
+                "division_code": "152922212000"
+              },
+              "namedetails": {
+                "name": "\u963f\u62c9\u817e\u671d\u683c\u82cf\u6728 \u1820\u182f\u1832\u1820\u1828\u1834\u1823\u182d \u1830\u1824\u182e\u1824",
+                "name:en": "Altan Qog",
+                "name:mn": "\u1820\u182f\u1832\u1820\u1828\u1834\u1823\u182d \u1830\u1824\u182e\u1824",
+                "name:ru": "\u042d\u043b\u0430\u0442\u044d\u043d\u0447\u0430\u043e\u0433\u044d\u0441\u0443\u043c\u0443",
+                "name:zh": "\u963f\u62c9\u817e\u671d\u683c\u82cf\u6728",
+                "alt_name": "Alatengchaoke;Alatengchaoge Sumu;\u963f\u62c9\u817e\u671d\u514b\u82cf\u6728;\u963f\u62c9\u817e\u671d\u514b;\u963f\u62c9\u817e\u671d\u683c",
+                "_place_name": "\u963f\u62c9\u817e\u671d\u683c\u82cf\u6728 \u1820\u182f\u1832\u1820\u1828\u1834\u1823\u182d",
+                "alt_name:en": "Alatengchaoge",
+                "alt_name:mn": "\u1820\u182f\u1832\u1820\u1828\u1834\u1823\u182d",
+                "name:mn-Mong": "\u1820\u182f\u1832\u1820\u1828\u1834\u1823\u182d \u1830\u1824\u182e\u1824",
+                "official_name": "\u963f\u62c9\u817e\u671d\u683c\u82cf\u6728",
+                "alt_name:mn-Mong": "\u1820\u182f\u1832\u1820\u1828\u1834\u1823\u182d",
+                "name:zh-Latn-pinyin": "\u0101 l\u0101 t\u00e9ng zh\u0101o g\u00e9 s\u016b m\u00f9"
+              }
+            },
+            "bbox": [
+              99.4394873,
+              38.9468762,
+              102.2499583,
+              40.5905814
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                100.8652982,
+                39.1828518
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: town: Altan Qog, district: Alxa Right Banner, region: Alxa League, state: Inner Mongolia, ISO3166-2-lvl4: CN-NM, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Inner Mongolia",
+      "country": "China",
+      "state": "Inner Mongolia",
+      "city": ""
+    },
+    {
+      "lon": 110.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 202434585,
+              "osm_type": "way",
+              "osm_id": 951428776,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.05338390096894786,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "Shulinzhao, Dalad Banner, Ordos City, Inner Mongolia, 014300, China",
+              "address": {
+                "town": "Shulinzhao",
+                "city": "Dalad Banner",
+                "region": "Ordos City",
+                "state": "Inner Mongolia",
+                "ISO3166-2-lvl4": "CN-NM",
+                "postcode": "014300",
+                "country": "China",
+                "country_code": "cn"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              109.9573771,
+              39.9984006,
+              110.0104678,
+              40.0254664
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                110.00029271003649,
+                39.99931600210546
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: town: Shulinzhao, city: Dalad Banner, region: Ordos City, state: Inner Mongolia, ISO3166-2-lvl4: CN-NM, postcode: 014300, country: China, country_code: cn",
+      "address_formatted": "**Address:** China, Inner Mongolia, Dalad Banner",
+      "country": "China",
+      "state": "Inner Mongolia",
+      "city": "Dalad Banner"
+    },
+    {
+      "lon": 140.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 241929431,
+              "osm_type": "way",
+              "osm_id": 115702910,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.05338142290379183,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "\u5b57\u4e2d\u91ce, Ogata, Minamiakita County, Akita Prefecture, 010-0442, Japan",
+              "address": {
+                "quarter": "\u5b57\u4e2d\u91ce",
+                "village": "Ogata",
+                "county": "Minamiakita County",
+                "province": "Akita Prefecture",
+                "ISO3166-2-lvl4": "JP-05",
+                "postcode": "010-0442",
+                "country": "Japan",
+                "country_code": "jp"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              140.0014429,
+              39.992234,
+              140.0016495,
+              40.0025971
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                140.00149408227466,
+                40.000029786202774
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: quarter: \u5b57\u4e2d\u91ce, village: Ogata, county: Minamiakita County, province: Akita Prefecture, ISO3166-2-lvl4: JP-05, postcode: 010-0442, country: Japan, country_code: jp",
+      "address_formatted": "**Address:** Japan",
+      "country": "Japan",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": -120.0,
+      "lat": 50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 349010318,
+              "osm_type": "relation",
+              "osm_id": 11370154,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.18671166781109327,
+              "addresstype": "city",
+              "name": "Area M (Beautiful Nicola Valley - North)",
+              "display_name": "Area M (Beautiful Nicola Valley - North), Thompson-Nicola Regional District, British Columbia, Canada",
+              "address": {
+                "city": "Area M (Beautiful Nicola Valley - North)",
+                "county": "Thompson-Nicola Regional District",
+                "state": "British Columbia",
+                "ISO3166-2-lvl4": "CA-BC",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": null,
+              "namedetails": {
+                "name": "Area M (Beautiful Nicola Valley - North)"
+              }
+            },
+            "bbox": [
+              -121.0057383,
+              49.7725656,
+              -119.6337489,
+              50.4595799
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -119.98266670481547,
+                50.1160562
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city: Area M (Beautiful Nicola Valley - North), county: Thompson-Nicola Regional District, state: British Columbia, ISO3166-2-lvl4: CA-BC, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, British Columbia, Area M (Beautiful Nicola Valley - North)",
+      "country": "Canada",
+      "state": "British Columbia",
+      "city": "Area M (Beautiful Nicola Valley - North)"
+    },
+    {
+      "lon": -110.0,
+      "lat": 50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 347964660,
+              "osm_type": "relation",
+              "osm_id": 3387836,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.38067264276026613,
+              "addresstype": "municipality",
+              "name": "Maple Creek No. 111",
+              "display_name": "Maple Creek No. 111, Saskatchewan, S0N 1N0, Canada",
+              "address": {
+                "municipality": "Maple Creek No. 111",
+                "state": "Saskatchewan",
+                "ISO3166-2-lvl4": "CA-SK",
+                "postcode": "S0N 1N0",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": {
+                "place": "municipality",
+                "website": "https://rmmaplecreek.ca/",
+                "wikidata": "Q6753856",
+                "wikipedia": "en:Rural Municipality of Maple Creek No. 111",
+                "linked_place": "county"
+              },
+              "namedetails": {
+                "name": "Maple Creek No. 111"
+              }
+            },
+            "bbox": [
+              -110.0051088,
+              49.5235525,
+              -109.2576135,
+              50.1351924
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -109.660985,
+                49.8043107
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: municipality: Maple Creek No. 111, state: Saskatchewan, ISO3166-2-lvl4: CA-SK, postcode: S0N 1N0, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, Saskatchewan",
+      "country": "Canada",
+      "state": "Saskatchewan",
+      "city": ""
+    },
+    {
+      "lon": -100.0,
+      "lat": 50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 348285529,
+              "osm_type": "way",
+              "osm_id": 83226382,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.05337611123826959,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "Rural Municipality of Elton, Manitoba, Canada",
+              "address": {
+                "county": "Rural Municipality of Elton",
+                "state": "Manitoba",
+                "ISO3166-2-lvl4": "CA-MB",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": {
+                "lanes": "2",
+                "surface": "unpaved"
+              },
+              "namedetails": null
+            },
+            "bbox": [
+              -100.0037469,
+              49.9899276,
+              -100.0,
+              50.0194149
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -100.0037194,
+                50.0
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Rural Municipality of Elton, state: Manitoba, ISO3166-2-lvl4: CA-MB, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, Manitoba",
+      "country": "Canada",
+      "state": "Manitoba",
+      "city": ""
+    },
+    {
+      "lon": -90.0,
+      "lat": 50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 347827753,
+              "osm_type": "relation",
+              "osm_id": 7596736,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.18670622491798272,
+              "addresstype": "city",
+              "name": "Unorganized Thunder Bay District",
+              "display_name": "Unorganized Thunder Bay District, Thunder Bay District, Northwestern Ontario, Ontario, Canada",
+              "address": {
+                "city": "Unorganized Thunder Bay District",
+                "county": "Thunder Bay District",
+                "state_district": "Northwestern Ontario",
+                "state": "Ontario",
+                "ISO3166-2-lvl4": "CA-ON",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": {
+                "wikidata": "Q7897256"
+              },
+              "namedetails": {
+                "name": "Unorganized Thunder Bay District"
+              }
+            },
+            "bbox": [
+              -91.0079071,
+              47.0794119,
+              -85.3183704,
+              51.5590236
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -89.55741127010594,
+                49.3068222
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city: Unorganized Thunder Bay District, county: Thunder Bay District, state_district: Northwestern Ontario, state: Ontario, ISO3166-2-lvl4: CA-ON, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, Ontario, Unorganized Thunder Bay District",
+      "country": "Canada",
+      "state": "Ontario",
+      "city": "Unorganized Thunder Bay District"
+    },
+    {
+      "lon": -80.0,
+      "lat": 50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 347479412,
+              "osm_type": "relation",
+              "osm_id": 7588872,
+              "place_rank": 16,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.18670694514381625,
+              "addresstype": "city",
+              "name": "Unorganized North Cochrane",
+              "display_name": "Unorganized North Cochrane, Cochrane District, Northeastern Ontario, Ontario, Canada",
+              "address": {
+                "city": "Unorganized North Cochrane",
+                "county": "Cochrane District",
+                "state_district": "Northeastern Ontario",
+                "state": "Ontario",
+                "ISO3166-2-lvl4": "CA-ON",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": {
+                "wikidata": "Q3551923"
+              },
+              "namedetails": {
+                "name": "Unorganized North Cochrane"
+              }
+            },
+            "bbox": [
+              -86.5494253,
+              48.2757342,
+              -79.5164173,
+              52.293824
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -83.03267168314164,
+                50.297862699999996
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: city: Unorganized North Cochrane, county: Cochrane District, state_district: Northeastern Ontario, state: Ontario, ISO3166-2-lvl4: CA-ON, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, Ontario, Unorganized North Cochrane",
+      "country": "Canada",
+      "state": "Ontario",
+      "city": "Unorganized North Cochrane"
+    },
+    {
+      "lon": -70.0,
+      "lat": 50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 264104521,
+              "osm_type": "relation",
+              "osm_id": 8126390,
+              "place_rank": 10,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.548616614322413,
+              "addresstype": "region",
+              "name": "C\u00f4te-Nord",
+              "display_name": "C\u00f4te-Nord, Quebec, Canada",
+              "address": {
+                "region": "C\u00f4te-Nord",
+                "state": "Quebec",
+                "ISO3166-2-lvl4": "CA-QC",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": {
+                "place": "region",
+                "ref:qc": "09",
+                "wikidata": "Q1124109",
+                "wikipedia": "fr:C\u00f4te-Nord",
+                "description": "R\u00e9gion administrative du Qu\u00e9bec/Administrative region of Quebec"
+              },
+              "namedetails": {
+                "name": "C\u00f4te-Nord"
+              }
+            },
+            "bbox": [
+              -70.0778758,
+              48.053092,
+              -57.1074889,
+              55.0000604
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -63.56369789661956,
+                51.54009295
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: region: C\u00f4te-Nord, state: Quebec, ISO3166-2-lvl4: CA-QC, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, Quebec",
+      "country": "Canada",
+      "state": "Quebec",
+      "city": ""
+    },
+    {
+      "lon": 10.0,
+      "lat": 50.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 114484225,
+              "osm_type": "node",
+              "osm_id": 1765517107,
+              "place_rank": 30,
+              "category": "tourism",
+              "type": "attraction",
+              "importance": 5.1121538109361676e-05,
+              "addresstype": "tourism",
+              "name": "Schnittpunktdenkmal",
+              "display_name": "Schnittpunktdenkmal, B 26a, Gemarkungsgrenze Schwebenried, Arnstein, Landkreis Main-Spessart, Bavaria, 97450, Germany",
+              "address": {
+                "tourism": "Schnittpunktdenkmal",
+                "road": "B 26a",
+                "suburb": "Gemarkungsgrenze Schwebenried",
+                "town": "Arnstein",
+                "county": "Landkreis Main-Spessart",
+                "state": "Bavaria",
+                "ISO3166-2-lvl4": "DE-BY",
+                "postcode": "97450",
+                "country": "Germany",
+                "country_code": "de"
+              },
+              "extratags": {
+                "toilets": "no",
+                "man_made": "meridian_marker",
+                "wikipedia": "de:Arnstein (Unterfranken)#Schnittpunkt-Denkmal",
+                "start_date": "1991",
+                "wikimedia_commons": "Category:Arnstein meridian marker"
+              },
+              "namedetails": {
+                "name": "Schnittpunktdenkmal"
+              }
+            },
+            "bbox": [
+              10.0006848,
+              49.9979975,
+              10.0007848,
+              49.9980975
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                10.0007348,
+                49.9980475
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: tourism: Schnittpunktdenkmal, road: B 26a, suburb: Gemarkungsgrenze Schwebenried, town: Arnstein, county: Landkreis Main-Spessart, state: Bavaria, ISO3166-2-lvl4: DE-BY, postcode: 97450, country: Germany, country_code: de",
+      "address_formatted": "**Address:** Germany, Bavaria, B 26a",
+      "country": "Germany",
+      "state": "Bavaria",
+      "city": ""
+    }
+  ]
+}

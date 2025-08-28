@@ -77,10 +77,11 @@ def configure_langsmith(disable_tracing: bool = False):
     else:
         print("LangSmith tracing enabled (default)")
 
-def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) -> Optional[str]:
+def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, chunk_id: Optional[str] = None) -> Optional[str]:
     """Find the latest intermediate file for resuming"""
     mode_suffix = "_simple" if simple_mode else ""
-    pattern = f"results/climate_results_intermediate_*{mode_suffix}.json"
+    chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
+    pattern = f"results/climate_results_intermediate_*{chunk_suffix}*{mode_suffix}.json"
     
     # Find all matching intermediate files
     intermediate_files = glob.glob(pattern)
@@ -92,16 +93,22 @@ def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) ->
     file_numbers = []
     for file_path in intermediate_files:
         try:
-            # Extract number from filename like "climate_results_intermediate_1840_simple.json"
+            # Extract number from filename like "climate_results_intermediate_1840_chunk_01_simple.json"
             filename = Path(file_path).stem
-            if simple_mode:
-                number_part = filename.replace("climate_results_intermediate_", "").replace("_simple", "")
-            else:
-                number_part = filename.replace("climate_results_intermediate_", "")
             
-            number = int(number_part)
+            # Remove prefixes and suffixes to extract the number
+            temp_name = filename.replace("climate_results_intermediate_", "")
+            if chunk_id:
+                temp_name = temp_name.replace(f"_chunk_{chunk_id}", "")
+            if simple_mode:
+                temp_name = temp_name.replace("_simple", "")
+            
+            # Extract any remaining model name parts and the number
+            parts = temp_name.split("_")
+            # The number should be the first part
+            number = int(parts[0])
             file_numbers.append((number, file_path))
-        except ValueError:
+        except (ValueError, IndexError):
             continue
     
     if not file_numbers:
@@ -589,11 +596,12 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
         print(f"  ✓ Individual queries completed: {successful_responses}/{num_repeats} successful responses")
         return processed_results
 
-def process_climate_benchmark(config: Dict):
+def process_climate_benchmark(config: Dict, mesh_file: str = None):
     """Main function to process climate benchmark"""
     
     # Get all values from config
-    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    if mesh_file is None:
+        mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
     num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
     model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
     simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
@@ -623,12 +631,19 @@ def process_climate_benchmark(config: Dict):
     land_points = [point for point in mesh_points if point['is_land']]
     print(f"Found {len(land_points)} land points")
     
+    # Extract chunk information from mesh file if it's a chunk
+    chunk_id = None
+    if 'chunk_id' in mesh_data.get('mesh_info', {}):
+        chunk_id = f"{mesh_data['mesh_info']['chunk_id']:02d}"
+        total_chunks = mesh_data['mesh_info'].get('total_chunks', 'unknown')
+        print(f"Processing chunk {chunk_id} of {total_chunks}")
+    
     # Check for resuming from intermediate file
     results = []
     start_index = 0
     
     if resume:
-        latest_file = find_latest_intermediate_file(resolution, simple_mode)
+        latest_file = find_latest_intermediate_file(resolution, simple_mode, chunk_id)
         if latest_file:
             results, saved_mesh_data, start_index = load_intermediate_results(latest_file)
             print(f"Resuming from intermediate file: {latest_file}")
@@ -682,10 +697,11 @@ def process_climate_benchmark(config: Dict):
         # Save intermediate results at configured interval
         if (i + 1) % save_interval == 0:
             mode_suffix = "_simple" if simple_mode else ""
+            chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
             # Clean model name for filename (replace special characters)
             clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
             results_dir = get_config_value(config, 'output.results_dir', 'results')
-            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{mode_suffix}.json"
+            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{chunk_suffix}{mode_suffix}.json"
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
             save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch)
@@ -721,15 +737,63 @@ def main():
     """Main function"""
     import sys
     
-    # Load configuration (only allow specifying config file)
+    # Parse command line arguments
     config_file = "config.yaml"
-    if len(sys.argv) > 1:
+    chunk_number = None
+    
+    # Support multiple argument formats:
+    # python climate_llm_benchmark.py [config_file] [chunk_number]
+    # python climate_llm_benchmark.py chunk_number (uses default config)
+    if len(sys.argv) == 2:
+        # Could be config file or chunk number
+        arg = sys.argv[1]
+        try:
+            chunk_number = int(arg)
+        except ValueError:
+            config_file = arg
+    elif len(sys.argv) == 3:
         config_file = sys.argv[1]
+        chunk_number = int(sys.argv[2])
     
     config = load_config(config_file)
     
     # Get all values from config
-    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    chunk_mode = get_config_value(config, 'benchmark.chunk_mode', False)
+    chunks_dir = get_config_value(config, 'benchmark.chunks_dir', 'meshes/chunks')
+    chunks_pattern = get_config_value(config, 'benchmark.chunks_pattern', 'mesh_data_1.0deg_chunk_{:02d}_of_{:02d}.json')
+    base_mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    
+    # Determine mesh file based on chunk mode
+    if chunk_mode and chunk_number is not None:
+        # Find total chunks by looking for existing chunk files
+        import glob
+        chunk_pattern_search = chunks_pattern.replace('{:02d}', '*')
+        chunk_files = glob.glob(f"{chunks_dir}/{chunk_pattern_search}")
+        if not chunk_files:
+            print(f"Error: No chunk files found in {chunks_dir} matching pattern {chunk_pattern_search}")
+            return
+        
+        # Extract total chunks from first file found
+        total_chunks = len(chunk_files)
+        mesh_file = f"{chunks_dir}/{chunks_pattern.format(chunk_number, total_chunks)}"
+        
+        if not Path(mesh_file).exists():
+            print(f"Error: Chunk file '{mesh_file}' not found.")
+            print(f"Available chunks: {sorted([Path(f).name for f in chunk_files])}")
+            return
+            
+        print(f"Chunk mode enabled: Processing chunk {chunk_number} of {total_chunks}")
+        
+    elif chunk_mode and chunk_number is None:
+        print("Error: Chunk mode is enabled but no chunk number specified.")
+        print("Usage: python climate_llm_benchmark.py [config_file] chunk_number")
+        return
+        
+    else:
+        mesh_file = base_mesh_file
+        if chunk_number is not None:
+            print("Warning: Chunk number specified but chunk_mode is disabled in config. Using regular mesh file.")
+    
     num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
     model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
     simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
@@ -741,6 +805,9 @@ def main():
     
     print(f"Climate LLM Benchmark")
     print(f"Configuration: {config_file}")
+    print(f"Chunk mode: {'Enabled' if chunk_mode else 'Disabled'}")
+    if chunk_mode and chunk_number is not None:
+        print(f"Processing chunk: {chunk_number}")
     print(f"Mesh file: {mesh_file}")
     print(f"Repeats per point: {num_repeats}")
     print(f"Provider: {provider}")
@@ -758,15 +825,23 @@ def main():
     
     try:
         # Process the benchmark
-        results, mesh_data = process_climate_benchmark(config)
+        results, mesh_data = process_climate_benchmark(config, mesh_file)
         
         # Save final results
         resolution = mesh_data['resolution']
         mode_suffix = "_simple" if simple_mode else ""
+        
+        # Extract chunk info for filename
+        chunk_suffix = ""
+        if 'chunk_id' in mesh_data.get('mesh_info', {}):
+            chunk_id_num = mesh_data['mesh_info']['chunk_id']
+            total_chunks = mesh_data['mesh_info']['total_chunks']
+            chunk_suffix = f"_chunk_{chunk_id_num:02d}_of_{total_chunks:02d}"
+        
         # Clean model name for filename (replace special characters)
         clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
         results_dir = get_config_value(config, 'output.results_dir', 'results')
-        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{mode_suffix}.json"
+        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{chunk_suffix}{mode_suffix}.json"
         # Create results directory if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
         save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch)
