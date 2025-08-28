@@ -736,29 +736,75 @@ def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_n
 def main():
     """Main function"""
     import sys
+    import argparse
     
-    # Parse command line arguments
-    config_file = "config.yaml"
-    chunk_number = None
+    # Create argument parser
+    parser = argparse.ArgumentParser(description='Climate LLM Benchmark')
+    parser.add_argument('--config', default='config.yaml', 
+                       help='Configuration file path (default: config.yaml)')
+    parser.add_argument('--chunk', type=int, 
+                       help='Chunk number to process (enables chunk mode)')
+    parser.add_argument('--base_url', 
+                       help='Override base URL for model provider (e.g., http://localhost:11434)')
     
-    # Support multiple argument formats:
-    # python climate_llm_benchmark.py [config_file] [chunk_number]
-    # python climate_llm_benchmark.py chunk_number (uses default config)
-    if len(sys.argv) == 2:
-        # Could be config file or chunk number
-        arg = sys.argv[1]
-        try:
-            chunk_number = int(arg)
-        except ValueError:
-            config_file = arg
-    elif len(sys.argv) == 3:
-        config_file = sys.argv[1]
-        chunk_number = int(sys.argv[2])
+    # Support legacy positional arguments for backward compatibility
+    parser.add_argument('legacy_args', nargs='*', 
+                       help='Legacy: [config_file] [chunk_number]')
+    
+    args = parser.parse_args()
+    
+    # Handle legacy argument format for backward compatibility
+    config_file = args.config
+    chunk_number = args.chunk
+    base_url_override = args.base_url
+    
+    if args.legacy_args:
+        # Legacy format: python climate_llm_benchmark.py [config_file] [chunk_number]
+        if len(args.legacy_args) == 1:
+            # Could be config file or chunk number
+            arg = args.legacy_args[0]
+            try:
+                chunk_number = int(arg)
+            except ValueError:
+                config_file = arg
+        elif len(args.legacy_args) == 2:
+            config_file = args.legacy_args[0]
+            chunk_number = int(args.legacy_args[1])
     
     config = load_config(config_file)
     
+    # Apply base_url override if provided
+    if base_url_override:
+        provider = get_config_value(config, 'model.provider', 'openai')
+        if provider == 'ollama':
+            # Override Ollama base_url
+            if 'providers' not in config:
+                config['providers'] = {}
+            if 'ollama' not in config['providers']:
+                config['providers']['ollama'] = {}
+            config['providers']['ollama']['base_url'] = base_url_override
+            print(f"Override Ollama base_url: {base_url_override}")
+        elif provider == 'openai':
+            # Override OpenAI base_url
+            if 'providers' not in config:
+                config['providers'] = {}
+            if 'openai' not in config['providers']:
+                config['providers']['openai'] = {}
+            config['providers']['openai']['base_url'] = base_url_override
+            print(f"Override OpenAI base_url: {base_url_override}")
+        elif provider == 'anthropic':
+            # Override Anthropic base_url
+            if 'providers' not in config:
+                config['providers'] = {}
+            if 'anthropic' not in config['providers']:
+                config['providers']['anthropic'] = {}
+            config['providers']['anthropic']['base_url'] = base_url_override
+            print(f"Override Anthropic base_url: {base_url_override}")
+        else:
+            print(f"Warning: --base_url override not supported for provider '{provider}', ignoring")
+    
     # Get all values from config
-    chunk_mode = get_config_value(config, 'benchmark.chunk_mode', False)
+    chunk_mode = get_config_value(config, 'benchmark.chunk_mode', False) or (chunk_number is not None)
     chunks_dir = get_config_value(config, 'benchmark.chunks_dir', 'meshes/chunks')
     chunks_pattern = get_config_value(config, 'benchmark.chunks_pattern', 'mesh_data_1.0deg_chunk_{:02d}_of_{:02d}.json')
     base_mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
@@ -786,7 +832,9 @@ def main():
         
     elif chunk_mode and chunk_number is None:
         print("Error: Chunk mode is enabled but no chunk number specified.")
-        print("Usage: python climate_llm_benchmark.py [config_file] chunk_number")
+        print("Usage: python climate_llm_benchmark.py --chunk=N")
+        print("   or: python climate_llm_benchmark.py --config=config.yaml --chunk=N")
+        print("Legacy: python climate_llm_benchmark.py [config_file] chunk_number")
         return
         
     else:
@@ -805,6 +853,8 @@ def main():
     
     print(f"Climate LLM Benchmark")
     print(f"Configuration: {config_file}")
+    if base_url_override:
+        print(f"Base URL override: {base_url_override}")
     print(f"Chunk mode: {'Enabled' if chunk_mode else 'Disabled'}")
     if chunk_mode and chunk_number is not None:
         print(f"Processing chunk: {chunk_number}")
