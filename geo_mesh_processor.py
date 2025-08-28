@@ -203,12 +203,22 @@ def load_mesh_data(input_file='mesh_data.json'):
         data = json.load(f)
     
     mesh_points = data['mesh_points']
-    lon_mesh = np.array(data['lon_mesh'])
-    lat_mesh = np.array(data['lat_mesh'])
-    mesh_shape = data.get('mesh_shape')
     resolution = data.get('resolution', 10)
-    is_on_regular = data.get('is_on_regular', True)
     mesh_info = data.get('mesh_info', {})
+    
+    # Check if this is a chunk file (doesn't have lon_mesh/lat_mesh)
+    if 'lon_mesh' in data and 'lat_mesh' in data:
+        # Full mesh file
+        lon_mesh = np.array(data['lon_mesh'])
+        lat_mesh = np.array(data['lat_mesh'])
+        mesh_shape = data.get('mesh_shape')
+        is_on_regular = data.get('is_on_regular', True)
+    else:
+        # Chunk file - create minimal arrays for compatibility
+        lon_mesh = np.array([])
+        lat_mesh = np.array([])
+        mesh_shape = None
+        is_on_regular = True
     
     return {
         'mesh_points': mesh_points,

@@ -1,0 +1,531 @@
+{
+  "mesh_info": {
+    "type": "regular_grid",
+    "resolution_degrees": 20.0,
+    "lon_range": [
+      -180,
+      180
+    ],
+    "lat_range": [
+      -60,
+      85
+    ],
+    "total_points": 144,
+    "chunk_id": 4,
+    "total_chunks": 5,
+    "land_points_in_chunk": 8
+  },
+  "resolution": 20.0,
+  "mesh_points": [
+    {
+      "lon": 140.0,
+      "lat": 40.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 241929431,
+              "osm_type": "way",
+              "osm_id": 115702910,
+              "place_rank": 26,
+              "category": "highway",
+              "type": "unclassified",
+              "importance": 0.05338142290379183,
+              "addresstype": "road",
+              "name": "",
+              "display_name": "\u5b57\u4e2d\u91ce, Ogata, Minamiakita County, Akita Prefecture, 010-0442, Japan",
+              "address": {
+                "quarter": "\u5b57\u4e2d\u91ce",
+                "village": "Ogata",
+                "county": "Minamiakita County",
+                "province": "Akita Prefecture",
+                "ISO3166-2-lvl4": "JP-05",
+                "postcode": "010-0442",
+                "country": "Japan",
+                "country_code": "jp"
+              },
+              "extratags": null,
+              "namedetails": null
+            },
+            "bbox": [
+              140.0014429,
+              39.992234,
+              140.0016495,
+              40.0025971
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                140.00149408227466,
+                40.000029786202774
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: quarter: \u5b57\u4e2d\u91ce, village: Ogata, county: Minamiakita County, province: Akita Prefecture, ISO3166-2-lvl4: JP-05, postcode: 010-0442, country: Japan, country_code: jp",
+      "address_formatted": "**Address:** Japan",
+      "country": "Japan",
+      "state": "",
+      "city": ""
+    },
+    {
+      "lon": -160.0,
+      "lat": 60.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 147480588,
+              "osm_type": "relation",
+              "osm_id": 7939736,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.4847849127721316,
+              "addresstype": "county",
+              "name": "Unorganized Borough",
+              "display_name": "Unorganized Borough, Alaska, United States",
+              "address": {
+                "county": "Unorganized Borough",
+                "state": "Alaska",
+                "ISO3166-2-lvl4": "US-AK",
+                "country": "United States",
+                "country_code": "us"
+              },
+              "extratags": {
+                "wikidata": "Q1474662",
+                "wikipedia": "en:Unorganized Borough, Alaska"
+              },
+              "namedetails": {
+                "name": "Unorganized Borough",
+                "name:en": "Unorganized Borough",
+                "name:es": "Borough No Organizado",
+                "name:fa": "\u0628\u0648\u0631\u0648\u06cc \u0633\u0627\u0632\u0645\u0627\u0646 \u0646\u06cc\u0627\u0641\u062a\u0647",
+                "name:ru": "\u041d\u0435\u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043e\u0432\u0430\u043d\u043d\u044b\u0439 \u0431\u043e\u0440\u043e",
+                "name:ur": "\u0627\u0646\u0627\u0648\u0631\u06af\u0627\u0646\u0627\u0632\u06cc\u0688 \u0628\u0631\u0648"
+              }
+            },
+            "bbox": [
+              -179.231086,
+              51.175092,
+              179.859681,
+              68.507297
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -157.6718650484568,
+                63.417431050000005
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Unorganized Borough, state: Alaska, ISO3166-2-lvl4: US-AK, country: United States, country_code: us",
+      "address_formatted": "**Address:** United States, Alaska",
+      "country": "United States",
+      "state": "Alaska",
+      "city": ""
+    },
+    {
+      "lon": -140.0,
+      "lat": 60.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 349936318,
+              "osm_type": "relation",
+              "osm_id": 2605317,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.5173703799928427,
+              "addresstype": "county",
+              "name": "Yakutat",
+              "display_name": "Yakutat, Alaska, United States",
+              "address": {
+                "county": "Yakutat",
+                "state": "Alaska",
+                "ISO3166-2-lvl4": "US-AK",
+                "country": "United States",
+                "country_code": "us"
+              },
+              "extratags": {
+                "is_in": "Alaska,Alaska,AK,USA",
+                "website": "https://www.yakutatak.us/",
+                "wikidata": "Q487681",
+                "wikipedia": "en:Yakutat, Alaska",
+                "border_type": "borough;city",
+                "linked_place": "county",
+                "nist:fips_code": "02282",
+                "nist:state_fips": "02"
+              },
+              "namedetails": {
+                "name": "Yakutat",
+                "name:ar": "\u064a\u0627\u0643\u0648\u062a\u0627\u062a",
+                "name:en": "Yakutat",
+                "name:fa": "\u06cc\u0627\u06a9\u0648\u062a\u0627\u062a",
+                "name:ur": "\u06cc\u06a9\u062a\u0627\u062a",
+                "name:tli": "Yaakwd\u00e1at",
+                "official_name": "City and Borough of Yakutat"
+              }
+            },
+            "bbox": [
+              -143.89521,
+              58.781314,
+              -137.5,
+              60.521899
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -139.3429439,
+                59.6391781
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Yakutat, state: Alaska, ISO3166-2-lvl4: US-AK, country: United States, country_code: us",
+      "address_formatted": "**Address:** United States, Alaska",
+      "country": "United States",
+      "state": "Alaska",
+      "city": ""
+    },
+    {
+      "lon": -120.0,
+      "lat": 60.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 348705792,
+              "osm_type": "relation",
+              "osm_id": 7087527,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.4402575705437361,
+              "addresstype": "county",
+              "name": "Mackenzie County",
+              "display_name": "Mackenzie County, Alberta, Canada",
+              "address": {
+                "county": "Mackenzie County",
+                "state": "Alberta",
+                "ISO3166-2-lvl4": "CA-AB",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": {
+                "is_in": "Alberta,Alta.,AB,Canada",
+                "wikidata": "Q1059903",
+                "linked_place": "county"
+              },
+              "namedetails": {
+                "name": "Mackenzie County",
+                "_place_name": "Mackenzie"
+              }
+            },
+            "bbox": [
+              -120.0013586,
+              57.3783586,
+              -113.9997768,
+              60.0004699
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -116.8686471,
+                58.9632924
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Mackenzie County, state: Alberta, ISO3166-2-lvl4: CA-AB, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, Alberta",
+      "country": "Canada",
+      "state": "Alberta",
+      "city": ""
+    },
+    {
+      "lon": -100.0,
+      "lat": 60.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 345836186,
+              "osm_type": "relation",
+              "osm_id": 9489819,
+              "place_rank": 10,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.45741428069973794,
+              "addresstype": "county",
+              "name": "Kivalliq Region",
+              "display_name": "Kivalliq Region, Nunavut, Canada",
+              "address": {
+                "county": "Kivalliq Region",
+                "state": "Nunavut",
+                "ISO3166-2-lvl4": "CA-NU",
+                "country": "Canada",
+                "country_code": "ca"
+              },
+              "extratags": {
+                "wikidata": "Q1508363",
+                "land_area": "administrative",
+                "linked_place": "county"
+              },
+              "namedetails": {
+                "name": "\u146d\u1559\u14ea\u14d5\u1585 Kivalliq Region",
+                "name:en": "Kivalliq Region",
+                "name:es": "Regi\u00f3n de Kivalliq",
+                "name:fr": "Kivalliq",
+                "name:iu": "\u146d\u1559\u14ea\u14d5\u1585",
+                "name:pt": "Regi\u00e3o de Kivalliq",
+                "name:zh": "\u57fa\u74e6\u91cc\u5947\u5730\u533a",
+                "_place_name": "\u146d\u1559\u14ea\u14d5\u1585 Kivalliq",
+                "_place_name:en": "Kivalliq"
+              }
+            },
+            "bbox": [
+              -105.0082979,
+              56.9678793,
+              -80.0207693,
+              67.0000001
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -92.6471525,
+                63.5511048
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Kivalliq Region, state: Nunavut, ISO3166-2-lvl4: CA-NU, country: Canada, country_code: ca",
+      "address_formatted": "**Address:** Canada, Nunavut",
+      "country": "Canada",
+      "state": "Nunavut",
+      "city": ""
+    },
+    {
+      "lon": 40.0,
+      "lat": 60.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 183950157,
+              "osm_type": "node",
+              "osm_id": 3181767071,
+              "place_rank": 25,
+              "category": "place",
+              "type": "locality",
+              "importance": 0.25725756847226283,
+              "addresstype": "locality",
+              "name": "\u0422\u0430\u0442\u0430\u0440\u0441\u043a\u043e\u0435",
+              "display_name": "\u0422\u0430\u0442\u0430\u0440\u0441\u043a\u043e\u0435, \u0413\u043e\u0440\u0431\u0430\u0442\u0438\u0445\u0430, \u0425\u0430\u0440\u043e\u0432\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433, Vologda Oblast, Northwestern Federal District, Russia",
+              "address": {
+                "locality": "\u0422\u0430\u0442\u0430\u0440\u0441\u043a\u043e\u0435",
+                "hamlet": "\u0413\u043e\u0440\u0431\u0430\u0442\u0438\u0445\u0430",
+                "county": "\u0425\u0430\u0440\u043e\u0432\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433",
+                "state": "Vologda Oblast",
+                "ISO3166-2-lvl4": "RU-VLG",
+                "region": "Northwestern Federal District",
+                "country": "Russia",
+                "country_code": "ru"
+              },
+              "extratags": {
+                "wikidata": "Q4452524",
+                "wikipedia": "ru:\u0422\u0430\u0442\u0430\u0440\u0441\u043a\u043e\u0435 (\u0412\u043e\u043b\u043e\u0433\u043e\u0434\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c)",
+                "oktmo:user": "yes",
+                "abandoned:place": "hamlet"
+              },
+              "namedetails": {
+                "name": "\u0422\u0430\u0442\u0430\u0440\u0441\u043a\u043e\u0435"
+              }
+            },
+            "bbox": [
+              39.998217,
+              59.9990061,
+              40.018217,
+              60.0190061
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                40.008217,
+                60.0090061
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: locality: \u0422\u0430\u0442\u0430\u0440\u0441\u043a\u043e\u0435, hamlet: \u0413\u043e\u0440\u0431\u0430\u0442\u0438\u0445\u0430, county: \u0425\u0430\u0440\u043e\u0432\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433, state: Vologda Oblast, ISO3166-2-lvl4: RU-VLG, region: Northwestern Federal District, country: Russia, country_code: ru",
+      "address_formatted": "**Address:** Russia, Vologda Oblast",
+      "country": "Russia",
+      "state": "Vologda Oblast",
+      "city": ""
+    },
+    {
+      "lon": 60.0,
+      "lat": 60.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 184275284,
+              "osm_type": "relation",
+              "osm_id": 1359253,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.33490418538826533,
+              "addresstype": "county",
+              "name": "\u0412\u043e\u043b\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433",
+              "display_name": "\u0412\u043e\u043b\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433, Sverdlovsk Oblast, Ural Federal District, Russia",
+              "address": {
+                "county": "\u0412\u043e\u043b\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433",
+                "state": "Sverdlovsk Oblast",
+                "ISO3166-2-lvl4": "RU-SVE",
+                "region": "Ural Federal District",
+                "country": "Russia",
+                "country_code": "ru"
+              },
+              "extratags": {
+                "wikidata": "Q4124204",
+                "wikipedia": "ru:\u0412\u043e\u043b\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u0433\u043e\u0440\u043e\u0434\u0441\u043a\u043e\u0439 \u043e\u043a\u0440\u0443\u0433",
+                "oktmo:user": "65735000",
+                "official_status": "ru:\u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433"
+              },
+              "namedetails": {
+                "name": "\u0412\u043e\u043b\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433",
+                "name:ja": "\u30f4\u30a9\u30eb\u30c1\u30e3\u30f3\u30b9\u30af\u7ba1\u533a",
+                "name:ru": "\u0412\u043e\u043b\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433",
+                "name:uk": "\u0412\u043e\u0432\u0447\u0430\u043d\u0441\u044c\u043a\u0438\u0439 \u043c\u0456\u0441\u044c\u043a\u0438\u0439 \u043e\u043a\u0440\u0443\u0433"
+              }
+            },
+            "bbox": [
+              59.7834815,
+              59.8395613,
+              60.3851172,
+              60.0634893
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                60.04203547745601,
+                59.95732025
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: \u0412\u043e\u043b\u0447\u0430\u043d\u0441\u043a\u0438\u0439 \u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433, state: Sverdlovsk Oblast, ISO3166-2-lvl4: RU-SVE, region: Ural Federal District, country: Russia, country_code: ru",
+      "address_formatted": "**Address:** Russia, Sverdlovsk Oblast",
+      "country": "Russia",
+      "state": "Sverdlovsk Oblast",
+      "city": ""
+    },
+    {
+      "lon": 80.0,
+      "lat": 60.0,
+      "is_land": true,
+      "location_info": {
+        "type": "FeatureCollection",
+        "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "place_id": 201049031,
+              "osm_type": "relation",
+              "osm_id": 333020,
+              "place_rank": 12,
+              "category": "boundary",
+              "type": "administrative",
+              "importance": 0.240022816052491,
+              "addresstype": "county",
+              "name": "Alexandrovsky District",
+              "display_name": "Alexandrovsky District, Tomsk Oblast, Siberian Federal District, Russia",
+              "address": {
+                "county": "Alexandrovsky District",
+                "state": "Tomsk Oblast",
+                "ISO3166-2-lvl4": "RU-TOM",
+                "region": "Siberian Federal District",
+                "country": "Russia",
+                "country_code": "ru"
+              },
+              "extratags": {
+                "website": "http://www.als.tomskinvest.ru/",
+                "wikidata": "Q2031378",
+                "wikipedia": "ru:\u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u043e\u0432\u0441\u043a\u0438\u0439 \u0440\u0430\u0439\u043e\u043d (\u0422\u043e\u043c\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c)",
+                "population": "7743",
+                "official_status": "ru:\u043c\u0443\u043d\u0438\u0446\u0438\u043f\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u0430\u0439\u043e\u043d",
+                "population:date": "2020-01-01"
+              },
+              "namedetails": {
+                "name": "\u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u043e\u0432\u0441\u043a\u0438\u0439 \u0440\u0430\u0439\u043e\u043d",
+                "name:de": "Alexandrowski rajon",
+                "name:en": "Alexandrovsky District",
+                "name:ja": "\u30a2\u30ec\u30af\u30b5\u30f3\u30c9\u30ed\u30d5\u30b9\u30b3\u30a8\u5730\u533a",
+                "name:ru": "\u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u043e\u0432\u0441\u043a\u0438\u0439 \u0440\u0430\u0439\u043e\u043d"
+              }
+            },
+            "bbox": [
+              76.6523036,
+              59.2609597,
+              81.458741,
+              60.8585195
+            ],
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                78.72436453439619,
+                60.0566538
+              ]
+            }
+          }
+        ]
+      },
+      "address_full": "Address: county: Alexandrovsky District, state: Tomsk Oblast, ISO3166-2-lvl4: RU-TOM, region: Siberian Federal District, country: Russia, country_code: ru",
+      "address_formatted": "**Address:** Russia, Tomsk Oblast",
+      "country": "Russia",
+      "state": "Tomsk Oblast",
+      "city": ""
+    }
+  ]
+}

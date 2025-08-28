@@ -4,6 +4,7 @@ import time
 import os
 from pathlib import Path
 from typing import Dict, List, Optional, Union
+import re
 from geo_mesh_processor import load_mesh_data
 
 # Core langchain imports
@@ -76,10 +77,11 @@ def configure_langsmith(disable_tracing: bool = False):
     else:
         print("LangSmith tracing enabled (default)")
 
-def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) -> Optional[str]:
+def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, chunk_id: Optional[str] = None) -> Optional[str]:
     """Find the latest intermediate file for resuming"""
     mode_suffix = "_simple" if simple_mode else ""
-    pattern = f"results/climate_results_intermediate_*{mode_suffix}_scenario_SSP5-8.5.json"
+    chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
+    pattern = f"results/climate_results_intermediate_*{chunk_suffix}*{mode_suffix}_scenario_SSP5-8.5.json"
     
     # Find all matching intermediate files
     intermediate_files = glob.glob(pattern)
@@ -91,16 +93,23 @@ def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) ->
     file_numbers = []
     for file_path in intermediate_files:
         try:
-            # Extract number from filename like "climate_results_intermediate_1840_simple_scenario_SSP5-8.5.json"
+            # Extract number from filename like "climate_results_intermediate_1840_chunk_01_simple_scenario_SSP5-8.5.json"
             filename = Path(file_path).stem
-            if simple_mode:
-                number_part = filename.replace("climate_results_intermediate_", "").replace("_simple_scenario_SSP5-8.5", "")
-            else:
-                number_part = filename.replace("climate_results_intermediate_", "").replace("_scenario_SSP5-8.5", "")
             
-            number = int(number_part)
+            # Remove prefixes and suffixes to extract the number
+            temp_name = filename.replace("climate_results_intermediate_", "")
+            if chunk_id:
+                temp_name = temp_name.replace(f"_chunk_{chunk_id}", "")
+            if simple_mode:
+                temp_name = temp_name.replace("_simple", "")
+            temp_name = temp_name.replace("_scenario_SSP5-8.5", "")
+            
+            # Extract any remaining model name parts and the number
+            parts = temp_name.split("_")
+            # The number should be the first part
+            number = int(parts[0])
             file_numbers.append((number, file_path))
-        except ValueError:
+        except (ValueError, IndexError):
             continue
     
     if not file_numbers:
@@ -199,16 +208,37 @@ def initialize_llm(config: Dict, model_name: str = None, temperature: float = No
         if ChatGoogleGenerativeAI is None:
             raise ImportError("langchain-google-genai not installed. Install with: pip install langchain-google-genai")
         
-        api_key_env = get_config_value(config, 'providers.google.api_key_env', 'GOOGLE_API_KEY')
-        
+        # Retrieve API key configuration.
+        # We support two patterns for backward compatibility:
+        # 1. providers.google.api_key -> contains the actual key (preferred, NOT committed!)
+        # 2. providers.google.api_key_env -> contains either the *name* of the env var (e.g. GOOGLE_API_KEY)
+        #    or (legacy / current file) the raw key starting with 'AIza'.
+        api_key_direct = get_config_value(config, 'providers.google.api_key')
+        api_key_config = get_config_value(config, 'providers.google.api_key_env', 'GOOGLE_API_KEY')
+
+        api_key = None
+        if api_key_direct:
+            api_key = api_key_direct.strip()
+        else:
+            # If the value looks like an API key (starts with AIza) treat it as the key, otherwise as env var name
+            if isinstance(api_key_config, str) and api_key_config.startswith('AIza'):
+                api_key = api_key_config.strip()
+                print("Warning: Detected a raw Google API key in 'api_key_env'. Consider moving it to an environment variable 'GOOGLE_API_KEY' and setting providers.google.api_key_env: GOOGLE_API_KEY")
+            else:
+                env_var_name = api_key_config or 'GOOGLE_API_KEY'
+                api_key = os.environ.get(env_var_name)
+                if not api_key:
+                    raise ValueError(f"Google API key not found. Set env var '{env_var_name}' or add 'providers.google.api_key' in config.yaml (do NOT commit the key).")
+
         llm_kwargs = {
             'model': model_name,
             'temperature': temperature,
+            'api_key': api_key,
         }
-        
+
         if max_tokens:
             llm_kwargs['max_output_tokens'] = max_tokens
-        
+
         return ChatGoogleGenerativeAI(**llm_kwargs)
     
     elif provider == "ollama":
@@ -308,50 +338,91 @@ Return ONLY a JSON object with this exact structure (no additional text):
 
     return ChatPromptTemplate.from_template(prompt_template)
 
-def validate_and_parse_response(response_text: str, simple_mode: bool = False, month: str = "July") -> Optional[Dict]:
-    """Validate and parse LLM response"""
+def extract_first_float(text: str) -> float:
+    """Estrae il primo numero float da una stringa dopo aver rimosso eventuali blocchi <think>...</think>.
+    Ritorna NaN se non trova numeri."""
+    # rimuovi blocchi di reasoning (deepseek-r1 / qwen reasoning ecc.)
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
+    m = re.search(r"[-+]?\d+(?:\.\d+)?", text)
+    return float(m.group(0)) if m else float("nan")
+
+def validate_and_parse_response(
+    response_text: str,
+    simple_mode: bool = False,
+    month: str = "July",
+    provider: Optional[str] = None,
+    model_name: Optional[str] = None,
+) -> Optional[Dict]:
+    """Validate and parse LLM response.
+
+    Aggiornato: per provider 'ollama' con modelli che iniziano con 'qwen' o 'deepseek'
+    (es. deepseek-r1) pulisce e estrae il primo numero anche se il modello restituisce
+    testo aggiuntivo o blocchi <think>."""
     try:
-        response_text = response_text.strip()
-        
+        raw = response_text or ""
+        response_text = raw.strip()
+
         if simple_mode:
-            # For simple mode, expect just a number
-            try:
-                temperature = float(response_text)
-                # Basic sanity check for temperature range (allowing higher temps for future scenario)
-                if -100 <= temperature <= 90:  # Even higher range for SSP5-8.5 extreme warming
-                    return {f'{month.lower()}_temp_mean': temperature}
-                else:
-                    return None
-            except ValueError:
+            temperature: Optional[float] = None
+
+            # Caso speciale: reasoning / output prolisso (qwen, deepseek via ollama)
+            if provider == "ollama" and model_name:
+                lowered = model_name.lower()
+                if lowered.startswith("qwen") or lowered.startswith("deepseek"):
+                    val = extract_first_float(response_text)
+                    if not (val != val):  # check not NaN
+                        temperature = val
+
+            # Fallback: prova conversione diretta
+            if temperature is None:
+                try:
+                    temperature = float(response_text)
+                except ValueError:
+                    # ultimo tentativo generico: estrai primo float
+                    val2 = extract_first_float(response_text)
+                    if not (val2 != val2):  # not NaN
+                        temperature = val2
+
+            if temperature is None:
                 return None
+
+            # Range plausibile (even higher for SSP5-8.5 extreme warming)
+            if -100 <= temperature <= 90:  # Even higher range for SSP5-8.5 extreme warming
+                return {f"{month.lower()}_temp_mean": temperature}
+            return None
         
-        else:
-            # Original JSON validation for full mode
-            # Remove any markdown formatting
-            if response_text.startswith("```json"):
-                response_text = response_text[7:]
-            if response_text.endswith("```"):
-                response_text = response_text[:-3]
-            
-            # Parse JSON
-            data = json.loads(response_text)
-            
-            # Validate structure
-            required_keys = ["temperature_2m_celsius", "precipitation_mm_per_day"]
-            months = ["january", "february", "march", "april", "may", "june",
-                     "july", "august", "september", "october", "november", "december"]
-            
-            for key in required_keys:
-                if key not in data:
+        # Full mode JSON
+        # Rimuove blocchi markdown json
+        if response_text.startswith("```json"):
+            response_text = response_text[7:]
+        if response_text.endswith("```"):
+            response_text = response_text[:-3]
+
+        data = json.loads(response_text)
+        required_keys = ["temperature_2m_celsius", "precipitation_mm_per_day"]
+        months = [
+            "january",
+            "february",
+            "march",
+            "april",
+            "may",
+            "june",
+            "july",
+            "august",
+            "september",
+            "october",
+            "november",
+            "december",
+        ]
+        for key in required_keys:
+            if key not in data:
+                return None
+            for m in months:
+                if m not in data[key]:
                     return None
-                    
-                for month in months:
-                    if month not in data[key]:
-                        return None
-                    if not all(stat in data[key][month] for stat in ["mean", "min", "max"]):
-                        return None
-                        
-            return data
+                if not all(stat in data[key][m] for stat in ["mean", "min", "max"]):
+                    return None
+        return data
         
     except json.JSONDecodeError:
         return None
@@ -389,7 +460,7 @@ def convert_to_numpy_arrays(climate_data: Dict, simple_mode: bool = False) -> Di
         
         return result
 
-def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False, month: str = "July") -> Optional[Dict]:
+def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None) -> Optional[Dict]:
     """Query LLM for climate data with retry logic (single request)"""
     
     # Prepare location info
@@ -415,7 +486,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
             response_text = response.content
             
             # Validate and parse response
-            parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+            parsed_data = validate_and_parse_response(response_text, simple_mode, month, provider=provider, model_name=model_name)
             
             if parsed_data is not None:
                 return {
@@ -435,7 +506,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
     print(f"  Failed to get valid response after {max_retries} attempts")
     return None
 
-def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July") -> List[Optional[Dict]]:
+def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None) -> List[Optional[Dict]]:
     """Query LLM for climate data using batch processing"""
     
     # Prepare location info
@@ -478,7 +549,7 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
                 response_text = response.content
                 
                 # Validate and parse response
-                parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+                parsed_data = validate_and_parse_response(response_text, simple_mode, month, provider=provider, model_name=model_name)
                 
                 if parsed_data is not None:
                     processed_results.append({
@@ -508,7 +579,7 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
                 response_text = response.content if hasattr(response, 'content') else str(response)
                 
                 # Validate and parse response
-                parsed_data = validate_and_parse_response(response_text, simple_mode, month)
+                parsed_data = validate_and_parse_response(response_text, simple_mode, month, provider=provider, model_name=model_name)
                 
                 if parsed_data is not None:
                     processed_results.append({
@@ -528,11 +599,12 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
         print(f"  ✓ Individual queries completed: {successful_responses}/{num_repeats} successful responses")
         return processed_results
 
-def process_climate_benchmark(config: Dict):
+def process_climate_benchmark(config: Dict, mesh_file: str = None):
     """Main function to process climate benchmark"""
     
     # Get all values from config
-    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    if mesh_file is None:
+        mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
     num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
     model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
     simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
@@ -563,12 +635,19 @@ def process_climate_benchmark(config: Dict):
     land_points = [point for point in mesh_points if point['is_land']]
     print(f"Found {len(land_points)} land points")
     
+    # Extract chunk information from mesh file if it's a chunk
+    chunk_id = None
+    if 'chunk_id' in mesh_data.get('mesh_info', {}):
+        chunk_id = f"{mesh_data['mesh_info']['chunk_id']:02d}"
+        total_chunks = mesh_data['mesh_info'].get('total_chunks', 'unknown')
+        print(f"Processing chunk {chunk_id} of {total_chunks}")
+    
     # Check for resuming from intermediate file
     results = []
     start_index = 0
     
     if resume:
-        latest_file = find_latest_intermediate_file(resolution, simple_mode)
+        latest_file = find_latest_intermediate_file(resolution, simple_mode, chunk_id)
         if latest_file:
             results, saved_mesh_data, start_index = load_intermediate_results(latest_file)
             print(f"Resuming from intermediate file: {latest_file}")
@@ -598,7 +677,7 @@ def process_climate_benchmark(config: Dict):
         
         if use_batch and num_repeats > 1:
             # Use batch processing for multiple repeats
-            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, config, num_repeats, simple_mode, month)
+            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, config, num_repeats, simple_mode, month, provider=provider, model_name=model_name)
             point_results['llm_responses'] = batch_responses
             
         else:
@@ -608,7 +687,7 @@ def process_climate_benchmark(config: Dict):
                 if num_repeats > 1:
                     print(f"  Query {repeat + 1}/{num_repeats}")
                 
-                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=max_retries, simple_mode=simple_mode, month=month)
+                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=max_retries, simple_mode=simple_mode, month=month, provider=provider, model_name=model_name)
                 
                 if climate_response:
                     point_results['llm_responses'].append(climate_response)
@@ -622,10 +701,11 @@ def process_climate_benchmark(config: Dict):
         # Save intermediate results at configured interval
         if (i + 1) % save_interval == 0:
             mode_suffix = "_simple" if simple_mode else ""
+            chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
             # Clean model name for filename (replace special characters)
             clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
             results_dir = get_config_value(config, 'output.results_dir', 'results')
-            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{mode_suffix}_scenario_SSP5-8.5.json"
+            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{chunk_suffix}{mode_suffix}_scenario_SSP5-8.5.json"
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
             save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch)
@@ -663,15 +743,63 @@ def main():
     """Main function"""
     import sys
     
-    # Load configuration (only allow specifying config file)
+    # Parse command line arguments
     config_file = "config.yaml"
-    if len(sys.argv) > 1:
+    chunk_number = None
+    
+    # Support multiple argument formats:
+    # python climate_llm_benchmark_future_8.5.py [config_file] [chunk_number]
+    # python climate_llm_benchmark_future_8.5.py chunk_number (uses default config)
+    if len(sys.argv) == 2:
+        # Could be config file or chunk number
+        arg = sys.argv[1]
+        try:
+            chunk_number = int(arg)
+        except ValueError:
+            config_file = arg
+    elif len(sys.argv) == 3:
         config_file = sys.argv[1]
+        chunk_number = int(sys.argv[2])
     
     config = load_config(config_file)
     
     # Get all values from config
-    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    chunk_mode = get_config_value(config, 'benchmark.chunk_mode', False)
+    chunks_dir = get_config_value(config, 'benchmark.chunks_dir', 'meshes/chunks')
+    chunks_pattern = get_config_value(config, 'benchmark.chunks_pattern', 'mesh_data_1.0deg_chunk_{:02d}_of_{:02d}.json')
+    base_mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    
+    # Determine mesh file based on chunk mode
+    if chunk_mode and chunk_number is not None:
+        # Find total chunks by looking for existing chunk files
+        import glob
+        chunk_pattern_search = chunks_pattern.replace('{:02d}', '*')
+        chunk_files = glob.glob(f"{chunks_dir}/{chunk_pattern_search}")
+        if not chunk_files:
+            print(f"Error: No chunk files found in {chunks_dir} matching pattern {chunk_pattern_search}")
+            return
+        
+        # Extract total chunks from first file found
+        total_chunks = len(chunk_files)
+        mesh_file = f"{chunks_dir}/{chunks_pattern.format(chunk_number, total_chunks)}"
+        
+        if not Path(mesh_file).exists():
+            print(f"Error: Chunk file '{mesh_file}' not found.")
+            print(f"Available chunks: {sorted([Path(f).name for f in chunk_files])}")
+            return
+            
+        print(f"Chunk mode enabled: Processing chunk {chunk_number} of {total_chunks}")
+        
+    elif chunk_mode and chunk_number is None:
+        print("Error: Chunk mode is enabled but no chunk number specified.")
+        print("Usage: python climate_llm_benchmark_future_8.5.py [config_file] chunk_number")
+        return
+        
+    else:
+        mesh_file = base_mesh_file
+        if chunk_number is not None:
+            print("Warning: Chunk number specified but chunk_mode is disabled in config. Using regular mesh file.")
+    
     num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
     model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
     simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
@@ -683,6 +811,9 @@ def main():
     
     print(f"Climate LLM Benchmark - Future Scenario (SSP5-8.5)")
     print(f"Configuration: {config_file}")
+    print(f"Chunk mode: {'Enabled' if chunk_mode else 'Disabled'}")
+    if chunk_mode and chunk_number is not None:
+        print(f"Processing chunk: {chunk_number}")
     print(f"Mesh file: {mesh_file}")
     print(f"Repeats per point: {num_repeats}")
     print(f"Provider: {provider}")
@@ -701,15 +832,23 @@ def main():
     
     try:
         # Process the benchmark
-        results, mesh_data = process_climate_benchmark(config)
+        results, mesh_data = process_climate_benchmark(config, mesh_file)
         
         # Save final results
         resolution = mesh_data['resolution']
         mode_suffix = "_simple" if simple_mode else ""
+        
+        # Extract chunk info for filename
+        chunk_suffix = ""
+        if 'chunk_id' in mesh_data.get('mesh_info', {}):
+            chunk_id_num = mesh_data['mesh_info']['chunk_id']
+            total_chunks = mesh_data['mesh_info']['total_chunks']
+            chunk_suffix = f"_chunk_{chunk_id_num:02d}_of_{total_chunks:02d}"
+        
         # Clean model name for filename (replace special characters)
         clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
         results_dir = get_config_value(config, 'output.results_dir', 'results')
-        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{mode_suffix}_scenario_SSP5-8.5.json"
+        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{chunk_suffix}{mode_suffix}_scenario_SSP5-8.5.json"
         # Create results directory if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
         save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch)
