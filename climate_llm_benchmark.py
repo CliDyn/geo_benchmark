@@ -873,6 +873,31 @@ def main():
         print("Please provide a valid mesh file or run geo_mesh_processor.py first.")
         return
     
+    # Check if final result already exists when resume is enabled
+    if resume:
+        # Pre-calculate expected output filename to check if job is already done
+        # Load mesh data temporarily to get resolution and chunk info
+        temp_mesh_data = load_mesh_data(mesh_file)
+        temp_resolution = temp_mesh_data['resolution']
+        temp_mode_suffix = "_simple" if simple_mode else ""
+        
+        # Extract chunk info for filename
+        temp_chunk_suffix = ""
+        if 'chunk_id' in temp_mesh_data.get('mesh_info', {}):
+            temp_chunk_id_num = temp_mesh_data['mesh_info']['chunk_id']
+            temp_total_chunks = temp_mesh_data['mesh_info']['total_chunks']
+            temp_chunk_suffix = f"_chunk_{temp_chunk_id_num:02d}_of_{temp_total_chunks:02d}"
+        
+        # Clean model name for filename (replace special characters)
+        temp_clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
+        results_dir = get_config_value(config, 'output.results_dir', 'results')
+        expected_output_file = f"{results_dir}/climate_results_{temp_resolution}deg_r{num_repeats}_{temp_clean_model_name}{temp_chunk_suffix}{temp_mode_suffix}.json"
+        
+        if Path(expected_output_file).exists():
+            print(f"✓ Final result file already exists: {expected_output_file}")
+            print("Job already completed - nothing to do. Use resume=false to force re-processing.")
+            return
+    
     try:
         # Process the benchmark
         results, mesh_data = process_climate_benchmark(config, mesh_file)
