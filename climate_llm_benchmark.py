@@ -30,8 +30,9 @@ except ImportError:
     ChatGoogleGenerativeAI = None
 
 try:
+    from langchain_ollama import ChatOllama
     from langchain_community.llms import Ollama
-    from langchain_community.chat_models import ChatOllama
+    #from langchain_community.chat_models import ChatOllama
 except ImportError:
     Ollama = None
     ChatOllama = None
@@ -76,10 +77,11 @@ def configure_langsmith(disable_tracing: bool = False):
     else:
         print("LangSmith tracing enabled (default)")
 
-def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) -> Optional[str]:
+def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, chunk_id: Optional[str] = None) -> Optional[str]:
     """Find the latest intermediate file for resuming"""
     mode_suffix = "_simple" if simple_mode else ""
-    pattern = f"results/climate_results_intermediate_*{mode_suffix}.json"
+    chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
+    pattern = f"results/climate_results_intermediate_*{chunk_suffix}*{mode_suffix}.json"
     
     # Find all matching intermediate files
     intermediate_files = glob.glob(pattern)
@@ -91,16 +93,22 @@ def find_latest_intermediate_file(resolution: str, simple_mode: bool = False) ->
     file_numbers = []
     for file_path in intermediate_files:
         try:
-            # Extract number from filename like "climate_results_intermediate_1840_simple.json"
+            # Extract number from filename like "climate_results_intermediate_1840_chunk_01_simple.json"
             filename = Path(file_path).stem
-            if simple_mode:
-                number_part = filename.replace("climate_results_intermediate_", "").replace("_simple", "")
-            else:
-                number_part = filename.replace("climate_results_intermediate_", "")
             
-            number = int(number_part)
+            # Remove prefixes and suffixes to extract the number
+            temp_name = filename.replace("climate_results_intermediate_", "")
+            if chunk_id:
+                temp_name = temp_name.replace(f"_chunk_{chunk_id}", "")
+            if simple_mode:
+                temp_name = temp_name.replace("_simple", "")
+            
+            # Extract any remaining model name parts and the number
+            parts = temp_name.split("_")
+            # The number should be the first part
+            number = int(parts[0])
             file_numbers.append((number, file_path))
-        except ValueError:
+        except (ValueError, IndexError):
             continue
     
     if not file_numbers:
@@ -328,8 +336,8 @@ Return ONLY a JSON object with this exact structure (no additional text):
     return ChatPromptTemplate.from_template(prompt_template)
 
 def extract_first_float(text: str) -> float:
-    """Estrae il primo numero float da una stringa dopo aver rimosso eventuali blocchi <think>...</think>.
-    Ritorna NaN se non trova numeri."""
+    """Extracts the first float number from a string after removing any <think>...</think> blocks.
+       Returns NaN if no numbers are found."""
     # rimuovi blocchi di reasoning (deepseek-r1 / qwen reasoning ecc.)
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
     m = re.search(r"[-+]?\d+(?:\.\d+)?", text)
@@ -344,10 +352,8 @@ def validate_and_parse_response(
     model_name: Optional[str] = None,
 ) -> Optional[Dict]:
     """Validate and parse LLM response.
-
-    Aggiornato: per provider 'ollama' con modelli che iniziano con 'qwen' o 'deepseek'
-    (es. deepseek-r1) pulisce e estrae il primo numero anche se il modello restituisce
-    testo aggiuntivo o blocchi <think>."""
+       Updated: for provider 'ollama' with models starting with 'qwen' or 'deepseek' (e.g. deepseek-r1), 
+       it cleans and extracts the first number even if the model returns additional text or <think> blocks."""
     try:
         raw = response_text or ""
         response_text = raw.strip()
@@ -588,11 +594,12 @@ def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dic
         print(f"  ✓ Individual queries completed: {successful_responses}/{num_repeats} successful responses")
         return processed_results
 
-def process_climate_benchmark(config: Dict):
+def process_climate_benchmark(config: Dict, mesh_file: str = None):
     """Main function to process climate benchmark"""
     
     # Get all values from config
-    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    if mesh_file is None:
+        mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
     num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
     model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
     simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
@@ -622,12 +629,19 @@ def process_climate_benchmark(config: Dict):
     land_points = [point for point in mesh_points if point['is_land']]
     print(f"Found {len(land_points)} land points")
     
+    # Extract chunk information from mesh file if it's a chunk
+    chunk_id = None
+    if 'chunk_id' in mesh_data.get('mesh_info', {}):
+        chunk_id = f"{mesh_data['mesh_info']['chunk_id']:02d}"
+        total_chunks = mesh_data['mesh_info'].get('total_chunks', 'unknown')
+        print(f"Processing chunk {chunk_id} of {total_chunks}")
+    
     # Check for resuming from intermediate file
     results = []
     start_index = 0
     
     if resume:
-        latest_file = find_latest_intermediate_file(resolution, simple_mode)
+        latest_file = find_latest_intermediate_file(resolution, simple_mode, chunk_id)
         if latest_file:
             results, saved_mesh_data, start_index = load_intermediate_results(latest_file)
             print(f"Resuming from intermediate file: {latest_file}")
@@ -681,10 +695,11 @@ def process_climate_benchmark(config: Dict):
         # Save intermediate results at configured interval
         if (i + 1) % save_interval == 0:
             mode_suffix = "_simple" if simple_mode else ""
+            chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
             # Clean model name for filename (replace special characters)
             clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
             results_dir = get_config_value(config, 'output.results_dir', 'results')
-            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{mode_suffix}.json"
+            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{chunk_suffix}{mode_suffix}.json"
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
             save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch)
@@ -719,16 +734,112 @@ def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_n
 def main():
     """Main function"""
     import sys
+    import argparse
     
-    # Load configuration (only allow specifying config file)
-    config_file = "config.yaml"
-    if len(sys.argv) > 1:
-        config_file = sys.argv[1]
+    # Create argument parser
+    parser = argparse.ArgumentParser(description='Climate LLM Benchmark')
+    parser.add_argument('--config', default='config.yaml', 
+                       help='Configuration file path (default: config.yaml)')
+    parser.add_argument('--chunk', type=int, 
+                       help='Chunk number to process (enables chunk mode)')
+    parser.add_argument('--base_url', 
+                       help='Override base URL for model provider (e.g., http://localhost:11434)')
+    
+    # Support legacy positional arguments for backward compatibility
+    parser.add_argument('legacy_args', nargs='*', 
+                       help='Legacy: [config_file] [chunk_number]')
+    
+    args = parser.parse_args()
+    
+    # Handle legacy argument format for backward compatibility
+    config_file = args.config
+    chunk_number = args.chunk
+    base_url_override = args.base_url
+    
+    if args.legacy_args:
+        # Legacy format: python climate_llm_benchmark.py [config_file] [chunk_number]
+        if len(args.legacy_args) == 1:
+            # Could be config file or chunk number
+            arg = args.legacy_args[0]
+            try:
+                chunk_number = int(arg)
+            except ValueError:
+                config_file = arg
+        elif len(args.legacy_args) == 2:
+            config_file = args.legacy_args[0]
+            chunk_number = int(args.legacy_args[1])
     
     config = load_config(config_file)
     
+    # Apply base_url override if provided
+    if base_url_override:
+        provider = get_config_value(config, 'model.provider', 'openai')
+        if provider == 'ollama':
+            # Override Ollama base_url
+            if 'providers' not in config:
+                config['providers'] = {}
+            if 'ollama' not in config['providers']:
+                config['providers']['ollama'] = {}
+            config['providers']['ollama']['base_url'] = base_url_override
+            print(f"Override Ollama base_url: {base_url_override}")
+        elif provider == 'openai':
+            # Override OpenAI base_url
+            if 'providers' not in config:
+                config['providers'] = {}
+            if 'openai' not in config['providers']:
+                config['providers']['openai'] = {}
+            config['providers']['openai']['base_url'] = base_url_override
+            print(f"Override OpenAI base_url: {base_url_override}")
+        elif provider == 'anthropic':
+            # Override Anthropic base_url
+            if 'providers' not in config:
+                config['providers'] = {}
+            if 'anthropic' not in config['providers']:
+                config['providers']['anthropic'] = {}
+            config['providers']['anthropic']['base_url'] = base_url_override
+            print(f"Override Anthropic base_url: {base_url_override}")
+        else:
+            print(f"Warning: --base_url override not supported for provider '{provider}', ignoring")
+    
     # Get all values from config
-    mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    chunk_mode = get_config_value(config, 'benchmark.chunk_mode', False) or (chunk_number is not None)
+    chunks_dir = get_config_value(config, 'benchmark.chunks_dir', 'meshes/chunks')
+    chunks_pattern = get_config_value(config, 'benchmark.chunks_pattern', 'mesh_data_1.0deg_chunk_{:02d}_of_{:02d}.json')
+    base_mesh_file = get_config_value(config, 'benchmark.mesh_file', 'meshes/mesh_data_10deg.json')
+    
+    # Determine mesh file based on chunk mode
+    if chunk_mode and chunk_number is not None:
+        # Find total chunks by looking for existing chunk files
+        import glob
+        chunk_pattern_search = chunks_pattern.replace('{:02d}', '*')
+        chunk_files = glob.glob(f"{chunks_dir}/{chunk_pattern_search}")
+        if not chunk_files:
+            print(f"Error: No chunk files found in {chunks_dir} matching pattern {chunk_pattern_search}")
+            return
+        
+        # Extract total chunks from first file found
+        total_chunks = len(chunk_files)
+        mesh_file = f"{chunks_dir}/{chunks_pattern.format(chunk_number, total_chunks)}"
+        
+        if not Path(mesh_file).exists():
+            print(f"Error: Chunk file '{mesh_file}' not found.")
+            print(f"Available chunks: {sorted([Path(f).name for f in chunk_files])}")
+            return
+            
+        print(f"Chunk mode enabled: Processing chunk {chunk_number} of {total_chunks}")
+        
+    elif chunk_mode and chunk_number is None:
+        print("Error: Chunk mode is enabled but no chunk number specified.")
+        print("Usage: python climate_llm_benchmark.py --chunk=N")
+        print("   or: python climate_llm_benchmark.py --config=config.yaml --chunk=N")
+        print("Legacy: python climate_llm_benchmark.py [config_file] chunk_number")
+        return
+        
+    else:
+        mesh_file = base_mesh_file
+        if chunk_number is not None:
+            print("Warning: Chunk number specified but chunk_mode is disabled in config. Using regular mesh file.")
+    
     num_repeats = get_config_value(config, 'benchmark.num_repeats', 10)
     model_name = get_config_value(config, 'model.name', 'gpt-5-nano')
     simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
@@ -740,6 +851,11 @@ def main():
     
     print(f"Climate LLM Benchmark")
     print(f"Configuration: {config_file}")
+    if base_url_override:
+        print(f"Base URL override: {base_url_override}")
+    print(f"Chunk mode: {'Enabled' if chunk_mode else 'Disabled'}")
+    if chunk_mode and chunk_number is not None:
+        print(f"Processing chunk: {chunk_number}")
     print(f"Mesh file: {mesh_file}")
     print(f"Repeats per point: {num_repeats}")
     print(f"Provider: {provider}")
@@ -755,17 +871,50 @@ def main():
         print("Please provide a valid mesh file or run geo_mesh_processor.py first.")
         return
     
+    # Check if final result already exists when resume is enabled
+    if resume:
+        # Pre-calculate expected output filename to check if job is already done
+        # Load mesh data temporarily to get resolution and chunk info
+        temp_mesh_data = load_mesh_data(mesh_file)
+        temp_resolution = temp_mesh_data['resolution']
+        temp_mode_suffix = "_simple" if simple_mode else ""
+        
+        # Extract chunk info for filename
+        temp_chunk_suffix = ""
+        if 'chunk_id' in temp_mesh_data.get('mesh_info', {}):
+            temp_chunk_id_num = temp_mesh_data['mesh_info']['chunk_id']
+            temp_total_chunks = temp_mesh_data['mesh_info']['total_chunks']
+            temp_chunk_suffix = f"_chunk_{temp_chunk_id_num:02d}_of_{temp_total_chunks:02d}"
+        
+        # Clean model name for filename (replace special characters)
+        temp_clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
+        results_dir = get_config_value(config, 'output.results_dir', 'results')
+        expected_output_file = f"{results_dir}/climate_results_{temp_resolution}deg_r{num_repeats}_{temp_clean_model_name}{temp_chunk_suffix}{temp_mode_suffix}.json"
+        
+        if Path(expected_output_file).exists():
+            print(f"✓ Final result file already exists: {expected_output_file}")
+            print("Job already completed - nothing to do. Use resume=false to force re-processing.")
+            return
+    
     try:
         # Process the benchmark
-        results, mesh_data = process_climate_benchmark(config)
+        results, mesh_data = process_climate_benchmark(config, mesh_file)
         
         # Save final results
         resolution = mesh_data['resolution']
         mode_suffix = "_simple" if simple_mode else ""
+        
+        # Extract chunk info for filename
+        chunk_suffix = ""
+        if 'chunk_id' in mesh_data.get('mesh_info', {}):
+            chunk_id_num = mesh_data['mesh_info']['chunk_id']
+            total_chunks = mesh_data['mesh_info']['total_chunks']
+            chunk_suffix = f"_chunk_{chunk_id_num:02d}_of_{total_chunks:02d}"
+        
         # Clean model name for filename (replace special characters)
         clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
         results_dir = get_config_value(config, 'output.results_dir', 'results')
-        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{mode_suffix}.json"
+        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{chunk_suffix}{mode_suffix}.json"
         # Create results directory if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
         save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch)
