@@ -385,9 +385,12 @@ def validate_and_parse_response(
                     if not (val != val):  # check not NaN
                         temperature = val
                 elif lowered.startswith("mistral"):
-                    val = extract_last_float_after_newlines(response_text)
-                    if not (val != val):  # check not NaN
-                        temperature = val
+                    try:
+                        temperature = float(response_text)
+                    except ValueError:
+                        val = extract_last_float_after_newlines(response_text)
+                        if not (val != val):  # check not NaN
+                            temperature = val
 
             # Fallback: prova conversione diretta
             if temperature is None:
