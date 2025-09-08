@@ -48,12 +48,6 @@ Thumbs.db
 results/*
 results/*.csv
 
-!results/climate_results_1.0deg_r10_gemma3_12b_simple_temp_03_spatial_rmse_bathymetry_population.json.zip
-!results/climate_results_1.0deg_r10_gemma3_27b_simple_temp_03_spatial_rmse_bathymetry_population.json.zip
-!results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json.zip
-
 png/*/*png
 !png/*/llm_era5_comparison_*.png
-!png/*/temperature_comparison_*_combined.png
-!png/*/temperature_comparison_*_combined.png
 !png/*/spatial_analysis_*_r2_rmse.png
