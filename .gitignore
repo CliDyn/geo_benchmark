@@ -51,3 +51,5 @@ results/*.csv
 png/*/*png
 !png/*/llm_era5_comparison_*.png
 !png/*/spatial_analysis_*_r2_rmse.png
+
+literature/*
