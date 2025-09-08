@@ -336,8 +336,8 @@ Return ONLY a JSON object with this exact structure (no additional text):
     return ChatPromptTemplate.from_template(prompt_template)
 
 def extract_first_float(text: str) -> float:
-    """Estrae il primo numero float da una stringa dopo aver rimosso eventuali blocchi <think>...</think>.
-    Ritorna NaN se non trova numeri."""
+    """Extracts the first float number from a string after removing any <think>...</think> blocks.
+       Returns NaN if no numbers are found."""
     # rimuovi blocchi di reasoning (deepseek-r1 / qwen reasoning ecc.)
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
     m = re.search(r"[-+]?\d+(?:\.\d+)?", text)
@@ -352,10 +352,8 @@ def validate_and_parse_response(
     model_name: Optional[str] = None,
 ) -> Optional[Dict]:
     """Validate and parse LLM response.
-
-    Aggiornato: per provider 'ollama' con modelli che iniziano con 'qwen' o 'deepseek'
-    (es. deepseek-r1) pulisce e estrae il primo numero anche se il modello restituisce
-    testo aggiuntivo o blocchi <think>."""
+       Updated: for provider 'ollama' with models starting with 'qwen' or 'deepseek' (e.g. deepseek-r1), 
+       it cleans and extracts the first number even if the model returns additional text or <think> blocks."""
     try:
         raw = response_text or ""
         response_text = raw.strip()
