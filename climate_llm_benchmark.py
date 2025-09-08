@@ -344,6 +344,22 @@ def extract_first_float(text: str) -> float:
     return float(m.group(0)) if m else float("nan")
 
 
+def extract_last_float_after_newlines(text: str) -> float:
+    """Extracts the last float number that appears after double newlines (\\n\\n).
+       Special function for Mistral models that put thinking before \\n\\n and the answer after.
+       Returns NaN if no numbers are found."""
+    # Find the last occurrence of \n\n
+    parts = text.split('\n\n')
+    if len(parts) > 1:
+        # Get the last part after the final \n\n
+        last_part = parts[-1].strip()
+        # Extract float from this last part
+        m = re.search(r"[-+]?\d+(?:\.\d+)?", last_part)
+        return float(m.group(0)) if m else float("nan")
+    else:
+        return float("nan")
+
+
 def validate_and_parse_response(
     response_text: str,
     simple_mode: bool = False,
@@ -361,11 +377,15 @@ def validate_and_parse_response(
         if simple_mode:
             temperature: Optional[float] = None
 
-            # Caso speciale: reasoning / output prolisso (qwen, deepseek via ollama)
+            # Caso speciale: reasoning / output prolisso (qwen, deepseek, mistral via ollama)
             if provider == "ollama" and model_name:
                 lowered = model_name.lower()
                 if lowered.startswith("qwen") or lowered.startswith("deepseek"):
                     val = extract_first_float(response_text)
+                    if not (val != val):  # check not NaN
+                        temperature = val
+                elif lowered.startswith("mistral"):
+                    val = extract_last_float_after_newlines(response_text)
                     if not (val != val):  # check not NaN
                         temperature = val
 
@@ -374,10 +394,7 @@ def validate_and_parse_response(
                 try:
                     temperature = float(response_text)
                 except ValueError:
-                    # ultimo tentativo generico: estrai primo float
-                    val2 = extract_first_float(response_text)
-                    if not (val2 != val2):  # not NaN
-                        temperature = val2
+                    pass  # If not a valid float, temperature remains None
 
             if temperature is None:
                 return None
