@@ -1,5 +1,9 @@
 langchain
 langchain-openai
+langchain-anthropic
+langchain-google-genai
+langchain-community
+langchain-ollama
 openai
 geopandas
 shapely
