@@ -122,7 +122,8 @@ def create_data_grid(mapping_data, resolution=1.0):
 def create_map_plot(mapping_data, field_name, resolution, colormap='viridis', 
                    vmin=None, vmax=None, title_suffix="", output_file=None, figsize=(7.1, 4.0),
                    temp_range=None, temp_colormap='thermal', bias_range=None, bias_colormap='RdBu_r',
-                   rmse_range=None, rmse_colormap='viridis_r'):
+                   rmse_range=None, rmse_colormap='viridis_r', font_family='Helvetica', 
+                   font_size_label=10, font_size_tick=8, show_axes=True, show_frame=True):
     """Create a contour map for the given field"""
     
     if not mapping_data:
@@ -231,69 +232,88 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
     # Customize the map
     ax.set_xlim(-180, 180)
     ax.set_ylim(-60, 85)
-    ax.set_xlabel('Longitude', fontsize=9)
-    ax.set_ylabel('Latitude', fontsize=9)
+    
+    # Configure axis display based on settings
+    if show_axes:
+        # Show axis labels and coordinate ticks
+        ax.set_xlabel('Longitude', fontsize=font_size_label, fontfamily=font_family)
+        ax.set_ylabel('Latitude', fontsize=font_size_label, fontfamily=font_family)
+        
+        # Add coordinate ticks with proper geographic notation
+        lon_ticks = np.arange(-180, 181, 60)
+        lat_ticks = np.arange(-60, 91, 30)
+        ax.set_xticks(lon_ticks)
+        ax.set_yticks(lat_ticks)
+        
+        # Format longitude labels: 180°W, 120°W, 60°W, 0°, 60°E, 120°E, 180°E
+        lon_labels = []
+        for lon in lon_ticks:
+            if lon == 0:
+                lon_labels.append('0°')
+            elif lon > 0:
+                lon_labels.append(f'{int(lon)}°E')
+            else:
+                lon_labels.append(f'{int(abs(lon))}°W')
+        ax.set_xticklabels(lon_labels, fontsize=font_size_tick, fontfamily=font_family)
+        
+        # Format latitude labels: 60°S, 30°S, 0°, 30°N, 60°N
+        lat_labels = []
+        for lat in lat_ticks:
+            if lat == 0:
+                lat_labels.append('0°')
+            elif lat > 0:
+                lat_labels.append(f'{int(lat)}°N')
+            else:
+                lat_labels.append(f'{int(abs(lat))}°S')
+        ax.set_yticklabels(lat_labels, fontsize=font_size_tick, fontfamily=font_family)
+    else:
+        # Remove axis labels and ticks for clean publication look
+        ax.set_xlabel('')
+        ax.set_ylabel('')
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.tick_params(left=False, bottom=False)
+    
+    # Configure frame/box around map
+    if not show_frame:
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
     
     # Minimal title - just the field name
     ax.set_title('', fontsize=12)  # Remove title per journal standards
     
-    # Add coordinate ticks with proper geographic notation
-    lon_ticks = np.arange(-180, 181, 60)
-    lat_ticks = np.arange(-60, 91, 30)
-    ax.set_xticks(lon_ticks)
-    ax.set_yticks(lat_ticks)
-    
-    # Format longitude labels: 180°W, 120°W, 60°W, 0°, 60°E, 120°E, 180°E
-    lon_labels = []
-    for lon in lon_ticks:
-        if lon == 0:
-            lon_labels.append('0°')
-        elif lon > 0:
-            lon_labels.append(f'{int(lon)}°E')
-        else:
-            lon_labels.append(f'{int(abs(lon))}°W')
-    ax.set_xticklabels(lon_labels)
-    
-    # Format latitude labels: 60°S, 30°S, 0°, 30°N, 60°N
-    lat_labels = []
-    for lat in lat_ticks:
-        if lat == 0:
-            lat_labels.append('0°')
-        elif lat > 0:
-            lat_labels.append(f'{int(lat)}°N')
-        else:
-            lat_labels.append(f'{int(abs(lat))}°S')
-    ax.set_yticklabels(lat_labels)
     
     # Add horizontal colorbar beneath the map with appropriate ends
     cbar = plt.colorbar(contour, ax=ax, orientation='horizontal', shrink=0.8, aspect=40, pad=0.15)
     
     # Set colorbar label and ticks based on field type
     if is_rmse_field:
-        cbar.set_label('RMSE (°C)', fontsize=10)
+        cbar.set_label('RMSE (°C)', fontsize=font_size_label, fontfamily=font_family)
         # Set nice rounded ticks for RMSE colorbar - every 2 degrees
         if rmse_range is not None:
             rmse_ticks = np.arange(rmse_range[0], rmse_range[1] + 0.1, 2)  # Every 2 degrees: 0, 2, 4, 6, 8, 10
             cbar.set_ticks(rmse_ticks)
-            cbar.set_ticklabels([f'{int(tick)}°' for tick in rmse_ticks])
+            cbar.set_ticklabels([f'{int(tick)}°' for tick in rmse_ticks], fontsize=font_size_tick, fontfamily=font_family)
     elif 'mae' in field_name.lower():
-        cbar.set_label('MAE (°C)', fontsize=10)
+        cbar.set_label('MAE (°C)', fontsize=font_size_label, fontfamily=font_family)
     elif 'bias' in field_name.lower():
-        cbar.set_label('Bias (°C)', fontsize=10)
+        cbar.set_label('Bias (°C)', fontsize=font_size_label, fontfamily=font_family)
         # Set nice rounded ticks for bias colorbar - every 2.5 degrees
         if bias_range is not None:
             bias_ticks = np.arange(bias_range[0], bias_range[1] + 0.1, 2.5)  # Every 2.5 degrees: -7.5, -5.0, -2.5, 0, 2.5, 5.0, 7.5
             cbar.set_ticks(bias_ticks)
-            cbar.set_ticklabels([f'{tick:g}°' for tick in bias_ticks])
+            cbar.set_ticklabels([f'{tick:g}°' for tick in bias_ticks], fontsize=font_size_tick, fontfamily=font_family)
     elif is_temp_field:
-        cbar.set_label('Temperature (°C)', fontsize=10)
+        cbar.set_label('Temperature (°C)', fontsize=font_size_label, fontfamily=font_family)
         # Set nice rounded ticks for temperature colorbar - every 5 degrees
         if temp_range is not None:
             temp_ticks = np.arange(temp_range[0], temp_range[1] + 1, 5)  # Every 5 degrees: -10, -5, 0, 5, ..., 40
             cbar.set_ticks(temp_ticks)
-            cbar.set_ticklabels([f'{int(tick)}°' for tick in temp_ticks])
+            cbar.set_ticklabels([f'{int(tick)}°' for tick in temp_ticks], fontsize=font_size_tick, fontfamily=font_family)
     else:
-        cbar.set_label('Value', fontsize=10)
+        cbar.set_label('Value', fontsize=font_size_label, fontfamily=font_family)
     
     # Statistics are removed from figure - should go in caption or supplementary table
     # as per journal standards
@@ -311,7 +331,7 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
     return fig
 
 
-def create_all_spatial_maps(results_data, resolution, output_dir='png', temp_range=(-13, 40), temp_colormap='thermal', bias_range=(-7, 7), bias_colormap='RdBu_r', rmse_range=(0, 10), rmse_colormap='viridis_r'):
+def create_all_spatial_maps(results_data, resolution, output_dir='png', temp_range=(-13, 40), temp_colormap='thermal', bias_range=(-7, 7), bias_colormap='RdBu_r', rmse_range=(0, 10), rmse_colormap='viridis_r', font_family='Helvetica', font_size_label=10, font_size_tick=8, show_axes=True, show_frame=True):
     """Create all spatial analysis maps from the results data"""
     
     print("Creating comprehensive spatial analysis maps...")
@@ -396,7 +416,12 @@ def create_all_spatial_maps(results_data, resolution, output_dir='png', temp_ran
                 bias_range=bias_range,
                 bias_colormap=bias_colormap,
                 rmse_range=rmse_range,
-                rmse_colormap=rmse_colormap
+                rmse_colormap=rmse_colormap,
+                font_family=font_family,
+                font_size_label=font_size_label,
+                font_size_tick=font_size_tick,
+                show_axes=show_axes,
+                show_frame=show_frame
             )
             
             if fig is not None:
@@ -490,6 +515,15 @@ def main():
     #  - 'plasma_r' - matplotlib: Purple-pink-yellow (reversed)
     #  - 'inferno_r' - matplotlib: Black-red-yellow (reversed)
     #  - 'Spectral' - matplotlib: Blue-green-yellow-red
+    
+    # Font configuration for publication quality
+    FONT_FAMILY = 'Helvetica'  # Font family for all text elements
+    FONT_SIZE_LABEL = 10       # Font size for colorbar labels and axis labels
+    FONT_SIZE_TICK = 8         # Font size for tick labels (axis and colorbar)
+    
+    # Axis display configuration
+    SHOW_AXES = False          # Show axis labels and tick marks (True) or clean map (False)
+    SHOW_FRAME = False         # Show frame/box around the map (True) or remove it (False)
     # Default file
     default_results = 'results/climate_results_1.0deg_r10_gpt-5_simple_spatial_rmse_bathymetry_population.json'
     
@@ -531,7 +565,7 @@ def main():
         print(f"Output directory: {output_dir}")
         
         # Create all spatial maps
-        created_maps = create_all_spatial_maps(results_data, resolution, str(output_dir), temp_range, TEMP_COLORMAP, bias_range, BIAS_COLORMAP, rmse_range, RMSE_COLORMAP)
+        created_maps = create_all_spatial_maps(results_data, resolution, str(output_dir), temp_range, TEMP_COLORMAP, bias_range, BIAS_COLORMAP, rmse_range, RMSE_COLORMAP, FONT_FAMILY, FONT_SIZE_LABEL, FONT_SIZE_TICK, SHOW_AXES, SHOW_FRAME)
         
         # Print summary statistics
         print_summary_statistics(results_data)
