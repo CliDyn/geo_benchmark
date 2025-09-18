@@ -34,6 +34,7 @@ data/*nc
 !data/gpw_v4_population_density_rev11_2000_1_deg.prj
 !data/gpw_v4_population_density_rev11_2000_1_deg_asc_readme.txt
 !data/land/*
+data/land/exlude_areas.*
 
 # OS files
 .DS_Store
