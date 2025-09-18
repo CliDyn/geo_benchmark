@@ -8,6 +8,7 @@ benchmark:
   num_repeats: 1                            # Number of queries per mesh point
   simple_mode: true                         # Simple mode (single month) vs full mode (all months)
   month: "July"                             # Month for simple mode (ignored in full mode)
+  with_address: true                        # Include address information in prompts (true) or coordinates only (false)
   use_batch: false                           # Use batch processing for multiple repeats
   disable_tracing: true                    # Disable LangSmith tracing for faster processing
   resume: false                             # Resume from latest intermediate file
