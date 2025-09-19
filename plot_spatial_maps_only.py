@@ -28,8 +28,48 @@ import sys
 import os
 import cmocean
 
+# Optional Cartopy import (graceful fallback if not available)
+try:
+    import cartopy.crs as ccrs
+    import cartopy.feature as cfeature
+    CARTOPY_AVAILABLE = True
+except ImportError:
+    CARTOPY_AVAILABLE = False
+    print("Warning: Cartopy not available. Install with: pip install cartopy")
+    print("Falling back to matplotlib-only plotting.")
+
 # Add the current directory to path to import other modules
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+
+def get_cartopy_projection(projection_name, central_longitude=0):
+    """Get Cartopy projection object from name with optional central longitude"""
+    if not CARTOPY_AVAILABLE:
+        return None
+    
+    # Projections that support central_longitude parameter
+    central_longitude_projections = {
+        'PlateCarree': lambda: ccrs.PlateCarree(central_longitude=central_longitude),
+        'Robinson': lambda: ccrs.Robinson(central_longitude=central_longitude),
+        'Mollweide': lambda: ccrs.Mollweide(central_longitude=central_longitude),
+        'Mercator': lambda: ccrs.Mercator(central_longitude=central_longitude),
+        'InterruptedGoodeHomolosine': lambda: ccrs.InterruptedGoodeHomolosine(central_longitude=central_longitude),
+    }
+    
+    # Projections that don't support central_longitude (use default)
+    fixed_projections = {
+        'Orthographic': ccrs.Orthographic(),
+        'NorthPolarStereo': ccrs.NorthPolarStereo(),
+        'SouthPolarStereo': ccrs.SouthPolarStereo(),
+    }
+    
+    if projection_name in central_longitude_projections:
+        return central_longitude_projections[projection_name]()
+    elif projection_name in fixed_projections:
+        return fixed_projections[projection_name]
+    else:
+        # Default fallback
+        return ccrs.PlateCarree(central_longitude=central_longitude)
 
 
 def load_spatial_results(results_file):
@@ -123,7 +163,8 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
                    vmin=None, vmax=None, title_suffix="", output_file=None, figsize=(7.1, 4.0),
                    temp_range=None, temp_colormap='thermal', bias_range=None, bias_colormap='RdBu_r',
                    rmse_range=None, rmse_colormap='viridis_r', font_family='Helvetica', 
-                   font_size_label=10, font_size_tick=8, show_axes=True, show_frame=True):
+                   font_size_label=10, font_size_tick=8, show_axes=True, show_frame=True,
+                   use_cartopy=False, projection='PlateCarree', central_longitude=0, color_levels=20):
     """Create a contour map for the given field"""
     
     if not mapping_data:
@@ -137,8 +178,16 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
         print(f"Failed to create grid for {field_name}")
         return None
     
-    # Create figure
-    fig, ax = plt.subplots(figsize=figsize)
+    # Create figure with appropriate projection
+    if use_cartopy and CARTOPY_AVAILABLE:
+        proj = get_cartopy_projection(projection, central_longitude)
+        fig, ax = plt.subplots(figsize=figsize, subplot_kw={'projection': proj})
+        cartopy_mode = True
+    else:
+        if use_cartopy and not CARTOPY_AVAILABLE:
+            print(f"Warning: Cartopy requested but not available. Using matplotlib plotting.")
+        fig, ax = plt.subplots(figsize=figsize)
+        cartopy_mode = False
     
     # Extract values for contour levels and statistics
     values = [d['value'] for d in mapping_data]
@@ -173,7 +222,7 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
             vmax = np.max(values)
     
     # Create contour levels
-    levels = np.linspace(vmin, vmax, 20)
+    levels = np.linspace(vmin, vmax, color_levels)
     
     # Create contour plot with appropriate colormap
     if is_rmse_field:
@@ -196,6 +245,8 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
             # Fall back to matplotlib colormap
             cmap = plt.colormaps[bias_colormap]
         # Bias range is already set above, no need to make symmetric here
+        # Update levels in case bias colormap handling changed them
+        levels = np.linspace(vmin, vmax, color_levels)
     elif is_temp_field:
         # For absolute temperature, use specified colormap (cmocean or matplotlib)
         try:
@@ -214,34 +265,53 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
     else:
         extend_option = 'neither'
     
-    contour = ax.contourf(lon_grid, lat_grid, data_grid, 
-                         levels=levels, cmap=cmap, extend=extend_option)
+    # Create contour plot with appropriate transform
+    if cartopy_mode:
+        contour = ax.contourf(lon_grid, lat_grid, data_grid, 
+                             levels=levels, cmap=cmap, extend=extend_option,
+                             transform=ccrs.PlateCarree())
+    else:
+        contour = ax.contourf(lon_grid, lat_grid, data_grid, 
+                             levels=levels, cmap=cmap, extend=extend_option)
     
-    # Try to load and overlay country boundaries with subtle coastlines
-    try:
-        world = gpd.read_file('data/land/ne_10m_admin_0_countries.shp')
-        world.boundary.plot(ax=ax, color='gray', linewidth=0.25, alpha=0.7)
-    except Exception as e:
-        print(f"Could not load country boundaries: {e}")
-        # Add faint gridlines if no coastlines available
-        ax.grid(True, color='lightgray', alpha=0.3, linewidth=0.5)
+    # Add geographic features (coastlines and boundaries)
+    if cartopy_mode:
+        # Use Cartopy's built-in features
+        ax.add_feature(cfeature.COASTLINE, linewidth=0.25, color='gray', alpha=0.7)
+        ax.add_feature(cfeature.BORDERS, linewidth=0.15, color='gray', alpha=0.5)
+        # Optionally add land and ocean features
+        # ax.add_feature(cfeature.LAND, alpha=0.1, color='lightgray')
+        # ax.add_feature(cfeature.OCEAN, alpha=0.1, color='lightblue')
+    else:
+        # Use GeoPandas for matplotlib mode
+        try:
+            world = gpd.read_file('data/land/ne_10m_admin_0_countries.shp')
+            world.boundary.plot(ax=ax, color='gray', linewidth=0.25, alpha=0.7)
+        except Exception as e:
+            print(f"Could not load country boundaries: {e}")
+            # Add faint gridlines if no coastlines available
+            ax.grid(True, color='lightgray', alpha=0.3, linewidth=0.5)
     
     # Add faint gridlines for better orientation
     ax.grid(True, color='lightgray', alpha=0.2, linewidth=0.3, linestyle='-')
     
-    # Customize the map
-    ax.set_xlim(-180, 180)
-    ax.set_ylim(-60, 85)
+    # Customize the map extent (exclude Antarctica by limiting to -57°S)
+    if cartopy_mode:
+        # Set custom extent to exclude Antarctica
+        ax.set_extent([-180, 180, -57, 85], crs=ccrs.PlateCarree())
+    else:
+        ax.set_xlim(-180, 180)
+        ax.set_ylim(-57, 85)
     
     # Configure axis display based on settings
-    if show_axes:
-        # Show axis labels and coordinate ticks
+    if show_axes and not cartopy_mode:
+        # Show axis labels and coordinate ticks (only for matplotlib mode)
         ax.set_xlabel('Longitude', fontsize=font_size_label, fontfamily=font_family)
         ax.set_ylabel('Latitude', fontsize=font_size_label, fontfamily=font_family)
         
         # Add coordinate ticks with proper geographic notation
         lon_ticks = np.arange(-180, 181, 60)
-        lat_ticks = np.arange(-60, 91, 30)
+        lat_ticks = np.arange(-60, 91, 30)  # Keep -60 for reference even though map shows -57
         ax.set_xticks(lon_ticks)
         ax.set_yticks(lat_ticks)
         
@@ -266,20 +336,45 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
             else:
                 lat_labels.append(f'{int(abs(lat))}°S')
         ax.set_yticklabels(lat_labels, fontsize=font_size_tick, fontfamily=font_family)
+    elif show_axes and cartopy_mode:
+        # For Cartopy, add gridlines with labels
+        try:
+            gl = ax.gridlines(draw_labels=True, linewidth=0.3, color='lightgray', alpha=0.2)
+            gl.top_labels = False
+            gl.right_labels = False
+            gl.xlabel_style = {'size': font_size_tick, 'family': font_family}
+            gl.ylabel_style = {'size': font_size_tick, 'family': font_family}
+        except:
+            # Fallback for older Cartopy versions
+            ax.gridlines(linewidth=0.3, color='lightgray', alpha=0.2)
     else:
         # Remove axis labels and ticks for clean publication look
-        ax.set_xlabel('')
-        ax.set_ylabel('')
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.tick_params(left=False, bottom=False)
+        if not cartopy_mode:
+            ax.set_xlabel('')
+            ax.set_ylabel('')
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.tick_params(left=False, bottom=False)
     
     # Configure frame/box around map
     if not show_frame:
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['bottom'].set_visible(False)
-        ax.spines['left'].set_visible(False)
+        if cartopy_mode:
+            # Remove Cartopy frame/outline - try different methods based on version
+            try:
+                ax.spines['geo'].set_visible(False)
+            except KeyError:
+                try:
+                    ax.outline_patch.set_visible(False)
+                except AttributeError:
+                    # For newer Cartopy versions, remove all spines
+                    for spine in ax.spines.values():
+                        spine.set_visible(False)
+        else:
+            # Remove matplotlib spines
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['bottom'].set_visible(False)
+            ax.spines['left'].set_visible(False)
     
     # Minimal title - just the field name
     ax.set_title('', fontsize=12)  # Remove title per journal standards
@@ -331,7 +426,7 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
     return fig
 
 
-def create_all_spatial_maps(results_data, resolution, output_dir='png', temp_range=(-13, 40), temp_colormap='thermal', bias_range=(-7, 7), bias_colormap='RdBu_r', rmse_range=(0, 10), rmse_colormap='viridis_r', font_family='Helvetica', font_size_label=10, font_size_tick=8, show_axes=True, show_frame=True):
+def create_all_spatial_maps(results_data, resolution, output_dir='png', temp_range=(-13, 40), temp_colormap='thermal', bias_range=(-7, 7), bias_colormap='RdBu_r', rmse_range=(0, 10), rmse_colormap='viridis_r', font_family='Helvetica', font_size_label=10, font_size_tick=8, show_axes=True, show_frame=True, use_cartopy=False, projection='PlateCarree', central_longitude=0, color_levels=20):
     """Create all spatial analysis maps from the results data"""
     
     print("Creating comprehensive spatial analysis maps...")
@@ -421,7 +516,11 @@ def create_all_spatial_maps(results_data, resolution, output_dir='png', temp_ran
                 font_size_label=font_size_label,
                 font_size_tick=font_size_tick,
                 show_axes=show_axes,
-                show_frame=show_frame
+                show_frame=show_frame,
+                use_cartopy=use_cartopy,
+                projection=projection,
+                central_longitude=central_longitude,
+                color_levels=color_levels
             )
             
             if fig is not None:
@@ -518,12 +617,29 @@ def main():
     
     # Font configuration for publication quality
     FONT_FAMILY = 'Helvetica'  # Font family for all text elements
-    FONT_SIZE_LABEL = 10       # Font size for colorbar labels and axis labels
-    FONT_SIZE_TICK = 8         # Font size for tick labels (axis and colorbar)
+    FONT_SIZE_LABEL = 12       # Font size for colorbar labels and axis labels
+    FONT_SIZE_TICK = 10         # Font size for tick labels (axis and colorbar)
     
     # Axis display configuration
     SHOW_AXES = False          # Show axis labels and tick marks (True) or clean map (False)
     SHOW_FRAME = False         # Show frame/box around the map (True) or remove it (False)
+    
+    # Cartopy projection configuration
+    USE_CARTOPY = True         # Use Cartopy for map projections (True) or matplotlib (False)
+    PROJECTION = 'Robinson'    # Map projection when using Cartopy
+    CENTRAL_LONGITUDE = 0      # Central longitude for projection (0=Greenwich, -30=Atlantic-centered, 180=Pacific-centered)
+    
+    # Color levels configuration
+    COLOR_LEVELS = 21         # Number of color levels for contour plots (more levels = smoother gradients)
+    #  Available projections:
+    #  - 'Robinson' - Robinson projection (good for global views)
+    #  - 'PlateCarree' - Equirectangular projection (simple lat/lon grid)
+    #  - 'Mollweide' - Mollweide projection (equal-area)
+    #  - 'Orthographic' - Orthographic projection (globe view)
+    #  - 'NorthPolarStereo' - North Polar Stereographic
+    #  - 'SouthPolarStereo' - South Polar Stereographic
+    #  - 'Mercator' - Mercator projection
+    #  - 'InterruptedGoodeHomolosine' - Interrupted Goode Homolosine
     # Default file
     default_results = 'results/climate_results_1.0deg_r10_gpt-5_simple_spatial_rmse_bathymetry_population.json'
     
@@ -565,7 +681,7 @@ def main():
         print(f"Output directory: {output_dir}")
         
         # Create all spatial maps
-        created_maps = create_all_spatial_maps(results_data, resolution, str(output_dir), temp_range, TEMP_COLORMAP, bias_range, BIAS_COLORMAP, rmse_range, RMSE_COLORMAP, FONT_FAMILY, FONT_SIZE_LABEL, FONT_SIZE_TICK, SHOW_AXES, SHOW_FRAME)
+        created_maps = create_all_spatial_maps(results_data, resolution, str(output_dir), temp_range, TEMP_COLORMAP, bias_range, BIAS_COLORMAP, rmse_range, RMSE_COLORMAP, FONT_FAMILY, FONT_SIZE_LABEL, FONT_SIZE_TICK, SHOW_AXES, SHOW_FRAME, USE_CARTOPY, PROJECTION, CENTRAL_LONGITUDE, COLOR_LEVELS)
         
         # Print summary statistics
         print_summary_statistics(results_data)
