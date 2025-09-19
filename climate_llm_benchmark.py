@@ -77,12 +77,13 @@ def configure_langsmith(disable_tracing: bool = False):
     else:
         print("LangSmith tracing enabled (default)")
 
-def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, chunk_id: Optional[str] = None, with_address: bool = True) -> Optional[str]:
+def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, chunk_id: Optional[str] = None, with_address: bool = True, periods: bool = False) -> Optional[str]:
     """Find the latest intermediate file for resuming"""
     mode_suffix = "_simple" if simple_mode else ""
     address_suffix = "_noaddress" if not with_address else ""
+    periods_suffix = "_climchange" if periods else ""
     chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
-    pattern = f"results/climate_results_intermediate_*{chunk_suffix}*{mode_suffix}{address_suffix}.json"
+    pattern = f"results/climate_results_intermediate_*{chunk_suffix}*{mode_suffix}{address_suffix}{periods_suffix}.json"
     
     # Find all matching intermediate files
     intermediate_files = glob.glob(pattern)
@@ -103,6 +104,8 @@ def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, ch
                 temp_name = temp_name.replace(f"_chunk_{chunk_id}", "")
             if simple_mode:
                 temp_name = temp_name.replace("_simple", "")
+            if periods:
+                temp_name = temp_name.replace("_climchange", "")
             
             # Extract any remaining model name parts and the number
             parts = temp_name.split("_")
@@ -263,12 +266,47 @@ def initialize_llm(config: Dict, model_name: str = None, temperature: float = No
     else:
         raise ValueError(f"Unsupported provider: {provider}. Supported providers: openai, anthropic, google, ollama")
 
-def create_climate_prompt(simple_mode=False, month="July", with_address=True):
+def create_climate_prompt(simple_mode=False, month="July", with_address=True, periods=False):
     """Create prompt template for climate data requests"""
     
+    # Check for invalid combination
+    if periods and not simple_mode:
+        raise ValueError("Error: periods=True is only supported when simple_mode=True")
+    
     if simple_mode:
-        if with_address:
-            prompt_template = f"""You are a climate data expert. Given the location coordinates and address information below, provide the mean {month} temperature for the period 1991-2020.
+        if periods:
+            # Climate change mode - temperature difference between periods
+            if with_address:
+                prompt_template = f"""You are a climate data expert. Given the location coordinates and address information below, calculate the change in mean {month} temperature between the periods 1950–1974 and 2000–2024.
+
+Location Information:
+- Longitude: {{longitude}}
+- Latitude: {{latitude}}
+- Country: {{country}}
+- State/Region: {{state}}
+- City: {{city}}
+
+Provide ONLY the temperature difference (2000–2024 minus 1950–1974) at 2 m above surface (°C) for this location.
+
+IMPORTANT: Return ONLY a single number (float) representing the temperature difference in Celsius. No text, no JSON, just the number.
+
+Example: 1.8"""
+            else:
+                prompt_template = f"""You are a climate data expert. Given the location coordinates below, calculate the change in mean {month} temperature between the periods 1950–1974 and 2000–2024.
+
+Location Information:
+- Longitude: {{longitude}}
+- Latitude: {{latitude}}
+
+Provide ONLY the temperature difference (2000–2024 minus 1950–1974) at 2 m above surface (°C) for this location.
+
+IMPORTANT: Return ONLY a single number (float) representing the temperature difference in Celsius. No text, no JSON, just the number.
+
+Example: 1.8"""
+        else:
+            # Original climate mode - absolute temperature
+            if with_address:
+                prompt_template = f"""You are a climate data expert. Given the location coordinates and address information below, provide the mean {month} temperature for the period 1991-2020.
 
 Location Information:
 - Longitude: {{longitude}}
@@ -282,8 +320,8 @@ Provide ONLY the mean {month} temperature at 2m above surface (°C) for this loc
 IMPORTANT: Return ONLY a single number (float) representing the mean {month} temperature in Celsius. No text, no JSON, just the number.
 
 Example: 25.4"""
-        else:
-            prompt_template = f"""You are a climate data expert. Given the location coordinates below, provide the mean {month} temperature for the period 1991-2020.
+            else:
+                prompt_template = f"""You are a climate data expert. Given the location coordinates below, provide the mean {month} temperature for the period 1991-2020.
 
 Location Information:
 - Longitude: {{longitude}}
@@ -539,7 +577,7 @@ def convert_to_numpy_arrays(climate_data: Dict, simple_mode: bool = False) -> Di
         
         return result
 
-def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None, with_address: bool = True) -> Optional[Dict]:
+def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int = 3, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None, with_address: bool = True, periods: bool = False) -> Optional[Dict]:
     """Query LLM for climate data with retry logic (single request)"""
     
     # Prepare location info
@@ -591,7 +629,7 @@ def query_climate_data(llm, prompt_template, point_data: Dict, max_retries: int 
     print(f"  Failed to get valid response after {max_retries} attempts")
     return None
 
-def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None, with_address: bool = True) -> List[Optional[Dict]]:
+def query_climate_data_batch(llm, prompt_template, point_data: Dict, config: Dict, num_repeats: int = 10, simple_mode: bool = False, month: str = "July", provider: Optional[str] = None, model_name: Optional[str] = None, with_address: bool = True, periods: bool = False) -> List[Optional[Dict]]:
     """Query LLM for climate data using batch processing"""
     
     # Prepare location info
@@ -738,7 +776,7 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
     start_index = 0
     
     if resume:
-        latest_file = find_latest_intermediate_file(resolution, simple_mode, chunk_id, with_address)
+        latest_file = find_latest_intermediate_file(resolution, simple_mode, chunk_id, with_address, periods)
         if latest_file:
             results, saved_mesh_data, start_index = load_intermediate_results(latest_file)
             print(f"Resuming from intermediate file: {latest_file}")
@@ -768,7 +806,7 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
         
         if use_batch and num_repeats > 1:
             # Use batch processing for multiple repeats
-            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, config, num_repeats, simple_mode, month, provider=provider, model_name=model_name, with_address=with_address)
+            batch_responses = query_climate_data_batch(llm, prompt_template, point_data, config, num_repeats, simple_mode, month, provider=provider, model_name=model_name, with_address=with_address, periods=periods)
             point_results['llm_responses'] = batch_responses
             
         else:
@@ -778,7 +816,7 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
                 if num_repeats > 1:
                     print(f"  Query {repeat + 1}/{num_repeats}")
                 
-                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=max_retries, simple_mode=simple_mode, month=month, provider=provider, model_name=model_name, with_address=with_address)
+                climate_response = query_climate_data(llm, prompt_template, point_data, max_retries=max_retries, simple_mode=simple_mode, month=month, provider=provider, model_name=model_name, with_address=with_address, periods=periods)
                 
                 if climate_response:
                     point_results['llm_responses'].append(climate_response)
@@ -793,18 +831,19 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
         if (i + 1) % save_interval == 0:
             mode_suffix = "_simple" if simple_mode else ""
             address_suffix = "_noaddress" if not with_address else ""
+            periods_suffix = "_climchange" if periods else ""
             chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
             # Clean model name for filename (replace special characters)
             clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
             results_dir = get_config_value(config, 'output.results_dir', 'results')
-            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{chunk_suffix}{mode_suffix}{address_suffix}.json"
+            intermediate_file = f"{results_dir}/climate_results_intermediate_{i+1}_{clean_model_name}{chunk_suffix}{mode_suffix}{address_suffix}{periods_suffix}.json"
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
-            save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch)
+            save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch, periods)
     
     return results, mesh_data
 
-def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str, simple_mode: bool = False, month: str = "July", use_batch: bool = True):
+def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str, simple_mode: bool = False, month: str = "July", use_batch: bool = True, periods: bool = False):
     """Save climate benchmark results"""
     print(f"Saving results to {output_file}...")
     
@@ -979,6 +1018,7 @@ def main():
         temp_resolution = temp_mesh_data['resolution']
         temp_mode_suffix = "_simple" if simple_mode else ""
         temp_address_suffix = "_noaddress" if not with_address else ""
+        temp_periods_suffix = "_climchange" if periods else ""
         
         # Extract chunk info for filename
         temp_chunk_suffix = ""
@@ -990,7 +1030,7 @@ def main():
         # Clean model name for filename (replace special characters)
         temp_clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
         results_dir = get_config_value(config, 'output.results_dir', 'results')
-        expected_output_file = f"{results_dir}/climate_results_{temp_resolution}deg_r{num_repeats}_{temp_clean_model_name}{temp_chunk_suffix}{temp_mode_suffix}{temp_address_suffix}.json"
+        expected_output_file = f"{results_dir}/climate_results_{temp_resolution}deg_r{num_repeats}_{temp_clean_model_name}{temp_chunk_suffix}{temp_mode_suffix}{temp_address_suffix}{temp_periods_suffix}.json"
         
         if Path(expected_output_file).exists():
             print(f"✓ Final result file already exists: {expected_output_file}")
@@ -1005,6 +1045,7 @@ def main():
         resolution = mesh_data['resolution']
         mode_suffix = "_simple" if simple_mode else ""
         address_suffix = "_noaddress" if not with_address else ""
+        periods_suffix = "_climchange" if periods else ""
         
         # Extract chunk info for filename
         chunk_suffix = ""
@@ -1016,10 +1057,10 @@ def main():
         # Clean model name for filename (replace special characters)
         clean_model_name = model_name.replace(":", "_").replace("/", "_").replace(".", "_")
         results_dir = get_config_value(config, 'output.results_dir', 'results')
-        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{chunk_suffix}{mode_suffix}{address_suffix}.json"
+        output_file = f"{results_dir}/climate_results_{resolution}deg_r{num_repeats}_{clean_model_name}{chunk_suffix}{mode_suffix}{address_suffix}{periods_suffix}.json"
         # Create results directory if it doesn't exist
         Path(output_file).parent.mkdir(parents=True, exist_ok=True)
-        save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch)
+        save_results(results, mesh_data, output_file, model_name, simple_mode, month, use_batch, periods)
         
         # Print summary
         successful_points = sum(1 for r in results if any(resp for resp in r['llm_responses'] if resp))
