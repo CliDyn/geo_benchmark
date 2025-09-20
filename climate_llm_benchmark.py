@@ -739,6 +739,7 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
     simple_mode = get_config_value(config, 'benchmark.simple_mode', True)
     month = get_config_value(config, 'benchmark.month', 'July')
     with_address = get_config_value(config, 'benchmark.with_address', True)
+    periods = get_config_value(config, 'benchmark.periods', False)
     use_batch = get_config_value(config, 'benchmark.use_batch', True)
     disable_tracing = get_config_value(config, 'benchmark.disable_tracing', False)
     resume = get_config_value(config, 'benchmark.resume', False)
@@ -788,7 +789,7 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
     
     # Initialize LLM
     llm = initialize_llm(config, model_name, simple_mode=simple_mode)
-    prompt_template = create_climate_prompt(simple_mode, month, with_address)
+    prompt_template = create_climate_prompt(simple_mode, month, with_address, periods)
     
     # Get save interval from config
     save_interval = get_config_value(config, 'batch.save_interval', 10)

@@ -5,16 +5,17 @@
 # Basic benchmark settings
 benchmark:
   mesh_file: "meshes/mesh_data_20.0deg.json"  # Path to mesh data file (used when chunk_mode is false)
-  num_repeats: 1                            # Number of queries per mesh point
+  num_repeats: 10                            # Number of queries per mesh point
   simple_mode: true                         # Simple mode (single month) vs full mode (all months)
   month: "July"                             # Month for simple mode (ignored in full mode)
   with_address: true                        # Include address information in prompts (true) or coordinates only (false)
-  use_batch: false                           # Use batch processing for multiple repeats
-  disable_tracing: true                    # Disable LangSmith tracing for faster processing
+  periods: false                            # Climate change mode: ask for temperature difference between 1950-1974 and 2000-2024 (only works with simple_mode=true)
+  use_batch: true                           # Use batch processing for multiple repeats
+  disable_tracing: false                    # Disable LangSmith tracing for faster processing
   resume: false                             # Resume from latest intermediate file
   
   # Chunk processing settings
-  chunk_mode: true                          # Enable chunk processing mode
+  chunk_mode: false                          # Enable chunk processing mode
   chunks_dir: "meshes/chunks"               # Directory containing chunk files
   chunks_pattern: "mesh_data_20.0deg_chunk_{:02d}_of_{:02d}.json"  # Pattern for chunk files
 
