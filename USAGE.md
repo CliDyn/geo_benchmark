@@ -1,14 +1,13 @@
 # Usage Guide
 
-Complete guide for using the GEO Benchmark framework to evaluate LLM climate prediction performance.
+Usage instructions for the GEO Benchmark framework.
 
-## Workflow Overview
+## Workflow
 
-1. **Generate Mesh** → Create global coordinate grid
-2. **Run LLM Benchmark** → Query LLMs for climate data  
-3. **Complete Analysis Pipeline** → Automated enhancement and visualization
-4. **Individual Analysis** → Custom spatial RMSE, population, bathymetry analysis
-5. **Advanced Visualization** → Clustering, filtering, multivariate modeling
+1. Generate mesh (global coordinate grid)
+2. Run LLM benchmark (query LLMs for climate data)
+3. Analysis pipeline (spatial RMSE, population, bathymetry)
+4. Visualization (temperature maps, clustering, statistical plots)
 
 ## 1. Mesh Generation
 
@@ -38,7 +37,7 @@ python plot_mesh.py meshes/mesh_data_10.0deg.json
 
 ## 2. LLM Climate Benchmarking
 
-Query LLMs for temperature data using configuration-based approach with multi-provider support.
+Query LLMs for temperature data using configuration files. Supports multiple providers.
 
 ### Configuration Setup
 
@@ -216,10 +215,10 @@ python compare_llm_era5.py meshes/mesh_data_10.0deg.json results/climate_results
 - `png/temperature_difference_map_{resolution}deg.png` - Difference map
 
 ### Features
-- **Error bars**: ERA5 climatological uncertainty (horizontal) + LLM variability (vertical)
-- **Statistics**: RMSE, MAE, bias, correlation, request counts
-- **Consistent scaling**: Both maps use ERA5 temperature range
-- **Difference visualization**: Diverging colormap (blue=LLM<ERA5, red=LLM>ERA5)
+- Error bars: ERA5 uncertainty (horizontal) + LLM variability (vertical)
+- Statistics: RMSE, MAE, bias, correlation, request counts
+- Consistent scaling: Both maps use ERA5 temperature range
+- Difference visualization: Blue=LLM<ERA5, red=LLM>ERA5
 
 ## Common Workflows
 
@@ -309,23 +308,22 @@ python climate_llm_benchmark.py
 ## 6. Complete Analysis Pipeline
 
 ### Automated Pipeline
-Run the complete enhancement and visualization workflow in one command:
 ```bash
 # Complete analysis from raw results to all plots
 python run_complete_analysis_pipeline.py results/climate_results_1.0deg_r10_simple.json
 ```
 
-This pipeline automatically:
-1. Extends results with spatial RMSE calculations
-2. Adds bathymetry/elevation data
-3. Adds population density data  
-4. Generates all spatial analysis plots
-5. Creates temperature comparison plots
-6. Generates elevation clustering analysis
-7. Creates population clustering plots
-8. Produces bathymetry maps and comparisons
-9. Builds population maps and correlations
-10. Creates filtered spatial analysis (pop≥5/km², elev≤2000m)
+Pipeline steps:
+1. Spatial RMSE calculations
+2. Bathymetry/elevation data integration
+3. Population density data integration
+4. Spatial analysis plots
+5. Temperature comparison plots
+6. Elevation clustering analysis
+7. Population clustering plots
+8. Bathymetry maps and comparisons
+9. Population maps and correlations
+10. Filtered spatial analysis (pop≥5/km², elev≤2000m)
 
 ### Individual Analysis Steps
 
@@ -376,9 +374,9 @@ python plot_spatial_analysis_filtered.py results/climate_results_1.0deg_r10_simp
 
 #### Multivariate Analysis
 ```bash
-# Comprehensive statistical modeling
+# Statistical modeling
 python multivariate_rmse_analysis.py results/climate_results_1.0deg_r10_simple_spatial_rmse_bathymetry_population.json
-# Outputs: distributions, correlations, GAM/XGBoost (if available), spatial CV
+# Outputs: distributions, correlations, GAM/XGBoost, spatial CV
 ```
 
 ## File Structure

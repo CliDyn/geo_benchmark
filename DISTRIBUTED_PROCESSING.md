@@ -1,16 +1,16 @@
 # Distributed Processing Guide
 
-This guide explains how to use the enhanced distributed processing system for the Climate LLM Benchmark.
+Instructions for distributed processing with the Climate LLM Benchmark.
 
 ## Overview
 
-The system supports a **chunk mode** that enables large-scale distributed processing by splitting meshes into chunks with equal land point distribution. Key benefits include:
+Chunk mode splits meshes into pieces with equal land point distribution. Features:
 
-- **Automatic Load Balancing**: Equal land points per chunk for optimal resource utilization
-- **Zero Configuration Per Chunk**: Set chunk mode once, then specify chunk number via command line
-- **Independent Processing**: Each chunk runs completely independently with separate resume capability
-- **Scalable Parallelism**: Process thousands of points across multiple cores/machines
-- **Fault Tolerance**: Failed chunks don't affect others; easy selective reprocessing
+- Automatic load balancing: Equal land points per chunk
+- Zero configuration per chunk: Set chunk mode once, specify chunk number via command line
+- Independent processing: Each chunk runs independently with separate resume capability
+- Scalable parallelism: Process across multiple cores/machines
+- Fault tolerance: Failed chunks don't affect others
 
 ## Quick Start
 
