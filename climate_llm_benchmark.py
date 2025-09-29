@@ -986,6 +986,7 @@ def main():
     disable_tracing = get_config_value(config, 'benchmark.disable_tracing', False)
     resume = get_config_value(config, 'benchmark.resume', False)
     with_address = get_config_value(config, 'benchmark.with_address', True)
+    periods = get_config_value(config, 'benchmark.periods', False)
     provider = get_config_value(config, 'model.provider', 'openai')
     
     print(f"Climate LLM Benchmark")
