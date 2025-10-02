@@ -96,6 +96,8 @@ def calculate_llm_temp_mean_for_point(result):
     temps = []
     
     for response in result.get('llm_responses', []):
+        if response is None:
+            continue
         parsed_data = response.get('parsed_data', {})
         if 'july_temp_mean' in parsed_data:
             temp = parsed_data['july_temp_mean']
