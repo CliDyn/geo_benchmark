@@ -409,9 +409,9 @@ def create_map_plot(mapping_data, field_name, resolution, colormap='viridis',
         cbar.set_label('MAE (°C)', fontsize=font_size_label, fontfamily=font_family)
     elif 'bias' in field_name.lower():
         cbar.set_label('Bias (°C)', fontsize=font_size_label, fontfamily=font_family)
-        # Set nice rounded ticks for bias colorbar - every 2.5 degrees
+        # Set specific ticks for bias colorbar: min, 0, max
         if bias_range is not None:
-            bias_ticks = np.arange(bias_range[0], bias_range[1] + 0.1, 2.5)  # Every 2.5 degrees: -7.5, -5.0, -2.5, 0, 2.5, 5.0, 7.5
+            bias_ticks = [bias_range[0], 0, bias_range[1]]  # min, 0, max
             cbar.set_ticks(bias_ticks)
             cbar.set_ticklabels([f'{tick:g}°' for tick in bias_ticks], fontsize=font_size_tick, fontfamily=font_family)
     elif is_temp_field:
@@ -598,8 +598,8 @@ def main():
     
     # Bias range configuration for bias maps
     # Change these values to control the color scale for bias fields
-    BIAS_MIN = -7.5  # Minimum bias in °C
-    BIAS_MAX = 7.5   # Maximum bias in °C
+    BIAS_MIN = -2.0  # Minimum bias in °C
+    BIAS_MAX = 2.0   # Maximum bias in °C
     bias_range = (BIAS_MIN, BIAS_MAX)
     
     # RMSE range configuration for RMSE maps
@@ -648,7 +648,7 @@ def main():
     CENTRAL_LONGITUDE = 0      # Central longitude for projection (0=Greenwich, -30=Atlantic-centered, 180=Pacific-centered)
     
     # Color levels configuration
-    COLOR_LEVELS = 21         # Number of color levels for contour plots (more levels = smoother gradients)
+    COLOR_LEVELS = 20         # Number of color levels for contour plots (more levels = smoother gradients)
     #  Available projections:
     #  - 'Robinson' - Robinson projection (good for global views)
     #  - 'PlateCarree' - Equirectangular projection (simple lat/lon grid)
