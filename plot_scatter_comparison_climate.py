@@ -45,6 +45,10 @@ POINT_EDGE_COLOR = 'none' # Edge color around points: 'black', 'white', 'none', 
 POINT_EDGE_WIDTH = 0.3     # Width of edge lines around points (0 = no edge)
 POINT_SIZE = 30            # Size of scatter points
 
+# 1:1 line configuration
+LINE_1TO1_MIN = 0          # Minimum value for 1:1 line (None = auto from data)
+LINE_1TO1_MAX = 3          # Maximum value for 1:1 line (None = auto from data)
+
 
 def extract_comparison_data(results_data):
     """Extract LLM vs ERA5 comparison data from results"""
@@ -77,7 +81,7 @@ def extract_comparison_data(results_data):
     return comparison_data
 
 
-def create_scatter_plot(comparison_data, output_file=None, font_family='Helvetica', font_size_label=12, font_size_tick=10, show_axes=True, show_frame=True, show_left_axis=True, show_right_axis=False, show_top_axis=False, show_bottom_axis=True, colorbar_horizontal=True, colorbar_units=True, colorbar_pad=0.08, colorbar_min=0.0, colorbar_max=0.012, point_color='density', point_edge_color='black', point_edge_width=0.3, point_size=30):
+def create_scatter_plot(comparison_data, output_file=None, font_family='Helvetica', font_size_label=12, font_size_tick=10, show_axes=True, show_frame=True, show_left_axis=True, show_right_axis=False, show_top_axis=False, show_bottom_axis=True, colorbar_horizontal=True, colorbar_units=True, colorbar_pad=0.08, colorbar_min=0.0, colorbar_max=0.012, point_color='density', point_edge_color='black', point_edge_width=0.3, point_size=30, line_1to1_min=None, line_1to1_max=None):
     """Create density-colored scatter plot comparing LLM vs ERA5 with statistical analysis"""
     
     if not comparison_data:
@@ -126,16 +130,26 @@ def create_scatter_plot(comparison_data, output_file=None, font_family='Helvetic
                             color=point_color, edgecolors=edge_colors, linewidth=point_edge_width)
         colorbar_needed = False
     
+    # Determine data range for regression line
+    data_min_temp = min(np.min(llm_vals), np.min(era5_vals))
+    data_max_temp = max(np.max(llm_vals), np.max(era5_vals))
+
     # Add 1:1 line
-    min_temp = min(np.min(llm_vals), np.min(era5_vals))
-    max_temp = max(np.max(llm_vals), np.max(era5_vals))
-    ax.plot([min_temp, max_temp], [min_temp, max_temp], 'r--', alpha=0.8, linewidth=2, 
+    if line_1to1_min is None or line_1to1_max is None:
+        # Auto-determine from data
+        line_min_temp = data_min_temp
+        line_max_temp = data_max_temp
+    else:
+        # Use specified limits
+        line_min_temp = line_1to1_min
+        line_max_temp = line_1to1_max
+    ax.plot([line_min_temp, line_max_temp], [line_min_temp, line_max_temp], 'r--', alpha=0.8, linewidth=2,
             label='1:1 line')
-    
-    # Calculate and add regression line
+
+    # Calculate and add regression line (always uses data range)
     coeffs = np.polyfit(era5_vals, llm_vals, 1)
     regression_line = np.poly1d(coeffs)
-    x_reg = np.linspace(min_temp, max_temp, 100)
+    x_reg = np.linspace(data_min_temp, data_max_temp, 100)
     ax.plot(x_reg, regression_line(x_reg), 'b-', alpha=0.8, linewidth=2, 
             label=f'Regression: y = {coeffs[0]:.3f}x + {coeffs[1]:.2f}')
     
@@ -264,7 +278,7 @@ def main():
     output_file = output_dir / f"pub_f2_scatter_comparison_{resolution}deg.png"
     
     # Create scatter plot
-    fig, stats = create_scatter_plot(comparison_data, output_file, FONT_FAMILY, FONT_SIZE_LABEL, FONT_SIZE_TICK, SHOW_AXES, SHOW_FRAME, SHOW_LEFT_AXIS, SHOW_RIGHT_AXIS, SHOW_TOP_AXIS, SHOW_BOTTOM_AXIS, COLORBAR_HORIZONTAL, COLORBAR_UNITS, COLORBAR_PAD, COLORBAR_MIN, COLORBAR_MAX, POINT_COLOR, POINT_EDGE_COLOR, POINT_EDGE_WIDTH, POINT_SIZE)
+    fig, stats = create_scatter_plot(comparison_data, output_file, FONT_FAMILY, FONT_SIZE_LABEL, FONT_SIZE_TICK, SHOW_AXES, SHOW_FRAME, SHOW_LEFT_AXIS, SHOW_RIGHT_AXIS, SHOW_TOP_AXIS, SHOW_BOTTOM_AXIS, COLORBAR_HORIZONTAL, COLORBAR_UNITS, COLORBAR_PAD, COLORBAR_MIN, COLORBAR_MAX, POINT_COLOR, POINT_EDGE_COLOR, POINT_EDGE_WIDTH, POINT_SIZE, LINE_1TO1_MIN, LINE_1TO1_MAX)
     
     if fig is not None:
         rmse, mae, bias, r_corr = stats
