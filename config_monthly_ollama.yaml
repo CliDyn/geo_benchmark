@@ -1,0 +1,38 @@
+# Monthly mode (all 12 months in ONE query) — open-weight models via Ollama (DKRZ/Levante)
+# Set model.name to one of: gpt-oss:120b | gemma3:27b | mistral-small3.1:24b
+# Run:  python climate_llm_benchmark.py --config config_monthly_ollama.yaml --base_url http://localhost:PORT
+# Mesh: python subsample_mesh.py meshes/mesh_data_1.0deg.json 10   (run once)
+# Output: results/climate_results_1.0deg_r10_<model>_sub10_simple_monthly.json
+
+benchmark:
+  mesh_file: "meshes/mesh_data_1.0deg_sub10.json"
+  num_repeats: 10
+  simple_mode: true
+  monthly: true                # one query -> 12 comma-separated monthly means (Jan..Dec)
+  month: "July"                # ignored in monthly mode
+  with_address: true
+  periods: false
+  use_batch: true
+  disable_tracing: true
+  resume: true
+  chunk_mode: false
+
+model:
+  provider: "ollama"
+  name: "gpt-oss:120b"
+  temperature: null            # null = model/provider default (parameter not sent)
+  max_tokens: 500
+  max_retries: 3
+  timeout: 300
+
+providers:
+  ollama:
+    base_url: "http://localhost:11434"
+    timeout: 300
+
+batch:
+  max_concurrency: 10
+  save_interval: 100
+
+output:
+  results_dir: "results"

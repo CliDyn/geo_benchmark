@@ -1,0 +1,38 @@
+# Monthly mode (all 12 months in ONE query) — GPT-5 via OpenAI API
+# Run:  python climate_llm_benchmark.py --config config_monthly_gpt5.yaml
+# Mesh: python subsample_mesh.py meshes/mesh_data_1.0deg.json 10   (run once)
+# Output: results/climate_results_1.0deg_r10_gpt-5_sub10_simple_monthly.json
+
+benchmark:
+  mesh_file: "meshes/mesh_data_1.0deg_sub10.json"
+  num_repeats: 10
+  simple_mode: true
+  monthly: true                # one query -> 12 comma-separated monthly means (Jan..Dec)
+  month: "July"                # ignored in monthly mode
+  with_address: true
+  periods: false
+  use_batch: true
+  disable_tracing: true
+  resume: true
+  chunk_mode: false
+
+model:
+  provider: "openai"
+  name: "gpt-5"
+  temperature: null            # null = provider default (parameter not sent)
+  max_tokens: 1000             # GPT-5 completion budget includes reasoning tokens
+  max_retries: 3
+  timeout: 300
+
+providers:
+  openai:
+    api_key_env: "OPENAI_API_KEY"
+    base_url: null
+    organization: null
+
+batch:
+  max_concurrency: 10
+  save_interval: 100
+
+output:
+  results_dir: "results"
