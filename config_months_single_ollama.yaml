@@ -1,0 +1,40 @@
+# Single-month protocol check — 12 SEPARATE per-month runs (paper-style prompt),
+# same subsampled mesh, to compare against the one-query monthly mode.
+# Loop over months (each run writes its own file, July keeps legacy suffix-free name):
+#   for M in January February March April May June July August September October November December; do
+#     python climate_llm_benchmark.py --config config_months_single_ollama.yaml --month $M --base_url http://localhost:PORT
+#   done
+# Output: results/climate_results_1.0deg_r10_gemma3_27b_sub10_simple[_<Month>].json
+
+benchmark:
+  mesh_file: "meshes/mesh_data_1.0deg_sub10.json"
+  num_repeats: 10
+  simple_mode: true
+  monthly: false               # classic one-month-per-query prompt
+  month: "July"                # overridden by --month
+  with_address: true
+  periods: false
+  use_batch: true
+  disable_tracing: true
+  resume: true
+  chunk_mode: false
+
+model:
+  provider: "ollama"
+  name: "gemma3:27b"
+  temperature: null            # null = model/provider default (parameter not sent)
+  max_tokens: 500
+  max_retries: 3
+  timeout: 300
+
+providers:
+  ollama:
+    base_url: "http://localhost:11434"
+    timeout: 300
+
+batch:
+  max_concurrency: 10
+  save_interval: 100
+
+output:
+  results_dir: "results"
