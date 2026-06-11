@@ -77,14 +77,15 @@ def configure_langsmith(disable_tracing: bool = False):
     else:
         print("LangSmith tracing enabled (default)")
 
-def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, chunk_id: Optional[str] = None, with_address: bool = True, periods: bool = False, month: str = "July", monthly: bool = False, sub_suffix: str = "") -> Optional[str]:
-    """Find the latest intermediate file for resuming"""
+def find_latest_intermediate_file(resolution: str, simple_mode: bool = False, chunk_id: Optional[str] = None, with_address: bool = True, periods: bool = False, month: str = "July", monthly: bool = False, sub_suffix: str = "", model_name: Optional[str] = None) -> Optional[str]:
+    """Find the latest intermediate file for resuming (keyed on model name to avoid cross-model collisions)"""
     mode_suffix = "_simple" if simple_mode else ""
     month_suffix = build_month_suffix(month, monthly)
     address_suffix = "_noaddress" if not with_address else ""
     periods_suffix = "_climchange" if periods else ""
     chunk_suffix = f"_chunk_{chunk_id}" if chunk_id else ""
-    pattern = f"results/climate_results_intermediate_*{sub_suffix}{chunk_suffix}*{mode_suffix}{month_suffix}{address_suffix}{periods_suffix}.json"
+    model_token = f"_{model_name.replace(':', '_').replace('/', '_').replace('.', '_')}" if model_name else ""
+    pattern = f"results/climate_results_intermediate_*{model_token}{sub_suffix}{chunk_suffix}*{mode_suffix}{month_suffix}{address_suffix}{periods_suffix}.json"
     
     # Find all matching intermediate files
     intermediate_files = glob.glob(pattern)
@@ -860,7 +861,7 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
     start_index = 0
     
     if resume:
-        latest_file = find_latest_intermediate_file(resolution, simple_mode, chunk_id, with_address, periods, month=month, monthly=monthly, sub_suffix=sub_suffix)
+        latest_file = find_latest_intermediate_file(resolution, simple_mode, chunk_id, with_address, periods, month=month, monthly=monthly, sub_suffix=sub_suffix, model_name=model_name)
         if latest_file:
             results, saved_mesh_data, start_index = load_intermediate_results(latest_file)
             print(f"Resuming from intermediate file: {latest_file}")

@@ -14,7 +14,7 @@ benchmark:
   month: "July"                # overridden by --month
   with_address: true
   periods: false
-  use_batch: true
+  use_batch: false
   disable_tracing: true
   resume: true
   chunk_mode: false
@@ -34,7 +34,7 @@ providers:
 
 batch:
   max_concurrency: 10
-  save_interval: 100
+  save_interval: 50
 
 output:
   results_dir: "results"

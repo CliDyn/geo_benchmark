@@ -8,7 +8,14 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from climate_llm_benchmark import validate_and_parse_response, format_progress
+import shutil
+import tempfile
+
+from climate_llm_benchmark import (
+    validate_and_parse_response,
+    format_progress,
+    find_latest_intermediate_file,
+)
 from subsample_mesh import subsample_land_points
 
 TWELVE = [-3.25, -1.87, 4.12, 9.65, 15.32, 19.78, 22.41, 21.93, 16.55, 10.02, 3.41, -1.96]
@@ -83,6 +90,51 @@ def test_progress_resume_shows_real_start_point():
 def test_progress_handles_zero_total_without_error():
     line = format_progress(start_index=0, done=0, total=0, successful_queries=0)
     assert "0/0" in line              # no ZeroDivisionError
+
+
+def _make_intermediates(names):
+    tmp = tempfile.mkdtemp()
+    os.makedirs(os.path.join(tmp, "results"))
+    for n in names:
+        open(os.path.join(tmp, "results", n), "w").close()
+    return tmp
+
+
+def test_resume_keys_on_model_name_not_other_models_checkpoint():
+    tmp = _make_intermediates([
+        "climate_results_intermediate_1500_gemma3_27b_sub10_simple_monthly.json",
+        "climate_results_intermediate_200_mistral-small3_1_24b_sub10_simple_monthly.json",
+    ])
+    prev = os.getcwd()
+    try:
+        os.chdir(tmp)
+        got = find_latest_intermediate_file(
+            "1.0", simple_mode=True, with_address=True, periods=False,
+            month="July", monthly=True, sub_suffix="_sub10",
+            model_name="mistral-small3.1:24b",
+        )
+        assert got and "mistral" in got and "gemma" not in got, got
+    finally:
+        os.chdir(prev)
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_resume_returns_none_when_no_checkpoint_for_this_model():
+    tmp = _make_intermediates([
+        "climate_results_intermediate_1500_gemma3_27b_sub10_simple_monthly.json",
+    ])
+    prev = os.getcwd()
+    try:
+        os.chdir(tmp)
+        got = find_latest_intermediate_file(
+            "1.0", simple_mode=True, with_address=True, periods=False,
+            month="July", monthly=True, sub_suffix="_sub10",
+            model_name="gpt-oss:120b",
+        )
+        assert got is None, got
+    finally:
+        os.chdir(prev)
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def _toy_mesh(n_points=35):
