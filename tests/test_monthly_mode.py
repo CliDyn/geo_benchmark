@@ -8,7 +8,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from climate_llm_benchmark import validate_and_parse_response
+from climate_llm_benchmark import validate_and_parse_response, format_progress
 from subsample_mesh import subsample_land_points
 
 TWELVE = [-3.25, -1.87, 4.12, 9.65, 15.32, 19.78, 22.41, 21.93, 16.55, 10.02, 3.41, -1.96]
@@ -63,6 +63,26 @@ def test_single_month_july_unchanged():
 def test_single_month_february_key():
     result = validate_and_parse_response("-11.3", simple_mode=True, month="February")
     assert result == {"february_temp_mean": -11.3}, f"unexpected result: {result}"
+
+
+def test_progress_fresh_start_shows_point_1_and_percent():
+    line = format_progress(start_index=0, done=100, total=1540, successful_queries=950)
+    assert "100/1540" in line
+    assert "6.5%" in line
+    assert "point 1" in line          # this run started at point 1
+    assert "950" in line
+
+
+def test_progress_resume_shows_real_start_point():
+    line = format_progress(start_index=500, done=600, total=1540, successful_queries=5800)
+    assert "600/1540" in line
+    assert "point 501" in line        # resumed at land point 501
+    assert "5800" in line
+
+
+def test_progress_handles_zero_total_without_error():
+    line = format_progress(start_index=0, done=0, total=0, successful_queries=0)
+    assert "0/0" in line              # no ZeroDivisionError
 
 
 def _toy_mesh(n_points=35):

@@ -513,6 +513,14 @@ def parse_monthly_response(response_text: str) -> Optional[Dict]:
     return {"monthly_temp_mean": values}
 
 
+def format_progress(start_index: int, done: int, total: int, successful_queries: int) -> str:
+    """One-line progress summary for periodic logging during a run."""
+    pct = (done / total * 100) if total else 0.0
+    return (f"[progress] {done}/{total} points ({pct:.1f}%) | "
+            f"this run started at point {start_index + 1} | "
+            f"{successful_queries} successful queries so far")
+
+
 def build_month_suffix(month: str, monthly: bool) -> str:
     """Filename token: '_monthly' for all-months mode, '_<Month>' for non-July single months.
        July keeps the legacy suffix-free naming used by all existing result files."""
@@ -868,7 +876,11 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
     
     # Get save interval from config
     save_interval = get_config_value(config, 'batch.save_interval', 10)
-    
+
+    print(f"\n=== Run starts at land point {start_index + 1}/{len(land_points)} "
+          f"({len(land_points) - start_index} points to process, {num_repeats} repeats each, "
+          f"progress every {save_interval}) ===")
+
     # Process each land point (starting from start_index if resuming)
     for i, point_data in enumerate(land_points[start_index:], start=start_index):
         print(f"\nProcessing land point {i+1}/{len(land_points)}: ({point_data['lat']:.1f}, {point_data['lon']:.1f})")
@@ -917,7 +929,10 @@ def process_climate_benchmark(config: Dict, mesh_file: str = None):
             # Create results directory if it doesn't exist
             Path(intermediate_file).parent.mkdir(parents=True, exist_ok=True)
             save_results(results, mesh_data, intermediate_file, model_name, simple_mode, month, use_batch, periods, monthly=monthly, temperature=gen_temperature)
-    
+
+            successful_queries = sum(1 for r in results for resp in r['llm_responses'] if resp)
+            print(format_progress(start_index, i + 1, len(land_points), successful_queries))
+
     return results, mesh_data
 
 def save_results(results: List[Dict], mesh_data: Dict, output_file: str, model_name: str, simple_mode: bool = False, month: str = "July", use_batch: bool = True, periods: bool = False, monthly: bool = False, temperature=0):
