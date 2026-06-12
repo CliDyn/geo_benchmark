@@ -146,23 +146,41 @@ def make_plots(results_data, stats, model, out_prefix):
     era5 = np.array([r["point_info"]["era5_monthly_mean"] for r in results])
     land = _land_boundary()
 
-    # 1) seasonal RMSE / bias
+    months = range(1, 13)
+    labels = [m[:3] for m in MONTHS]
     rmse = [s["rmse"] for s in stats["per_month"]]
     bias = [s["bias"] for s in stats["per_month"]]
+
+    # 1a) RMSE per month
     fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(range(1, 13), rmse, "o-", label="RMSE", color="tab:red")
-    ax.plot(range(1, 13), bias, "s--", label="Bias", color="tab:blue")
-    ax.axhline(0, color="gray", lw=0.8)
+    ax.plot(months, rmse, "o-", color="tab:red")
     ax.axhline(stats["annual"]["rmse"], color="tab:red", ls=":", alpha=0.6,
                label=f"Annual RMSE={stats['annual']['rmse']:.2f}")
-    ax.set_xticks(range(1, 13))
-    ax.set_xticklabels([m[:3] for m in MONTHS])
-    ax.set_ylabel("°C")
-    ax.set_title(f"Monthly LLM−ERA5: {model}")
+    ax.set_xticks(months)
+    ax.set_xticklabels(labels)
+    ax.set_ylabel("RMSE (°C)")
+    ax.set_ylim(bottom=0)
+    ax.set_title(f"Monthly RMSE (LLM vs ERA5): {model}")
     ax.legend()
     ax.grid(alpha=0.3)
     fig.tight_layout()
-    fig.savefig(f"png/{out_prefix}_seasonal_rmse.png", dpi=200, bbox_inches="tight")
+    fig.savefig(f"png/{out_prefix}_rmse.png", dpi=200, bbox_inches="tight")
+    plt.close(fig)
+
+    # 1b) bias per month
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(months, bias, "s-", color="tab:blue")
+    ax.axhline(0, color="gray", lw=0.8)
+    ax.axhline(stats["annual"]["bias"], color="tab:blue", ls=":", alpha=0.6,
+               label=f"Annual bias={stats['annual']['bias']:+.2f}")
+    ax.set_xticks(months)
+    ax.set_xticklabels(labels)
+    ax.set_ylabel("Bias, LLM − ERA5 (°C)")
+    ax.set_title(f"Monthly bias: {model}")
+    ax.legend()
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(f"png/{out_prefix}_bias.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
 
     # 2) pooled scatter LLM vs ERA5
@@ -210,7 +228,7 @@ def make_plots(results_data, stats, model, out_prefix):
     fig.savefig(f"png/{out_prefix}_diff_maps.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
 
-    print(f"Saved png/{out_prefix}_seasonal_rmse.png, _scatter.png, _diff_maps.png")
+    print(f"Saved png/{out_prefix}_rmse.png, _bias.png, _scatter.png, _diff_maps.png")
 
 
 # ---------------------------------------------------------------- main
