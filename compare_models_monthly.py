@@ -145,6 +145,28 @@ def _overlay(ax, overlays, key, colors):
                 label=f"{ov['model']} {MONTHS3[ov['month'] - 1]} single-month")
 
 
+# Published paper values (Table 1, July, full grid): (RMSE, bias)
+PAPER_JULY = {
+    "gpt-5": (3.49, 0.88),
+    "gpt-oss:120b": (4.03, -0.38),
+    "mistral-small3.1:24b": (4.07, 1.00),
+    "gemma3:27b": (4.49, 1.34),
+}
+
+
+def _paper_crosses(ax, series, idx, colors):
+    """Paper July values as crosses at x=July in each model's line colour."""
+    plotted = False
+    for model, _ in series:
+        if model in PAPER_JULY:
+            ax.plot(7, PAPER_JULY[model][idx], "x", markersize=11, markeredgewidth=2.5,
+                    color=colors.get(model, "black"))
+            plotted = True
+    if plotted:
+        ax.plot([], [], "x", color="0.3", markersize=10, markeredgewidth=2.5,
+                label="paper July (Table 1, full grid)")
+
+
 def make_plots(series, ref_per_month, ref_annual, overlays=None):
     import matplotlib
     matplotlib.use("Agg")
@@ -165,6 +187,7 @@ def make_plots(series, ref_per_month, ref_annual, overlays=None):
         ax.plot(months, ref_per_month, "k--", lw=2,
                 label=f"ERA5 interannual variability  (annual {ref_annual:.2f})")
     _overlay(ax, overlays, "rmse", colors)
+    _paper_crosses(ax, series, 0, colors)
     ax.set_xticks(months)
     ax.set_xticklabels(MONTHS3)
     ax.set_ylabel("RMSE (°C)")
@@ -185,6 +208,7 @@ def make_plots(series, ref_per_month, ref_annual, overlays=None):
                         label=f"{model}  (annual {stats['annual']['bias']:+.2f})")
         colors[model] = line.get_color()
     _overlay(ax, overlays, "bias", colors)
+    _paper_crosses(ax, series, 1, colors)
     ax.set_xticks(months)
     ax.set_xticklabels(MONTHS3)
     ax.set_ylabel("Bias, LLM − ERA5 (°C)")
