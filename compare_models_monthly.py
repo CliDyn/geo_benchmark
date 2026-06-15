@@ -126,6 +126,7 @@ def make_plots(series, ref_per_month, ref_annual):
 
     # Bias
     fig, ax = plt.subplots(figsize=(11, 5.5))
+    ax.axhline(0, color="gray", lw=0.8)
     for model, stats in series:
         bias = [s["bias"] for s in stats["per_month"]]
         ax.plot(months, bias, "s-", label=f"{model}  (annual {stats['annual']['bias']:+.2f})")
@@ -135,7 +136,6 @@ def make_plots(series, ref_per_month, ref_annual):
     ax.set_xticks(months)
     ax.set_xticklabels(MONTHS3)
     ax.set_ylabel("Bias, LLM − ERA5 (°C)")
-    ax.set_ylim(bottom=0)
     ax.set_title("Monthly bias vs ERA5")
     ax.legend()
     ax.grid(alpha=0.3)
