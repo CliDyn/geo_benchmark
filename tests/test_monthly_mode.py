@@ -15,6 +15,7 @@ from climate_llm_benchmark import (
     validate_and_parse_response,
     format_progress,
     find_latest_intermediate_file,
+    build_month_suffix,
 )
 from subsample_mesh import subsample_land_points
 
@@ -135,6 +136,19 @@ def test_resume_returns_none_when_no_checkpoint_for_this_model():
     finally:
         os.chdir(prev)
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_month_suffix_july_gets_named_in_single_month_mode():
+    assert build_month_suffix("July", monthly=False) == "_July"
+
+
+def test_month_suffix_other_single_months():
+    assert build_month_suffix("April", monthly=False) == "_April"
+    assert build_month_suffix("October", monthly=False) == "_October"
+
+
+def test_month_suffix_monthly_mode_ignores_month():
+    assert build_month_suffix("July", monthly=True) == "_monthly"
 
 
 def _toy_mesh(n_points=35):

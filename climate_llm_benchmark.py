@@ -523,11 +523,11 @@ def format_progress(start_index: int, done: int, total: int, successful_queries:
 
 
 def build_month_suffix(month: str, monthly: bool) -> str:
-    """Filename token: '_monthly' for all-months mode, '_<Month>' for non-July single months.
-       July keeps the legacy suffix-free naming used by all existing result files."""
+    """Filename token: '_monthly' for all-months mode, '_<Month>' for a single month
+       (every month, including July, is named explicitly)."""
     if monthly:
         return "_monthly"
-    return "" if month == "July" else f"_{month}"
+    return f"_{month}"
 
 
 def validate_and_parse_response(
