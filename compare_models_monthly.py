@@ -130,9 +130,6 @@ def make_plots(series, ref_per_month, ref_annual):
     for model, stats in series:
         bias = [s["bias"] for s in stats["per_month"]]
         ax.plot(months, bias, "s-", label=f"{model}  (annual {stats['annual']['bias']:+.2f})")
-    if ref_per_month is not None:
-        ax.plot(months, ref_per_month, "k--", lw=2,
-                label=f"ERA5 interannual variability  (annual {ref_annual:.2f})")
     ax.set_xticks(months)
     ax.set_xticklabels(MONTHS3)
     ax.set_ylabel("Bias, LLM − ERA5 (°C)")
