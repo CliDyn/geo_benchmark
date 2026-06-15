@@ -6,7 +6,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from compare_models_monthly import anomaly_rmse_per_month
+from compare_models_monthly import anomaly_rmse_per_month, rmse_bias
 
 
 def test_anomaly_rmse_single_month_deviation():
@@ -28,6 +28,18 @@ def test_anomaly_rmse_pools_over_points_and_years():
     per_month, annual = anomaly_rmse_per_month(vals)
     assert np.isclose(per_month[6], 3.0)
     assert np.isclose(annual, np.sqrt((4 * 9.0) / (2 * 2 * 12)))
+
+
+def test_rmse_bias_basic():
+    rmse, bias = rmse_bias([3.0, -3.0])
+    assert np.isclose(rmse, 3.0)
+    assert np.isclose(bias, 0.0)
+
+
+def test_rmse_bias_skips_none_and_nan():
+    rmse, bias = rmse_bias([2.0, None, float("nan"), 4.0])
+    assert np.isclose(rmse, np.sqrt((4 + 16) / 2))
+    assert np.isclose(bias, 3.0)
 
 
 if __name__ == "__main__":

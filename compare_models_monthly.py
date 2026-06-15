@@ -8,8 +8,12 @@ carrying metadata['monthly_statistics']). The ERA5 reference is the RMS of each
 year's deviation from the 30-year (1991-2020) per-point mean, sampled at the same
 points as the LLM answers, from the raw monthly file.
 
+Single-month protocol-validation results can be overlaid as unconnected circles
+(in each model's line colour) with --point <single_month_era5.json>.
+
 Usage:
-    python compare_models_monthly.py A_era5.json B_era5.json [...] [--kurz data/...kurz.nc]
+    python compare_models_monthly.py A_era5.json B_era5.json [...] \
+        [--point single_month_era5.json] [--kurz data/...kurz.nc]
 Outputs:
     png/monthly_compare_rmse.png  (RMSE line per model + dashed ERA5 reference)
     png/monthly_compare_bias.png  (bias line per model + grey +-ERA5 corridor)
@@ -95,24 +99,72 @@ def load_points(path):
     return np.array(lats), np.array(lons)
 
 
+MONTH_NUM = {"january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+             "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12}
+
+
+def rmse_bias(diffs):
+    """RMSE and bias (mean) from a list of LLM-minus-ERA5 differences (skips None/NaN)."""
+    d = np.array([x for x in diffs if x is not None and np.isfinite(x)], dtype=float)
+    if d.size == 0:
+        return float("nan"), float("nan")
+    return float(np.sqrt(np.mean(d ** 2))), float(np.mean(d))
+
+
+def load_single_month(path):
+    """A single-month enriched file (_era5.json from add_era5_to_results.py) ->
+    {model, month(1-12), rmse, bias, n}."""
+    with open(path) as f:
+        d = json.load(f)
+    meta = d.get("metadata", {})
+    model = meta.get("model_used", Path(path).stem)
+    mon = str(meta.get("month_processed") or meta.get("month") or "").lower()
+    if mon not in MONTH_NUM:                      # fall back to the parsed key
+        for r in d["results"]:
+            for resp in r.get("llm_responses", []):
+                if resp and "parsed_data" in resp:
+                    k = next((k for k in resp["parsed_data"] if k.endswith("_temp_mean")), None)
+                    if k:
+                        mon = k.split("_")[0]
+                        break
+            if mon in MONTH_NUM:
+                break
+    diffs = [r["point_info"].get("temp_difference") for r in d["results"]]
+    rmse, bias = rmse_bias(diffs)
+    n = sum(1 for x in diffs if x is not None and np.isfinite(x))
+    return {"model": model, "month": MONTH_NUM[mon], "rmse": rmse, "bias": bias, "n": n}
+
+
 # ---------------------------------------------------------------- plots
 
-def make_plots(series, ref_per_month, ref_annual):
+def _overlay(ax, overlays, key, colors):
+    """Single-month results as unconnected open circles in each model's line colour."""
+    for ov in overlays:
+        ax.plot(ov["month"], ov[key], "o", markersize=11, markerfacecolor="none",
+                markeredgewidth=2.2, color=colors.get(ov["model"], "black"),
+                label=f"{ov['model']} {MONTHS3[ov['month'] - 1]} single-month")
+
+
+def make_plots(series, ref_per_month, ref_annual, overlays=None):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
     Path("png").mkdir(exist_ok=True)
     months = range(1, 13)
+    overlays = overlays or []
 
     # RMSE
     fig, ax = plt.subplots(figsize=(11, 5.5))
+    colors = {}
     for model, stats in series:
-        rmse = [s["rmse"] for s in stats["per_month"]]
-        ax.plot(months, rmse, "o-", label=f"{model}  (annual {stats['annual']['rmse']:.2f})")
+        line, = ax.plot(months, [s["rmse"] for s in stats["per_month"]], "o-",
+                        label=f"{model}  (annual {stats['annual']['rmse']:.2f})")
+        colors[model] = line.get_color()
     if ref_per_month is not None:
         ax.plot(months, ref_per_month, "k--", lw=2,
                 label=f"ERA5 interannual variability  (annual {ref_annual:.2f})")
+    _overlay(ax, overlays, "rmse", colors)
     ax.set_xticks(months)
     ax.set_xticklabels(MONTHS3)
     ax.set_ylabel("RMSE (°C)")
@@ -127,9 +179,12 @@ def make_plots(series, ref_per_month, ref_annual):
     # Bias
     fig, ax = plt.subplots(figsize=(11, 5.5))
     ax.axhline(0, color="gray", lw=0.8)
+    colors = {}
     for model, stats in series:
-        bias = [s["bias"] for s in stats["per_month"]]
-        ax.plot(months, bias, "s-", label=f"{model}  (annual {stats['annual']['bias']:+.2f})")
+        line, = ax.plot(months, [s["bias"] for s in stats["per_month"]], "s-",
+                        label=f"{model}  (annual {stats['annual']['bias']:+.2f})")
+        colors[model] = line.get_color()
+    _overlay(ax, overlays, "bias", colors)
     ax.set_xticks(months)
     ax.set_xticklabels(MONTHS3)
     ax.set_ylabel("Bias, LLM − ERA5 (°C)")
@@ -149,10 +204,14 @@ def main():
     argv = sys.argv[1:]
     kurz_file = DEFAULT_KURZ
     files = []
+    point_files = []
     i = 0
     while i < len(argv):
         if argv[i] == "--kurz":
             kurz_file = argv[i + 1]
+            i += 2
+        elif argv[i] == "--point":
+            point_files.append(argv[i + 1])
             i += 2
         else:
             files.append(argv[i])
@@ -179,7 +238,12 @@ def main():
         print(f"NOTE: {kurz_file} not found -> plotting without ERA5 reference "
               f"(gunzip {kurz_file}.gz first).")
 
-    make_plots(series, ref_per_month, ref_annual)
+    overlays = [load_single_month(p) for p in point_files]
+    for ov in overlays:
+        print(f"  single-month point: {ov['model']} month={ov['month']} "
+              f"RMSE {ov['rmse']:.2f} bias {ov['bias']:+.2f} (n={ov['n']})")
+
+    make_plots(series, ref_per_month, ref_annual, overlays=overlays)
     for model, stats in series:
         print(f"  {model}: annual RMSE {stats['annual']['rmse']:.2f}, "
               f"bias {stats['annual']['bias']:+.2f}, corr {stats['annual']['corr']:.3f}")
