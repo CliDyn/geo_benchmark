@@ -116,7 +116,7 @@ def make_plots(results):
     x = np.arange(len(results))
 
     # Fig A: RMSE (a, top) and bias (b, bottom), stacked — square=temp 0, triangle=0.3, circle=default
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6.8, 7.6), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6.8, 4.0), sharex=True)
     for ax, idx, ylab, panel in [(ax1, 0, "RMSE (°C)", "(a)"), (ax2, 1, "Bias, LLM − ERA5 (°C)", "(b)")]:
         for i, r in enumerate(results):
             if "T=0" in r["old"]:
