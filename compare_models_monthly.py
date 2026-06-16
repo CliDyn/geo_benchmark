@@ -168,7 +168,7 @@ def make_plots(series, ref_per_month, ref_annual, overlays=None):
         ("bias", "s-", "Bias, LLM − ERA5 (°C)", "png/monthly_compare_bias.png", False),
     ]
     for key, fmt, ylab, outfile, is_rmse in panels:
-        fig, ax = plt.subplots(figsize=(8.0, 4.6))
+        fig, ax = plt.subplots(figsize=(6.8, 4.3))
         if not is_rmse:
             ax.axhline(0, color="gray", lw=0.8)
         colors = {}
