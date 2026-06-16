@@ -23,7 +23,7 @@ from pathlib import Path
 
 import numpy as np
 
-from compare_models_monthly import rmse_bias
+from compare_models_monthly import rmse_bias, FONT_FAMILY, FS_LABEL, FS_TICK, FS_TITLE, FS_LEGEND, DPI
 
 ERA5 = "data/t2m_climatology_1991-2020.nc"
 SUB10 = "meshes/mesh_data_1.0deg_sub10.json"
@@ -109,37 +109,39 @@ def make_plots(results):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    plt.rcParams.update({"font.family": FONT_FAMILY, "font.size": FS_TICK})
 
     Path("png").mkdir(exist_ok=True)
     names = [r["name"] for r in results]
     x = np.arange(len(results))
 
-    # Fig A: RMSE / bias per model — old T=0 (square), old T=0.3 (triangle), new (open circle)
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5.5))
-    for ax, idx, ylab in [(ax1, 0, "RMSE (°C)"), (ax2, 1, "Bias, LLM − ERA5 (°C)")]:
+    # Fig A: RMSE (a, top) and bias (b, bottom), stacked — square=temp 0, triangle=0.3, circle=default
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6.8, 7.6), sharex=True)
+    for ax, idx, ylab, panel in [(ax1, 0, "RMSE (°C)", "(a)"), (ax2, 1, "Bias, LLM − ERA5 (°C)", "(b)")]:
         for i, r in enumerate(results):
             if "T=0" in r["old"]:
                 ax.plot(i - 0.16, r["old"]["T=0"][idx], "s", color=r["color"], markersize=9)
             if "T=0.3" in r["old"]:
                 ax.plot(i, r["old"]["T=0.3"][idx], "^", color=r["color"], markersize=9)
             if r["new"]:
-                ax.plot(i + 0.16, r["new"][idx], "o", color=r["color"], markersize=12,
-                        markerfacecolor="none", markeredgewidth=2.4)
-        ax.set_xticks(x)
-        ax.set_xticklabels([n.replace(":", "\n") for n in names], fontsize=9)
-        ax.set_ylabel(ylab)
+                ax.plot(i + 0.16, r["new"][idx], "o", color=r["color"], markersize=11,
+                        markerfacecolor="none", markeredgewidth=2.0)
+        ax.set_ylabel(ylab, fontsize=FS_LABEL)
+        ax.tick_params(labelsize=FS_TICK)
         ax.grid(alpha=0.3, axis="y")
+        ax.text(0.012, 0.96, panel, transform=ax.transAxes, fontsize=FS_TITLE,
+                fontweight="bold", va="top", ha="left")
         if idx == 1:
             ax.axhline(0, color="gray", lw=0.8)
-    ax1.set_ylim(bottom=0)
-    for marker, lab in [("ks", "T=0"), ("k^", "T=0.3")]:
+    ax2.set_xticks(x)
+    ax2.set_xticklabels([n.replace(":", "\n") for n in names], fontsize=FS_TICK)
+    for marker, lab in [("ks", "temperature = 0"), ("k^", "temperature = 0.3")]:
         ax1.plot([], [], marker, label=lab)
-    ax1.plot([], [], "o", markerfacecolor="none", markeredgecolor="k", markeredgewidth=2.4,
-             label="default")
-    ax1.legend()
-    fig.suptitle("July (sub10, 1540 points): RMSE and bias by generation temperature")
+    ax1.plot([], [], "o", markerfacecolor="none", markeredgecolor="k", markeredgewidth=2.0,
+             label="temperature = default")
+    ax1.legend(fontsize=FS_LEGEND)
     fig.tight_layout()
-    fig.savefig("png/temperature_july_rmse_bias.png", dpi=200, bbox_inches="tight")
+    fig.savefig("png/temperature_july_rmse_bias.png", dpi=DPI, bbox_inches="tight")
     plt.close(fig)
 
     # Fig B: per-point old-LLM vs new-LLM (models that have a new run)

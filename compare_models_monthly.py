@@ -29,6 +29,11 @@ MONTHS3 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 DEFAULT_KURZ = "data/data_stream-moda_stepType-avgua_kurz.nc"
 DEFAULT_CLIM = "data/t2m_climatology_1991-2020.nc"
 
+# Publication style (matches the paper's plot scripts: Helvetica, label 12 / tick 10, lw 2, 300 dpi)
+FONT_FAMILY = "Helvetica"
+FS_LABEL, FS_TICK, FS_TITLE, FS_LEGEND = 12, 10, 13, 9
+LW, DPI = 2, 300
+
 
 # ---------------------------------------------------------------- pure core
 
@@ -141,62 +146,53 @@ def _overlay(ax, overlays, key, colors):
     """Single-month results as unconnected open circles in each model's line colour.
        One shared legend entry (colour already encodes the model)."""
     for ov in overlays:
-        ax.plot(ov["month"], ov[key], "o", markersize=11, markerfacecolor="none",
-                markeredgewidth=2.2, color=colors.get(ov["model"], "black"))
+        ax.plot(ov["month"], ov[key], "o", markersize=8, markerfacecolor="none",
+                markeredgewidth=1.7, color=colors.get(ov["model"], "black"))
     if overlays:
         ax.plot([], [], "o", markerfacecolor="none", markeredgecolor="0.3",
-                markersize=11, markeredgewidth=2.2, label="single-month run")
+                markersize=8, markeredgewidth=1.7, label="single-month run")
 
 
 def make_plots(series, ref_per_month, ref_annual, overlays=None):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    plt.rcParams.update({"font.family": FONT_FAMILY, "font.size": FS_TICK})
 
     Path("png").mkdir(exist_ok=True)
     months = range(1, 13)
     overlays = overlays or []
 
-    # RMSE
-    fig, ax = plt.subplots(figsize=(11, 5.5))
-    colors = {}
-    for model, stats in series:
-        line, = ax.plot(months, [s["rmse"] for s in stats["per_month"]], "o-",
-                        label=f"{model}  (annual {stats['annual']['rmse']:.2f})")
-        colors[model] = line.get_color()
-    if ref_per_month is not None:
-        ax.plot(months, ref_per_month, "k--", lw=2,
-                label=f"ERA5 interannual variability  (annual {ref_annual:.2f})")
-    _overlay(ax, overlays, "rmse", colors)
-    ax.set_xticks(months)
-    ax.set_xticklabels(MONTHS3)
-    ax.set_ylabel("RMSE (°C)")
-    ax.set_ylim(bottom=0)
-    ax.set_title("Monthly RMSE vs ERA5")
-    ax.legend()
-    ax.grid(alpha=0.3)
-    fig.tight_layout()
-    fig.savefig("png/monthly_compare_rmse.png", dpi=200, bbox_inches="tight")
-    plt.close(fig)
-
-    # Bias
-    fig, ax = plt.subplots(figsize=(11, 5.5))
-    ax.axhline(0, color="gray", lw=0.8)
-    colors = {}
-    for model, stats in series:
-        line, = ax.plot(months, [s["bias"] for s in stats["per_month"]], "s-",
-                        label=f"{model}  (annual {stats['annual']['bias']:+.2f})")
-        colors[model] = line.get_color()
-    _overlay(ax, overlays, "bias", colors)
-    ax.set_xticks(months)
-    ax.set_xticklabels(MONTHS3)
-    ax.set_ylabel("Bias, LLM − ERA5 (°C)")
-    ax.set_title("Monthly bias vs ERA5")
-    ax.legend()
-    ax.grid(alpha=0.3)
-    fig.tight_layout()
-    fig.savefig("png/monthly_compare_bias.png", dpi=200, bbox_inches="tight")
-    plt.close(fig)
+    panels = [
+        ("rmse", "o-", "RMSE (°C)", "png/monthly_compare_rmse.png", True),
+        ("bias", "s-", "Bias, LLM − ERA5 (°C)", "png/monthly_compare_bias.png", False),
+    ]
+    for key, fmt, ylab, outfile, is_rmse in panels:
+        fig, ax = plt.subplots(figsize=(8.0, 4.6))
+        if not is_rmse:
+            ax.axhline(0, color="gray", lw=0.8)
+        colors = {}
+        for model, stats in series:
+            a = stats["annual"][key]
+            astr = f"{a:+.2f}" if key == "bias" else f"{a:.2f}"
+            line, = ax.plot(months, [s[key] for s in stats["per_month"]], fmt,
+                            linewidth=LW, markersize=5, label=f"{model}  (annual {astr})")
+            colors[model] = line.get_color()
+        if is_rmse and ref_per_month is not None:
+            ax.plot(months, ref_per_month, "k--", lw=LW,
+                    label=f"ERA5 interannual variability  (annual {ref_annual:.2f})")
+        _overlay(ax, overlays, key, colors)
+        ax.set_xticks(months)
+        ax.set_xticklabels(MONTHS3)
+        ax.set_ylabel(ylab, fontsize=FS_LABEL)
+        if is_rmse:
+            ax.set_ylim(bottom=0)
+        ax.tick_params(labelsize=FS_TICK)
+        ax.legend(fontsize=FS_LEGEND)
+        ax.grid(alpha=0.3)
+        fig.tight_layout()
+        fig.savefig(outfile, dpi=DPI, bbox_inches="tight")
+        plt.close(fig)
 
     print("Saved png/monthly_compare_rmse.png, png/monthly_compare_bias.png")
 
