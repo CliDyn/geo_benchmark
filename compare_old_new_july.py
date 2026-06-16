@@ -33,7 +33,7 @@ MODELS = [
     {"name": "gpt-oss:120b", "color": "C1",
      "old": {"T=0": R + "gpt-oss_120b_combined_simple.json.gz",
              "T=0.3": R + "gpt-oss_120b_temp03_simple.json.gz"},
-     "new": None},                                                     # no new single-month July yet
+     "new": R + "gpt-oss_120b_sub10_simple_July_era5.json"},
     {"name": "mistral-small3.1:24b", "color": "C2",
      "old": {"T=0": R + "mistral-small3_1_24b_simple.json.gz",
              "T=0.3": R + "mistral-small3_1_24b_simple_temp03.json.gz"},
