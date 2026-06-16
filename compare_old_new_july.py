@@ -8,9 +8,12 @@ subset of the 1deg grid), the 10 repeats are averaged, and ERA5-July
 nearest-neighbour is subtracted (same postprocessing as the paper). The new side
 reuses the already-postprocessed single-month July `_era5.json` files.
 
+Framed as a generation-temperature comparison: T=0 (old _simple), T=0.3 (old _temp03),
+default (the new provider-default-temperature single-month July runs).
+
 Outputs:
-    png/old_new_july_rmse_bias.png  per-model RMSE & bias: old T=0, old T=0.3, new
-    png/old_new_july_scatter.png    per-point old-LLM vs new-LLM July temperature
+    png/temperature_july_rmse_bias.png  per-model RMSE & bias: T=0, T=0.3, default
+    png/temperature_july_scatter.png    per-point July LLM temperature, T=0.3 vs default
 
 Run: python compare_old_new_july.py
 """
@@ -129,14 +132,14 @@ def make_plots(results):
         if idx == 1:
             ax.axhline(0, color="gray", lw=0.8)
     ax1.set_ylim(bottom=0)
-    for marker, lab in [("ks", "old T=0"), ("k^", "old T=0.3")]:
+    for marker, lab in [("ks", "T=0"), ("k^", "T=0.3")]:
         ax1.plot([], [], marker, label=lab)
     ax1.plot([], [], "o", markerfacecolor="none", markeredgecolor="k", markeredgewidth=2.4,
-             label="new single-month July")
+             label="default")
     ax1.legend()
-    fig.suptitle("July: old full-grid (subset to sub10 points) vs new sub10")
+    fig.suptitle("July (sub10, 1540 points): RMSE and bias by generation temperature")
     fig.tight_layout()
-    fig.savefig("png/old_new_july_rmse_bias.png", dpi=200, bbox_inches="tight")
+    fig.savefig("png/temperature_july_rmse_bias.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
 
     # Fig B: per-point old-LLM vs new-LLM (models that have a new run)
@@ -154,16 +157,16 @@ def make_plots(results):
         lo, hi = min(xo.min(), yn.min()), max(xo.max(), yn.max())
         ax.plot([lo, hi], [lo, hi], "r--", lw=1.5, label="1:1")
         rb = rmse_bias(yn - xo)
-        ax.set_title(f"{r['name']}\nold {tag} vs new:  RMSD={rb[0]:.2f}, mean Δ={rb[1]:+.2f} °C", fontsize=10)
-        ax.set_xlabel(f"old LLM July, {tag} (°C)")
-        ax.set_ylabel("new LLM July (°C)")
+        ax.set_title(f"{r['name']}\n{tag} vs default:  RMSD={rb[0]:.2f}, mean Δ={rb[1]:+.2f} °C", fontsize=10)
+        ax.set_xlabel(f"LLM July, {tag} (°C)")
+        ax.set_ylabel("LLM July, default (°C)")
         ax.grid(alpha=0.3)
         ax.legend(loc="upper left")
-    fig.suptitle("Per-point old vs new LLM July temperature (sub10, 1540 points)")
+    fig.suptitle("Per-point July LLM temperature: T=0.3 vs default (sub10, 1540 points)")
     fig.tight_layout()
-    fig.savefig("png/old_new_july_scatter.png", dpi=200, bbox_inches="tight")
+    fig.savefig("png/temperature_july_scatter.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print("Saved png/old_new_july_rmse_bias.png, png/old_new_july_scatter.png")
+    print("Saved png/temperature_july_rmse_bias.png, png/temperature_july_scatter.png")
 
 
 def main():
@@ -187,8 +190,8 @@ def main():
             entry["new_llm"] = {k: v[0] for k, v in nm.items()}
             entry["new"] = rmse_bias([v[1] for v in nm.values()])
         results.append(entry)
-        olds = "  ".join(f"old {t}: {rb[0]:.2f}/{rb[1]:+.2f}" for t, rb in entry["old"].items())
-        new = f"new: {entry['new'][0]:.2f}/{entry['new'][1]:+.2f}" if entry["new"] else "new: —"
+        olds = "  ".join(f"{t}: {rb[0]:.2f}/{rb[1]:+.2f}" for t, rb in entry["old"].items())
+        new = f"default: {entry['new'][0]:.2f}/{entry['new'][1]:+.2f}" if entry["new"] else "default: —"
         print(f"{m['name']:<22} {olds}   {new}   (RMSE/bias)")
 
     make_plots(results)
