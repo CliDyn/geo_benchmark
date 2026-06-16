@@ -138,11 +138,14 @@ def load_single_month(path):
 # ---------------------------------------------------------------- plots
 
 def _overlay(ax, overlays, key, colors):
-    """Single-month results as unconnected open circles in each model's line colour."""
+    """Single-month results as unconnected open circles in each model's line colour.
+       One shared legend entry (colour already encodes the model)."""
     for ov in overlays:
         ax.plot(ov["month"], ov[key], "o", markersize=11, markerfacecolor="none",
-                markeredgewidth=2.2, color=colors.get(ov["model"], "black"),
-                label=f"{ov['model']} {MONTHS3[ov['month'] - 1]} single-month")
+                markeredgewidth=2.2, color=colors.get(ov["model"], "black"))
+    if overlays:
+        ax.plot([], [], "o", markerfacecolor="none", markeredgecolor="0.3",
+                markersize=11, markeredgewidth=2.2, label="single-month run")
 
 
 # Published paper values (Table 1, July, full grid): (RMSE, bias)
